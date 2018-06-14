@@ -1,0 +1,2 @@
+class HelpMailer < ApplicationMailer
+end

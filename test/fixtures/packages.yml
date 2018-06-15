@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  package_id: 1
+  package_time: 1
+  package_value: 1.5
+
+two:
+  package_id: 1
+  package_time: 1
+  package_value: 1.5

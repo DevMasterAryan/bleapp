@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  session_ts: 2018-06-15 12:10:27
+  user_id: 1
+  device_batterry_start: 2018-06-15 12:10:27
+  site_id: 1
+  device_id: 1
+
+two:
+  session_ts: 2018-06-15 12:10:27
+  user_id: 1
+  device_batterry_start: 2018-06-15 12:10:27
+  site_id: 1
+  device_id: 1

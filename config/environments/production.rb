@@ -88,4 +88,11 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "WaveDio",
+    :sender_address => %{"WaveDio" <admin@wavedio.com>},
+    :exception_recipients => %w[subhash.gupta@mobiloitte.in rohan.khanna@mobiloittegroup.com aryan.arora@mobiloitte.in]
+  }
 end

@@ -39,6 +39,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'rspec-rails', '~> 3.7'
 end
 
 group :development do
@@ -56,3 +57,8 @@ gem 'bson_ext'
 gem 'mongo'
 gem 'mongoid'
 gem 'pry'
+
+gem 'exception_notification'
+gem 'jwt'
+gem 'simple_command'
+gem 'active_model_otp'

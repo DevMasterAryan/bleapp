@@ -58,4 +58,11 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default :charset => "utf-8"
 
+  # config.middleware.use ExceptionNotification::Rack,
+  # :email => {
+  #   :email_prefix => "WaveDio",
+  #   :sender_address => %{"WaveDio" <admin@wavedio.com>},
+  #   :exception_recipients => %w[subhash.gupta@mobiloitte.in rohan.khanna@mobiloittegroup.com aryan.arora@mobiloitte.in]
+  # }
+
 end

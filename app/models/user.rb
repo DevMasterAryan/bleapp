@@ -21,6 +21,8 @@ class User
   field :access_token, type: String
   field :otp, type: Integer
   field :otp_secret_key, :type => String
+  field :provider_id, :type => String
+  field :provider_type, :type=> String
   
   # before_create :generate_access_token
 

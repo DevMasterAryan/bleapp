@@ -22,7 +22,7 @@ class User
   field :otp, type: Integer
   field :otp_secret_key, :type => String
   
-  # before_create :generate_access_token
+  before_create :generate_access_token
 
 
 

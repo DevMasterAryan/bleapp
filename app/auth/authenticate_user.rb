@@ -20,13 +20,12 @@ class AuthenticateUser
 	def user
 		if (@type == "email")
 			user = User.whrere(e_mail: email).first
-		else
+		elsif @type == "mobile"
 			user = User.where(mobile_no: email).first
+		else
+			errors.add :user_authentication, 'Invalid Credentials'
+			nil 			
 		end
-
 		return user if user #&& (user.mobile_no == password)
-
-		errors.add :user_authentication, 'Invalid Credentials'
-		nil 
 	end
 end

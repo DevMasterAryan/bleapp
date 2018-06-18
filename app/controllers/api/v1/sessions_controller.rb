@@ -29,9 +29,9 @@ class Api::V1::SessionsController < ApplicationController
 	end
 
 	def verify_otp
-		@user  = User.where(mobile: params[:mobile], otp: params[:otp])&.first
+		@user  = User.where(mobile: params[:mobile], otp: params[:otp]).first
 		if @user.present?
-			render json: {responseCode: 200, responseMessage: "Login successfully.",authorization: AuthenticateUser.call(@user.mobile, "mobile")}
+			render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token }
 		else
 			render json: {responseCode: 500, responseMessage: "OTP mismatch."}
 		end

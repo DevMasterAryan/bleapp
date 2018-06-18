@@ -19,6 +19,21 @@ Rails.application.routes.draw do
   			post :static_contents
   		end
   	end
+    resources :devices do
+      collection do
+        post :search_device
+      end
+    end
+    resources :packages do
+      collection do
+        get :packages_list
+      end
+    end
+    resources :users do
+      collection do
+        post :apply_credit
+      end
+    end
   end
 
 end

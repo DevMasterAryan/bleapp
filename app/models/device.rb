@@ -4,4 +4,8 @@ class Device
   field :qr_code, type: Integer
   field :bluetooth_id, type: Integer
   field :id_o, type: Integer
+  field :location_id, type: Integer
+  field :stolen, type: Mongoid::Boolean, default: false
+  belongs_to :location
+  has_one :session
 end

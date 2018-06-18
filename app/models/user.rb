@@ -25,6 +25,8 @@ class User
   before_create :generate_access_token
 
 
+  has_one :session
+
 
   def self.generate_otp
    otp = [*1000..9999].sample

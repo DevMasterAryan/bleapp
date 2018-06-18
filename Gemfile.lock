@@ -85,6 +85,7 @@ GEM
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
+    geocoder (1.4.9)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     has_secure_token (1.0.0)
@@ -256,6 +257,7 @@ DEPENDENCIES
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
   exception_notification
+  geocoder
   has_secure_token
   jbuilder (~> 2.5)
   jwt

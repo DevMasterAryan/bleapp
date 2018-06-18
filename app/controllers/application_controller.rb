@@ -9,14 +9,14 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   def authenticate
-    auth_token = request.headers[:AUTHTOKEN]
+    auth_token = request.headers[:accesstoken]
     unless auth_token
-      return render_message 501, t('authenticate.failed')
+      return render_message 501, 'authenticate failed'
     else
       @api_current_user = User.find_by(access_token: auth_token)
-      return render_message 999, t('authenticate.unauthorized') unless @api_current_user
+      return render_message 999, 'authenticate unauthorized' unless @api_current_user
       # return render_message 403, "Please wait for account approval by admin." if @current_user.is_approved == nil and @current_user.is_driver?
-       return render_message 503, "You are blocked by admin." if @api_current_user.block_by_admin?
+       # return render_message 503, "You are blocked by admin." if @api_current_user.block_by_admin?
       # @current_user.update_attributes(last_sign_in_at: Time.current)
     end
   end

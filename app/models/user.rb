@@ -24,7 +24,7 @@ class User
   field :provider_id, :type => String
   field :provider_type, :type=> String
   
-  # before_create :generate_access_token
+  before_create :generate_access_token
 
 
 

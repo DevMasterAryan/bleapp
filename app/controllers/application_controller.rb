@@ -1,17 +1,11 @@
 class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
 
-  before_action :authenticate_request
+  # before_action :authenticate_request
   attr_reader :current_user
 
   include ExceptionHandler
 
-  private
-
-  def authenticate_request
-  	@current_user = AuthorizeApiRequest.call(request.headers).result
-    render json: { error: 'Not Authorized' }, status: 401 unless @current_user
-	end
   protect_from_forgery with: :exception
   
   def authenticate
@@ -28,9 +22,15 @@ class ApplicationController < ActionController::Base
   end
 
   def render_message (code, msg)
-  	render :json => {
-  		:responseCode => code,
-  		:responseMessage => msg
-  	}
+    render :json => {
+      :responseCode => code,
+      :responseMessage => msg
+    }
   end
+  private
+
+  def authenticate_request
+  	@current_user = AuthorizeApiRequest.call(request.headers).result
+    render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+	end
 end

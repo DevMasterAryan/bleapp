@@ -19,9 +19,9 @@ class AuthenticateUser
 
 	def user
 		if (@type == "email")
-			user = User.find_by(e_mail: email)
+			user = User.whrere(e_mail: email).first
 		else
-			user = User.find_by(mobile_no: email)
+			user = User.where(mobile_no: email).first
 		end
 
 		return user if user #&& (user.mobile_no == password)

@@ -1,0 +1,48 @@
+include ActiveModel::SecurePassword
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  include Mongoid::Attributes::Dynamic
+  include Geocoder::Model::Mongoid
+
+  field :first_name, type: String
+  field :last_name, type: String
+  field :role, type: String
+  field :email, type: String
+  field :approved, type: Boolean, :default => false
+  field :approved_at, type: DateTime, default: ''
+  field :blocked, type: Boolean, :default => false
+  field :password_digest, type: String
+  field :phone_no, type: String
+  field :mobile_no, type: String
+  field :status, type: String#, :default => "Offline"
+  field :no_of_rides, type: Integer, :default => 0
+  field :avg_rating, type: Float, :default => 0
+  field :vehicle_id, type: String
+  field :password_reset_token,   type: String, default: ""
+  field :password_reset_token_sent_at,   type: DateTime
+  field :password_confirmed_at,   type: DateTime
+  field :user_image,   type: String, default: ""
+  field :customer_id,   type: String, default: ""
+  field :regs_status,type: String,default: "Not Pending"
+  field :company_id,  type: Integer, default: 0
+  field :login_status, type: Boolean, :default => false
+  field :payment_type, type: String, default: ""
+  field :unique_code_for_login, type: String, default: ""
+  field :address1,type: String,default: ""
+  field :address2,type: String,default: ""
+  field :city,type: String,default: ""
+  field :postal_code,type: String,default: ""
+  field :state,type: String,default: ""
+  field :ssn,type: String,default: ""
+  field :tax_info,type: String,default: ""
+  field :account_holder_name,type: String,default: ""
+  field :date_of_birth,type: String,default: ""
+  field :legal_name,type: String,default: ""
+  field :tax_id,type: String,default: ""
+  field :account_number,type: String,default: ""
+  field :routing_number,type: String,default: ""
+  field :tos_accepted,type: Boolean,:default => false
+  field :master_merchant_account_id,type: String,default: ""
+  field :merchant_account_status,type: String,default: ""
+  field :merchant_account_id,type: String,default: ""
+  field :device_id, type: String

@@ -14,6 +14,11 @@ Rails.application.routes.draw do
 	  		post :verify_otp
 	  	end 
   	end
+  	resources :static_contents do
+  		collection do
+  			post :static_contents
+  		end
+  	end
   end
 
 end

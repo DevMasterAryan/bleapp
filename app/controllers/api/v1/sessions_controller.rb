@@ -4,6 +4,10 @@ class Api::V1::SessionsController < ApplicationController
 	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp]
 
 	def login
+	  if params[:user][:provider_id].present? && params[:user][:provider].present?
+         @user = User.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
+         return render json: {responseCode: 200, responseMessage: "login successfully.", access_token: @user.access_token}         
+	  else
 	    @otp  = User.generate_otp
 		if @user = User.where(mobile: params[:user][:mobile])&.first
 			@user.update(otp: @otp)
@@ -26,6 +30,9 @@ class Api::V1::SessionsController < ApplicationController
 				render json: {responseCode: 500, responseMessage: "Something went wrong." }
 			end
 		end		
+	
+      end 
+
 	end
 
 	def verify_otp

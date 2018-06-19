@@ -7,5 +7,5 @@ class Device
   field :location_id, type: Integer
   field :stolen, type: Mongoid::Boolean, default: false
   belongs_to :location
-  has_one :session
+  has_one :session, dependent: :destroy
 end

@@ -4,9 +4,7 @@ class Api::V1::SessionsController < ApplicationController
 	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp]
 
 	def login
-	  if params[:user][:provider_id].present? && params[:user][:provider].present?
-         @user = User.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
-         return render json: {responseCode: 200, responseMessage: "login successfully.", access_token: @user.access_token}         
+	  
 	  else
 	    @otp  = User.generate_otp
 		if @user = User.where(mobile: params[:user][:mobile])&.first
@@ -31,7 +29,7 @@ class Api::V1::SessionsController < ApplicationController
 			end
 		end		
 	
-      end 
+       
 
 	end
 
@@ -43,6 +41,20 @@ class Api::V1::SessionsController < ApplicationController
 			render json: {responseCode: 500, responseMessage: "OTP mismatch."}
 		end
 		
+	end
+
+	def social_login
+	  begin
+	  	
+	  @user = User.find_or_create_by(email: params[:user][:email])
+	  if @user.present?
+       @user.social_logins.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
+	   return render json: {responseCode: 200, responseMessage: "Login successfully."}
+	  end	 
+		
+	  rescue Exception => e
+	    return render json: {responseCode: 500, responseMessage: "Something went wrong try again later."}  	
+	  end
 	end
 
 end

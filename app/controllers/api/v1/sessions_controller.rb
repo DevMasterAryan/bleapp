@@ -49,7 +49,7 @@ class Api::V1::SessionsController < ApplicationController
 	  @user = User.find_or_create_by(email: params[:user][:email])
 	  if @user.present?
        @user.social_logins.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
-	   return render json: {responseCode: 200, responseMessage: "Login successfully."}
+	   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token}
 	  end	 
 		
 	  rescue Exception => e

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 	  	collection do
 	  		post :login
 	  		post :verify_otp
+        post :social_login
 	  	end 
   	end
   	resources :static_contents do

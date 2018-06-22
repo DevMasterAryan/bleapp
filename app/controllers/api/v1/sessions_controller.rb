@@ -1,11 +1,9 @@
 require 'twilio_sms.rb'
 
 class Api::V1::SessionsController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp]
+	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp,:social_login]
 
 	def login
-	  
-	  else
 	    @otp  = User.generate_otp
 		if @user = User.where(mobile: params[:user][:mobile])&.first
 			@user.update(otp: @otp)
@@ -28,9 +26,6 @@ class Api::V1::SessionsController < ApplicationController
 				render json: {responseCode: 500, responseMessage: "Something went wrong." }
 			end
 		end		
-	
-       
-
 	end
 
 	def verify_otp
@@ -44,17 +39,15 @@ class Api::V1::SessionsController < ApplicationController
 	end
 
 	def social_login
-	  begin
-	  	
-	  @user = User.find_or_create_by(email: params[:user][:email])
-	  if @user.present?
-       @user.social_logins.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
-	   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token}
-	  end	 
-		
-	  rescue Exception => e
-	    return render json: {responseCode: 500, responseMessage: "Something went wrong try again later."}  	
-	  end
+	  	begin	  	
+		    @user = User.find_or_create_by(email: params[:user][:email]) || User.find_or_create_by(mobile: params[:user][:mobile])
+			if @user.present?
+		       @user.social_logins.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
+			   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token}
+			end	 		
+	  	rescue Exception => e
+	    	return render json: {responseCode: 500, responseMessage: "Something went wrong try again later."}  	
+	  	end
 	end
 
 end

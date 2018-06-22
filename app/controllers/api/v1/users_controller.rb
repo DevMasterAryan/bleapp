@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:apply_credit]
-	before_action :authenticate,only: [:apply_credit]
+	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history]
+	before_action :authenticate,only: [:apply_credit,:charge_history]
 
 	def apply_credit
 		@package  = Package.find_by(id: params["package_id"])
@@ -11,6 +11,11 @@ class Api::V1::UsersController < ApplicationController
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end		
+	end
+
+	def charge_history
+		binding.pry
+		
 	end
 
 	

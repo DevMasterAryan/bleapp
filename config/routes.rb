@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # post 'auth/login', to: 'users#login'
   # get 'test', to: 'users#test'
 
-
+  post 'phone_verifications/voice' => 'api/v1/phone_verifications#voice'
 
   api_version(:module => "api/V1", :header => {:name => "Accept", :value => "application/Wavedio; version=1"}) do
   	resources :sessions do
@@ -33,8 +33,15 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         post :apply_credit
+        get :charge_history
       end
     end
+
+    # resources :phone_verifications do
+    #   collection do
+    #     post :voice
+    #   end
+    # end
   end
 
 end

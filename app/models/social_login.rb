@@ -3,4 +3,5 @@ class SocialLogin
   field :provider_id, type: String
   field :provider, type: String
   field :user_id, type: Integer
+  belongs_to :user
 end

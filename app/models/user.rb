@@ -27,7 +27,8 @@ class User
   before_create :generate_access_token
 
 
-  has_one :session, dependent: :destroy
+  has_many :sessions, dependent: :destroy
+  has_many :social_logins, dependent: :destroy
 
 
   def self.generate_otp

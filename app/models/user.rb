@@ -39,7 +39,7 @@ class User
       otp = User.generate_otp
       user.update(otp: otp)
       @twilio ||= Twilio::REST::Client.new("ACf786a64203b2524f8ee2878ee632bbe7","0f53e378507e1543cd5e2ddfcf5389a1")
-      @twilio.calls.create( from: "+18555728559", to: user.mobile, url: "http://0c68eea3.ngrok.io/phone_verifications/voice?otp=#{otp}")
+      @twilio.calls.create( from: "+18555728559", to: user.mobile, url: "https://wavedio.herokuapp.com/phone_verifications/voice?otp=#{otp}")
   end
 
   def twilio_client

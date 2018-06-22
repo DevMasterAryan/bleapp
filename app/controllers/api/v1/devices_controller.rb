@@ -1,6 +1,6 @@
 class Api::V1::DevicesController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:search_device]
-	before_action :authenticate,only: [:search_device]
+	skip_before_action :verify_authenticity_token,only: [:search_device,:device_locations]
+	before_action :authenticate,only: [:search_device,:device_locations]
 	
 	def search_device
 		@device = Device.find_by(qr_code: params[:qr_code])
@@ -15,5 +15,19 @@ class Api::V1::DevicesController < ApplicationController
 		else
 			return render json: {responseCode: 500, responseMessage: "Device not found."}
 		end
+	end
+
+	def device_locations
+		@locations = Location.all
+		if @locations.present?
+			locations = []
+			@locations.each do |location|
+				locations << {name: location&.name, lat: location&.lat, long: location&.long} 
+			end
+			return render json: {responseCode: 200, location: locations}
+		else
+			return render json: {responseCode: 500, responseMessage: "No location found."}
+		end
+		
 	end
 end

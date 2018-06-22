@@ -1,7 +1,7 @@
 require 'twilio_sms.rb'
 
 class Api::V1::SessionsController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp,:social_login]
+	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp,:social_login,:call_verification]
 
 	def login
 	    @otp  = User.generate_otp
@@ -48,6 +48,17 @@ class Api::V1::SessionsController < ApplicationController
 	  	rescue Exception => e
 	    	return render json: {responseCode: 500, responseMessage: "Something went wrong try again later."}  	
 	  	end
+	end
+
+	def call_verification
+		@user = User.find_by(:mobile=>params[:mobile])
+		if @user.present?
+			User.call_verification(@user)
+			return render json: {responseCode: 200, responseMessage: "Calling."}
+		else
+			return render json: {responseCode: 500, responseMessage: "User not found."}
+		end
+		
 	end
 
 end

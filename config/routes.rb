@@ -13,16 +13,19 @@ Rails.application.routes.draw do
 	  		post :login
 	  		post :verify_otp
         post :social_login
+        post :call_verification
 	  	end 
   	end
   	resources :static_contents do
   		collection do
   			post :static_contents
+        get :faqs
   		end
   	end
     resources :devices do
       collection do
         post :search_device
+        get :device_locations
       end
     end
     resources :packages do
@@ -34,14 +37,15 @@ Rails.application.routes.draw do
       collection do
         post :apply_credit
         get :charge_history
+        get :user_last_charge
       end
     end
 
-    # resources :phone_verifications do
-    #   collection do
-    #     post :voice
-    #   end
-    # end
+  #   resources :phone_verifications do
+  #     collection do
+  #       post :voice
+  #     end
+  #   end
   end
 
 end

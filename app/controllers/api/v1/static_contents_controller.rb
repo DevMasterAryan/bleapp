@@ -1,6 +1,6 @@
 class Api::V1::StaticContentsController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:static_contents]
-	before_action :authenticate,only: [:static_contents]
+	skip_before_action :verify_authenticity_token,only: [:static_contents,:faqs]
+	before_action :authenticate,only: [:static_contents,:faqs]
 	
 	def static_contents
 		if params[:type].present?
@@ -12,5 +12,19 @@ class Api::V1::StaticContentsController < ApplicationController
 				return render json: {responseCode:500, responseMessage: e}	
 			end
 		end		 	 				
+	end
+
+	def faqs
+		@faqs = Faq.all.to_a
+		if @faqs.present?
+			faqs = []
+			@faqs.each do |f|
+				faqs << {question: f&.question || "", answer: f&.answer || ""}
+			end
+			return render json: {responseCode: 200, faqs: faqs}
+		else
+			return render json: {responseCode: 200, responseMessage: "No faqs found."}
+		end
+		
 	end
 end

@@ -88,8 +88,6 @@ GEM
     geocoder (1.4.9)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    has_secure_token (1.0.0)
-      activerecord (>= 3.0)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -262,7 +260,6 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   exception_notification
   geocoder
-  has_secure_token
   jbuilder (~> 2.5)
   jwt
   kaminari

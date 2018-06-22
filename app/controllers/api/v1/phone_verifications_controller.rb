@@ -1,6 +1,6 @@
 require 'twilio-ruby'
 class Api::V1::PhoneVerificationsController < ApplicationController
-  skip_before_action :verify_authenticity_token,only: [:voice,:processs]
+  skip_before_action :verify_authenticity_token,only: [:voice,:processs], :raise => false
   after_action :set_header
 
   def voice

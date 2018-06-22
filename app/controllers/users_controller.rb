@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	skip_before_action :authenticate_request, only: %i[login]
+	#skip_before_action :authenticate_request, only: %i[login]
 
 	def login
 		type1 = params[:email].present? ? "email" : "mobile"

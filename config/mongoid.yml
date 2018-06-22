@@ -1,4 +1,4 @@
-production:
+development:
   # Configure available database clients. (required)
   clients:
     # Defines the default client. (required)
@@ -163,3 +163,19 @@ test:
         read:
           mode: :primary
         max_pool_size: 1
+
+production:
+ # Configure available database clients. (required)
+  clients:
+    # Defines the default client. (required)
+    default:
+      # Defines the name of the default database that Mongoid can connect to.
+      # (required).
+      # uri: mongodb://courier_buddy:Mobiloitte1@ds127260.mlab.com:27260/courier_buddy_local
+      uri: mongodb://webdeo:webdeo1@ds061238.mlab.com:61238/webdeo_development
+      # database: medhaj_development
+      # Provides the hosts the default client can connect to. Must be an array
+      # of host:port pairs. (required)
+  options:
+    raise_not_found_error: false
+

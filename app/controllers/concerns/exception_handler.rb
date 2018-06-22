@@ -10,20 +10,20 @@ module ExceptionHandler
 
 
 	included do
-		rescue_from ActiveRecord::RecordInvalid, with: :four_twenty_two
+		# rescue_from ActiveRecord::RecordInvalid, with: :four_twenty_two
 		rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
 		rescue_from ExceptionHandler::MissingToken, with: :four_twenty_two
 		rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
 		rescue_from ExceptionHandler::ExpiredSignature, with: :four_ninety_eight
 		rescue_from ExceptionHandler::DecodeError, with: :four_zero_one
 
-		rescue_from ActiveRecord::RecordNotFound do |e|
-			render json: {message: e.message}, status: :not_found
-		end
+		# rescue_from ActiveRecord::RecordNotFound do |e|
+		# 	render json: {message: e.message}, status: :not_found
+		# end
 
-		rescue_from ActiveRecord::RecordInvalid do |e|
-			render json: {message: e.message}, status: :unprocessable_entity
-		end
+		# rescue_from ActiveRecord::RecordInvalid do |e|
+		# 	render json: {message: e.message}, status: :unprocessable_entity
+		# end
 	end
 
 	module ClassMethods

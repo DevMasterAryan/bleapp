@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       collection do
         post :search_device
         get :device_locations
+        post :stolen_device_location_update
       end
     end
     resources :packages do

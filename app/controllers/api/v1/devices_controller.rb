@@ -1,6 +1,6 @@
 class Api::V1::DevicesController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:search_device,:device_locations]
-	before_action :authenticate,only: [:search_device,:device_locations]
+	skip_before_action :verify_authenticity_token,only: [:search_device,:device_locations,:stolen_device_location_update]
+	before_action :authenticate,only: [:search_device,:device_locations,:stolen_device_location_update]
 	
 	def search_device
 		@device = Device.find_by(qr_code: params[:qr_code])
@@ -29,5 +29,21 @@ class Api::V1::DevicesController < ApplicationController
 			return render json: {responseCode: 500, responseMessage: "No location found."}
 		end
 		
+	end
+
+	def stolen_device_location_update
+		@device = Device.find_by(id: params["device_id"])
+		if @device.present?
+			begin				
+			results = Geocoder.search(params["location"])
+			@coordinates = results.first.coordinates
+			@device.location.update(name: params["location"],lat: @coordinates[0], long: @coordinates[1])
+			rescue Exception => e
+				return render json: {responseCode: 500, responseMessage: "Something went wrong."}
+			end
+			return render json: {responseCode: 200, responseMessage: "Location updated successfully."}
+		else
+			return render json: {responseCode: 200, responseMessage: "Device not found."}
+		end
 	end
 end

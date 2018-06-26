@@ -6,6 +6,8 @@ class Session
   field :device_batterry_start, type: Time
   field :site_id, type: Integer
   field :device_id, type: Integer
+  field :session_start_ts, type: Time
+  field :session_end_ts, type: Time
 
   belongs_to :user
   belongs_to :device

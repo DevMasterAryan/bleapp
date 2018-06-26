@@ -11,7 +11,7 @@ class Api::V1::SessionsController < ApplicationController
 			if otp == "send"
 				render json: {responseCode: 200, responseMessage: "OTP sent successfully."}
 			else
-				render json: {responseCode: 500, responseMessage: "Something went wrong."}
+				render json: {responseCode: 500, responseMessage: "Something went wrong.",otp: @otp}
 			end
 		else
 			@user =  User.new(mobile: params[:user][:mobile],otp: @otp)

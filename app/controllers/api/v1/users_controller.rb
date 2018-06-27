@@ -14,22 +14,22 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def charge_history
-		@sessions = @api_current_user.sessions
-		if @sessions.present?
-		    @session_data = []
-		    @sessions.each do |session|
-		   		@session_data << {session_ts: session&.session_ts || "",device_batterry_start: session&.device_batterry_start || "", created_at: session.created_at }
+		@billings = @api_current_user.billings
+		if @billings.present?
+		    @billings_data = []
+		    @billings.each do |billing|
+		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts: billing&.created_at&.strftime("%d-%m-%Y %H:%M:%S") || "",package_time: billing&.package&.package_time || ""}
 		    end
-		    return render json: {responseCode: 200, charge_history: @session_data}
+		    return render json: {responseCode: 200, charge_history: @billings_data}
 		else
 			return render json: {responseCode: 200, charge_history: "History not found."}
 		end
 	end
 
 	def user_last_charge
-		@last_charge = @api_current_user&.sessions&.last
+		@last_charge = @api_current_user&.billings&.last
 		if @last_charge.present?
-			return render json: {responseCode: 200, last_charge: {location:@last_charge.device&.location&.name || " ",date_time: @last_charge.created_at&.strftime("%d-%m-%Y %H:%M:%S") || ""}}
+			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time: @last_charge.created_at&.strftime("%d-%m-%Y %H:%M:%S") || "",package_time: @last_charge&.package&.package_time || ""}}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found."}
 		end		

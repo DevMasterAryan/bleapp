@@ -11,4 +11,5 @@ class Session
 
   belongs_to :user
   belongs_to :device
+  has_one :billing, dependent: :destroy
 end

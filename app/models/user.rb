@@ -27,6 +27,7 @@ class User
   before_create :generate_access_token
 
 
+  has_many :billings, dependent: :destroy
   has_many :sessions, dependent: :destroy
   has_many :social_logins, dependent: :destroy
 
@@ -38,12 +39,11 @@ class User
   def self.call_verification(user)
       otp = User.generate_otp
       user.update(otp: otp)
-      @twilio ||= Twilio::REST::Client.new("ACf786a64203b2524f8ee2878ee632bbe7","0f53e378507e1543cd5e2ddfcf5389a1")
-      @twilio.calls.create( from: "+18555728559", to: user.mobile, url: "https://wavedio.herokuapp.com/phone_verifications/voice?otp=#{otp}")
+      twilio_client.calls.create( from: "+1929-377-1326", to: user.mobile, url: "https://wavedio.herokuapp.com/phone_verifications/voice?otp=#{otp}")
   end
 
   def twilio_client
-    @twilio ||= Twilio::REST::Client.new("ACf786a64203b2524f8ee2878ee632bbe7","0f53e378507e1543cd5e2ddfcf5389a1")
+    @twilio ||= Twilio::REST::Client.new("AC55732aedd35186f7caa85d360e5dbd01","c575e7358ce88ba822c387bdf2925921")
   end
   private
 

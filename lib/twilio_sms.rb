@@ -1,15 +1,15 @@
 module TwilioSms
 
   def self.send_otp(phone, content)
-    twilio_sid = "ACf786a64203b2524f8ee2878ee632bbe7"
-      twilio_token = "0f53e378507e1543cd5e2ddfcf5389a1"
-      twilio_phone_number = "+18555728559"
+    twilio_sid = "AC55732aedd35186f7caa85d360e5dbd01"
+      twilio_token = "c575e7358ce88ba822c387bdf2925921"
+      twilio_phone_number = "+1929-377-1326"
       begin
       @twilio_client = Twilio::REST::Client.new twilio_sid, twilio_token
 
       @twilio_client.api.account.messages.create(
-      :from => "+18555728559",
-      :to => phone,
+      :from => "+1929-377-1326",
+      :to =>phone,
       :body=> content
       
       )

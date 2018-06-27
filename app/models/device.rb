@@ -1,5 +1,6 @@
 class Device
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :device_id, type: Integer
   field :qr_code, type: Integer
   field :bluetooth_id, type: Integer

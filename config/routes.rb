@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   		collection do
   			post :static_contents
         get :faqs
+        get :additional_topic
   		end
   	end
     resources :devices do
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
         post :search_device
         get :device_locations
         post :stolen_device_location_update
+        post :device_location_search
       end
     end
     resources :packages do

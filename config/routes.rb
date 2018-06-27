@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   		collection do
   			post :static_contents
         get :faqs
+        post :query
   		end
   	end
     resources :devices do

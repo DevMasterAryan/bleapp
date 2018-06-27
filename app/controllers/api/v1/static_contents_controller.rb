@@ -27,4 +27,9 @@ class Api::V1::StaticContentsController < ApplicationController
 		end
 		
 	end
+
+	def query
+	  UserMailer.contact_us(params[:message]).deliver_now
+      render json: {responseCode: 200, responseMessage: "Message send successfully."}
+    end
 end

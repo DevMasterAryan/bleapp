@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   			post :static_contents
         get :faqs
         get :additional_topic
+        post :query
   		end
   	end
     resources :devices do

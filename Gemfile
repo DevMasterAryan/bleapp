@@ -69,3 +69,9 @@ gem 'kaminari'
 # gem 'has_secure_token'
 gem 'geocoder'
 gem 'rails_12factor'
+gem 'carrierwave'
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+gem 'cloudinary'
+
+

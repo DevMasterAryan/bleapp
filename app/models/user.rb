@@ -6,6 +6,7 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   has_one_time_password
+  mount_uploader :image, AvatarUploader
 
   field :first_name, type: String
   field :last_name, type: String
@@ -15,6 +16,7 @@ class User
   field :first_login_date, type: Time
   field :last_login_date, type: Time
   field :logged_in, type: String
+  field :image, type: String
   field :user_lock, type: Mongoid::Boolean
   field :credit, type: Float
   field :promotion, type: String

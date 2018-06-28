@@ -5,7 +5,7 @@ class Api::V1::DevicesController < ApplicationController
 	def search_device
 		@device = Device.find_by(qr_code: params[:qr_code])
 		if @device.present?
-			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false } 
+			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "" } 
 			begin
 				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.location.id)
 			  	return render json: {responseCode: 200, device_detail: @device_detail}	

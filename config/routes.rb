@@ -45,6 +45,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :transactions do
+      collection do
+        post :package_payment
+      end
+    end
+
   #   resources :phone_verifications do
   #     collection do
   #       post :voice

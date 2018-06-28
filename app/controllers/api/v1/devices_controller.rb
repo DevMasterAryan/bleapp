@@ -3,7 +3,7 @@ class Api::V1::DevicesController < ApplicationController
 	before_action :authenticate,only: [:search_device,:device_locations,:stolen_device_location_update,:device_location_search]
 	
 	def search_device
-		@device = Device.find_by(qr_code: params[:qr_code])
+		@device = Device.find_by(device: params[:qr_code])
 		if @device.present?
 			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "" } 
 			begin

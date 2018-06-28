@@ -62,7 +62,11 @@ class Api::V1::SessionsController < ApplicationController
 	def call_verification
 		@user = User.find_by(:mobile=>params[:mobile])
 		if @user.present?
-			User.call_verification(@user)
+			begin				
+				User.call_verification(@user)
+			rescue Exception => e
+				return render json: {responseCode: 500, responseMessage: "Try again."}
+			end
 			return render json: {responseCode: 200, responseMessage: "Calling."}
 		else
 			return render json: {responseCode: 500, responseMessage: "User not found."}

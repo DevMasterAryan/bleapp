@@ -6,7 +6,7 @@ class Device
   field :bluetooth_id, type: Integer
   field :id_o, type: Integer
   field :location_id, type: Integer
-  field :stolen, type: Mongoid::Boolean, default: false,
+  field :stolen, type: Mongoid::Boolean, default: false
   field :mac_address, type: String
   field :identifier, type: String
   field :device, type: String

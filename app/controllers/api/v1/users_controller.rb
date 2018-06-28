@@ -7,6 +7,8 @@ class Api::V1::UsersController < ApplicationController
 		if !@api_current_user.credit.nil? and @api_current_user&.credit >= @package.package_value
 			@remaining_credit = @api_current_user&.credit -  @package.package_value
 			@api_current_user.update(credit: @remaining_credit)
+			@api_current_user.billings.new(method_of_payment: "Credit",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
+				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now + @package&.package_time.minutes).save(validate: false)
 			return render json: {responseCode: 200, responseMessage: "Your credit applied."}
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}

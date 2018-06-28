@@ -1,6 +1,6 @@
 class Api::V1::StaticContentsController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:static_contents,:faqs,:additional_topic]
-	before_action :authenticate,only: [:static_contents,:faqs,:additional_topic]
+	skip_before_action :verify_authenticity_token,only: [:static_contents,:faqs,:additional_topic,:query]
+	before_action :authenticate,only: [:static_contents,:faqs,:additional_topic,:query]
 	
 	def static_contents
 		if params[:type].present?

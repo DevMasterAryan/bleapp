@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/ahoward/mongoid-grid_fs.git
+  revision: e828e84753575560d669ad7667d40f7dace40503
+  specs:
+    mongoid-grid_fs (2.4.0)
+      mime-types (>= 1.0, < 4.0)
+      mongoid (>= 3.0, < 8.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -49,6 +57,7 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
+    aws_cf_signer (0.1.3)
     bcrypt (3.1.12)
     bindex (0.5.0)
     bson (4.3.0)
@@ -62,10 +71,20 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
+    carrierwave (1.2.2)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+    carrierwave-mongoid (0.1.0)
+      carrierwave
+      mongoid
     case_transform (0.2)
       activesupport
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
+    cloudinary (1.9.1)
+      aws_cf_signer
+      rest-client
     coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -77,6 +96,8 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.4)
     diff-lcs (1.3)
+    domain_name (0.5.20180417)
+      unf (>= 0.0.5, < 1.0.0)
     erubi (1.7.1)
     exception_notification (4.2.2)
       actionmailer (>= 4.0, < 6)
@@ -88,6 +109,8 @@ GEM
     geocoder (1.4.9)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -117,6 +140,9 @@ GEM
     mail (2.7.0)
       mini_mime (>= 0.1.1)
     method_source (0.9.0)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -127,6 +153,7 @@ GEM
       mongo (>= 2.5.1, < 3.0.0)
     multi_json (1.13.1)
     multipart-post (2.0.0)
+    netrc (0.11.0)
     nio4r (2.3.1)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
@@ -170,6 +197,10 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rotp (3.3.1)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
@@ -231,6 +262,9 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.1.11)
       execjs (>= 0.3.0, < 3)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.5)
     versionist (1.7.0)
       activesupport (>= 3)
       railties (>= 3)
@@ -257,6 +291,9 @@ DEPENDENCIES
   bson_ext
   byebug
   capybara (~> 2.13)
+  carrierwave
+  carrierwave-mongoid
+  cloudinary
   coffee-rails (~> 4.2)
   exception_notification
   geocoder
@@ -266,6 +303,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   mongo
   mongoid
+  mongoid-grid_fs!
   pry
   puma (~> 3.7)
   rails (~> 5.1.6)

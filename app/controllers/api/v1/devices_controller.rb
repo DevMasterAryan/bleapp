@@ -44,9 +44,10 @@ class Api::V1::DevicesController < ApplicationController
 		@device = Device.find_by(id: params["device_id"])
 		if @device.present?
 			begin				
-			results = Geocoder.search(params["location"])
-			@coordinates = results.first.coordinates
-			@device.location.update(name: params["location"],lat: @coordinates[0], long: @coordinates[1])
+			# results = Geocoder.search(params["location"])
+			# @coordinates = results.first.coordinates
+			# @device.location.update(name: params["location"],lat: @coordinates[0], long: @coordinates[1])
+			  @device.location.update(lat: params["lat"], long: params["long"])
 			rescue Exception => e
 				return render json: {responseCode: 500, responseMessage: "Something went wrong."}
 			end

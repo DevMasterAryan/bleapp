@@ -31,7 +31,7 @@ class Api::V1::UsersController < ApplicationController
 	def user_last_charge
 		@last_charge = @api_current_user&.billings&.last
 		if @last_charge.present?
-			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time: @last_charge.created_at&.strftime("%d-%m-%Y %H:%M:%S") || "",package_time: @last_charge&.package&.package_time || ""}}
+			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time: @last_charge.created_at&.strftime("%d-%m-%Y %H:%M:%S") || "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, status: DateTime.now > @last_charge.usage_end_ts ? "Over": "Left" }}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found."}
 		end		

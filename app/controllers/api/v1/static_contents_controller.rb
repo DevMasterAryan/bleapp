@@ -19,7 +19,7 @@ class Api::V1::StaticContentsController < ApplicationController
 		if @additional_topic.present?
 			additional_topic = []
 			@additional_topic.each do |at|
-				additional_topic << {title: at&.title, content:  at&.content}
+				additional_topic << {id: at&.id, title: at&.title, content:  at&.content}
 			end
 			return render json: {responseCode:200, additional_topics: additional_topic}
 		else
@@ -43,7 +43,12 @@ class Api::V1::StaticContentsController < ApplicationController
 	end
 
 	def query
-	  UserMailer.contact_us(params[:message]).deliver_now
-      render json: {responseCode: 200, responseMessage: "Message send successfully."}
+	  # UserMailer.contact_us(params[:message]).deliver_now
+      @help = @api_current_user.helps.new(content: params[:message], status: "Pending" )
+      if @help.save
+        render json: {responseCode: 200, responseMessage: "Message send successfully."}
+      else
+      	render json: {responseCode: 500, responseMessage: "Something went wrong, try again later."}
+      end
     end
 end

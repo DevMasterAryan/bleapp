@@ -32,6 +32,7 @@ class User
   has_many :billings, dependent: :destroy
   has_many :sessions, dependent: :destroy
   has_many :social_logins, dependent: :destroy
+  has_many :helps, dependent: :destroy
 
 
   def self.generate_otp

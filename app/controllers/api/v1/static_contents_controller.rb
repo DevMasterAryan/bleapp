@@ -33,7 +33,7 @@ class Api::V1::StaticContentsController < ApplicationController
 		if @faqs.present?
 			faqs = []
 			@faqs.each do |f|
-				faqs << {question: f&.question || "", answer: f&.answer || ""}
+				faqs << {id: f&.id&.as_json["$oid"] || "",question: f&.question || "", answer: f&.answer || ""}
 			end
 			return render json: {responseCode: 200, faqs: faqs}
 		else

@@ -39,9 +39,15 @@ class User
   end
 
   def self.call_verification(user)
+    begin
+      
       otp = User.generate_otp
       user.update(otp: otp)
-      twilio_client.calls.create( from: "+1929-377-1326", to: user.mobile, url: "https://wavedio.herokuapp.com/phone_verifications/voice?otp=#{otp}")
+      @twilio ||= Twilio::REST::Client.new("AC55732aedd35186f7caa85d360e5dbd01","c575e7358ce88ba822c387bdf2925921")
+      @twilio.calls.create( from: "+1929-377-1326", to: user.mobile, url: "https://wavedio.herokuapp.com/phone_verifications/voice?otp=#{otp}")
+    rescue Exception => e
+      
+    end
   end
 
   def twilio_client

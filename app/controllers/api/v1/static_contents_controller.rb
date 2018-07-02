@@ -19,7 +19,7 @@ class Api::V1::StaticContentsController < ApplicationController
 		if @additional_topic.present?
 			additional_topic = []
 			@additional_topic.each do |at|
-				additional_topic << {id: at&.id, title: at&.title, content:  at&.content}
+				additional_topic << {id: at&.id&.as_json["$oid"] || "", title: at&.title, content:  at&.content}
 			end
 			return render json: {responseCode:200, additional_topics: additional_topic}
 		else

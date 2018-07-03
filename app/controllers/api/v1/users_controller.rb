@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
 		    end
 		    return render json: {responseCode: 200, charge_history: @billings_data}
 		else
-			return render json: {responseCode: 500, responseMessage: "History not found.", charge_history: []}
+			return render json: {responseCode: 200, responseMessage: "History not found.", charge_history: []}
 		end
 	end
 
@@ -39,7 +39,7 @@ class Api::V1::UsersController < ApplicationController
 		if @last_charge.present?
 			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time: @last_charge.created_at&.strftime("%d-%m-%Y %H:%M:%S") || "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, status: DateTime.now > @last_charge.usage_end_ts ? "Over": "Left" }, additional_topic: additional_topic}
 		else
-			return render json: {responseCode: 500, responseMessage: "No charge found.", additional_topic: additional_topic}
+			return render json: {responseCode: 200, responseMessage: "No charge found.", additional_topic: additional_topic}
 		end		
 
 	end

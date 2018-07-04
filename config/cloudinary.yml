@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: devmasteraryan
+  api_key: '719357536219189'
+  api_secret: 83RzxCRZP6fezTjO9InyuQ-Os3E
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: devmasteraryan
+  api_key: '719357536219189'
+  api_secret: 83RzxCRZP6fezTjO9InyuQ-Os3E
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: devmasteraryan
+  api_key: '719357536219189'
+  api_secret: 83RzxCRZP6fezTjO9InyuQ-Os3E
+  enhance_image_tag: true
+  static_image_support: false

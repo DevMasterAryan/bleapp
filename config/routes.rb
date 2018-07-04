@@ -30,6 +30,7 @@ Rails.application.routes.draw do
         get :device_locations
         post :stolen_device_location_update
         post :device_location_search
+        post :device_status
       end
     end
     resources :packages do

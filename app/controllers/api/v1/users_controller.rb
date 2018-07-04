@@ -11,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
 			@transaction = Transaction.create(transaction_id: "", status: true, amount: @package&.package_value   )
 			@api_current_user.billings.new(method_of_payment: "Credit",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
 				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now + @package&.package_time.minutes, transaction_id: @transaction.id).save(validate: false)
-			return render json: {responseCode: 200, responseMessage: "Your credit applied."}
+			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit}
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end

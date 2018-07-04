@@ -6,7 +6,7 @@ class Api::V1::DevicesController < ApplicationController
 		@device = Device.any_of({mac_address: params[:qr_code]},{device: params[:qr_code]}).first
 		# @device = Device.find_by(device: params[:qr_code]) || Device.find_by(mac_address: params[:qr_code])
 		if @device.present?
-			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "" } 
+			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status } 
 			begin
 				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.location.id)
 			  	return render json: {responseCode: 200, device_detail: @device_detail}	
@@ -56,5 +56,16 @@ class Api::V1::DevicesController < ApplicationController
 		else
 			return render json: {responseCode: 200, responseMessage: "Device not found."}
 		end
+	end
+
+	def device_status
+     @device = Device.find_by(id: params["device_id"])
+     if @device.present?
+       @device.update(device_status: params["device_status"])
+       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status } 
+       return render json: { responseCode: 200, responseMessage: "Device status saved successfully.",device_detail: @device_detail }
+     else
+     	return render json: {responseCode: 500, responseMessage: "Device not found."}
+     end		
 	end
 end

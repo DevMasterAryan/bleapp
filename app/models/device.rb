@@ -10,6 +10,7 @@ class Device
   field :mac_address, type: String
   field :identifier, type: String
   field :device, type: String
+  field :device_status, type: String
   belongs_to :location
   has_one :session, dependent: :destroy
 end

@@ -1,4 +1,5 @@
 require 'twilio_sms.rb'
+require 'open-uri'
 
 class Api::V1::SessionsController < ApplicationController
 	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp,:social_login,:call_verification]
@@ -11,8 +12,10 @@ class Api::V1::SessionsController < ApplicationController
 				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, end_time: @user&.billings&.last&.usage_end_ts || "", credit: @user.credit }
 			else
 				@user.update(otp: @otp)
-				otp = TwilioSms.send_otp(@user.mobile,@otp)
-				if otp == "send"
+				# otp = TwilioSms.send_otp(@user.mobile,@otp)
+				response = open("https://2factor.in/API/V1/d243c39a-7dbc-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
+				# if otp == "send"
+				if response.status.first == "200"
 					render json: {responseCode: 200, responseMessage: "OTP sent successfully."}
 				else
 					render json: {responseCode: 500, responseMessage: "Something went wrong.",otp: @otp}
@@ -21,8 +24,9 @@ class Api::V1::SessionsController < ApplicationController
 		else
 			@user =  User.new(mobile: params[:user][:mobile],otp: @otp)
 			if @user.save
-				otp = TwilioSms.send_otp(@user.mobile,@otp)
-				if otp == "send"
+				 # otp = TwilioSms.send_otp(@user.mobile,@otp)
+				response = open("https://2factor.in/API/V1/d243c39a-7dbc-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
+				if response.status.first == "200"
 					render json: {responseCode: 200, responseMessage: "OTP sent successfully."}
 				else
 					render json: {responseCode: 500, responseMessage: "Something went wrong."}

@@ -37,7 +37,7 @@ class Api::V1::UsersController < ApplicationController
 		if @billings.present?
 		    @billings_data = []
 		    @billings.each do |billing|
-		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts: billing&.created_at&.strftime("%d-%m-%Y %H:%M:%S") || "",package_time: billing&.package&.package_time || ""}
+		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts: billing.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+billing.created_at.strftime("%I:%M %p") || "",package_time: billing&.package&.package_time || "", active: DateTime.now > billing&.usage_end_ts ? false : true }
 		    end
 		    return render json: {responseCode: 200, charge_history: @billings_data}
 		else
@@ -54,12 +54,12 @@ class Api::V1::UsersController < ApplicationController
 		@last_charge = @api_current_user&.billings&.last
 
 		if @last_charge.present?
-			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time: @last_charge.created_at&.strftime("%d-%m-%Y %H:%M:%S") || "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, status: DateTime.now > @last_charge.usage_end_ts ? "Over": "Left" }, additional_topic: additional_topic}
+			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time: @last_charge.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+@last_charge.created_at.strftime("%I:%M %p") || "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.now > @last_charge.usage_end_ts ? false : true }, additional_topic: additional_topic}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found.", additional_topic: additional_topic}
 		end		
 
 	end
-
+  
 	
 end

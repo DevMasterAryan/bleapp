@@ -16,7 +16,8 @@ class Api::V1::UsersController < ApplicationController
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
         elsif params["mop"]=="payment"
-          @transaction = Transaction.new(transaction_id: Digest::SHA256.hexdigest(Time.now.to_s), status: true, amount: @package&.package_value)
+          @transaction = Transaction.new(transaction_id: params["transaction_id"], status: true, amount: @package&.package_value)
+          # @transaction = Transaction.new(transaction_id: Digest::SHA256.hexdigest(Time.now.to_s), status: true, amount: @package&.package_value)
           if @transaction.save
 				@billing = @api_current_user.billings.new(method_of_payment: "Card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
 				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now+@package&.package_time.minutes,transaction_id: @transaction.id )

@@ -33,7 +33,7 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def charge_history
-		@billings = @api_current_user.billings
+		@billings = @api_current_user&.billings&.reverse
 		if @billings.present?
 		    @billings_data = []
 		    @billings.each do |billing|

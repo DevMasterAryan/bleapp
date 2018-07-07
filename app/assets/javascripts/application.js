@@ -10,6 +10,25 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
+//= require jquery
+//= require jquery_ujs
 //= require turbolinks
+//= require jquery-jvectormap-1.2.2.min
+//= require jquery-jvectormap-world-mill-en
+//= require jquery.sparkline
+//= require bootstrap-slider
+//= require bootstrap3-wysihtml5
+//= require fullcalendar
+//= require jquery.knob
+//= require bootstrap-timepicker
+//= require pace
+//= require morris
+//= require daterangepicker
+//= require bootstrap-colorpicker
+//= require bootstrap-datepicker
+//= require toastr.min
+//= require moment
+//= require jquery.slimscroll
+//= require app
+//= require rails-ujs
 //= require_tree .

@@ -11,5 +11,20 @@
  * It is generally better to create a new file per style scope.
  *
  *= require_tree .
+ *= require jquery-jvectormap-1.2.2
+ *= require slider
+ *= require bootstrap3-wysihtml5
+ *= require fullcalendar
+ *= require bootstrap-timepicker
+ *= require morris
+ *= require daterangepicker-bs3
+ *= require bootstrap-colorpicker
+ *= require datepicker3
+ *= require toastr.min
  *= require_self
  */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "AdminLTE/AdminLTE";
+@import "AdminLTE/skins/skin-blue";
+

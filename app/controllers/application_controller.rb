@@ -1,12 +1,14 @@
 class ApplicationController < ActionController::Base
   layout 'admin_lte_2'
-
   # protect_from_forgery with: :exception
 
   # before_action :authenticate_request
-  attr_reader :current_user
 
+  # attr_reader :current_user
+
+  include ApplicationHelper
   include ExceptionHandler
+  include RememberMe::Controller
 
   protect_from_forgery with: :exception
   
@@ -29,6 +31,23 @@ class ApplicationController < ActionController::Base
       :responseMessage => msg
     }
   end
+
+  def authenticate_admin_user
+   unless logged_in?
+    redirect_to admin_sessions_login_path
+   end
+    
+  end
+
+  def log_in(user)
+    session[:user_id] = user.id
+  end
+
+  def log_out
+    session.delete(:user_id)
+    @current_user = nil
+  end
+
   private
 
   def authenticate_request

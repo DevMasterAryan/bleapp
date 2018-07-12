@@ -30,6 +30,7 @@
 //= require jquery.validate
 //= require moment
 //= require jquery.slimscroll
+//= require bootstrap.min.js
 //= require app
 //= require rails-ujs
 //= require_tree .

@@ -9,7 +9,7 @@ class Api::V1::DevicesController < ApplicationController
 			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status } 
 			begin
 				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.location.id, device_batterry_start: params["device_battery_start"])
-			  	return render json: {responseCode: 200, device_detail: @device_detail}	
+			  	return render json: {responseCode: 200, device_detail: @device_detail, session_id: @session&.id&.as_json["$oid"] || ""}	
 			rescue Exception => e
 				return render json: {responseCode: 500, device_detail: e}	
 			end
@@ -60,9 +60,11 @@ class Api::V1::DevicesController < ApplicationController
 
 	def device_status
      @device = Device.find_by(id: params["device_id"])
+     @session = Session.find_by(id: params["session_id"])
      if @device.present?
-       @device.update(device_status: params["device_status"])
-       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status } 
+       @session = @session.update(device_battery_start: params["device_status"])
+       # @device.update(device_status: params["device_status"])
+       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @session&.device_battery_start } 
        return render json: { responseCode: 200, responseMessage: "Device status saved successfully.",device_detail: @device_detail }
      else
      	return render json: {responseCode: 500, responseMessage: "Device not found."}

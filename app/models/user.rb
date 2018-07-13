@@ -31,6 +31,7 @@ class User
   field :long, :type=> String
   field :imei, :type=> String
   field :ip_address, :type=> String
+  field :location, :type=> String
   field :mobile_phone_model, :type=> String
   field :location, :type=> String 
   field :logged_in, :type=> Boolean, default: false

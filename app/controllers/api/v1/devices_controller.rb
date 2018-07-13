@@ -6,7 +6,7 @@ class Api::V1::DevicesController < ApplicationController
 		@device = Device.any_of({mac_address: params[:qr_code]},{device: params[:qr_code]}).first
 		# @device = Device.find_by(device: params[:qr_code]) || Device.find_by(mac_address: params[:qr_code])
 		if @device.present?
-			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status } 
+			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status, site_display_name: @device&.site_display_name } 
 			begin
 				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.location.id, device_batterry_start: params["device_battery_start"])
 			  	return render json: {responseCode: 200, device_detail: @device_detail, session_id: @session&.id&.as_json["$oid"] || ""}	
@@ -49,6 +49,8 @@ class Api::V1::DevicesController < ApplicationController
 			# @coordinates = results.first.coordinates
 			# @device.location.update(name: params["location"],lat: @coordinates[0], long: @coordinates[1])
 			  @device.location.update(lat: params["lat"], long: params["long"])
+			  results = Geocoder.search([params["lat"], params["long"]])
+			  @api_current_user.update(lat: params["lat"], long: params["long"], location: results.first.address)
 			rescue Exception => e
 				return render json: {responseCode: 500, responseMessage: "Something went wrong."}
 			end
@@ -64,7 +66,7 @@ class Api::V1::DevicesController < ApplicationController
      if @device.present?
        @session = @session.update(device_battery_start: params["device_status"])
        # @device.update(device_status: params["device_status"])
-       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @session&.device_battery_start } 
+       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @session&.device_battery_start,site_display_name: @device&.site_display_name  } 
        return render json: { responseCode: 200, responseMessage: "Device status saved successfully.",device_detail: @device_detail }
      else
      	return render json: {responseCode: 500, responseMessage: "Device not found."}

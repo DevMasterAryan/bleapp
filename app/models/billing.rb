@@ -9,6 +9,14 @@ class Billing
   field :usage_start_ts, type: Time
   field :usage_end_ts, type: Time
   field :user_id, type: String
+  field :rating, type: Integer
+  field :help_id, type: String
+  field :help_status, type: String
+  field :payment_status, type: String
+  field :device_battery_ts15, type: Time
+  field :device_battery_ts30, type: Time
+  field :device_battery_ts45, type: Time
+  field :device_battery_ts60, type: Time
   belongs_to :transaction
   belongs_to :session
   belongs_to :package

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 	  		post :verify_otp
         post :social_login
         post :call_verification
+        post :logout
 	  	end 
   	end
   	resources :static_contents do

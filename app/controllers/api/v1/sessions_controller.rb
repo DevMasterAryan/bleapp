@@ -2,14 +2,17 @@ require 'twilio_sms.rb'
 require 'open-uri'
 
 class Api::V1::SessionsController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp,:social_login,:call_verification]
+	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp,:social_login,:call_verification, :logout]
 
 	def login
 	    @otp  = User.generate_otp
 	    @user = User.find_by(mobile: params[:user][:mobile])
 		if @user.present?
+			@user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.now, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
+		    @user.save
+			@user.register_device(params[:user][:device_type], params[:user][:device_token])
 			if @user.billings.last.present? and (DateTime.now < @user.billings.last.usage_end_ts)
-				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user.credit, mop: @user&.billings&.last&.method_of_payment }
+				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user.credit, mop: @user&.billings&.last&.method_of_payment}
 			else
 				@user.update(otp: @otp)
 				# otp = TwilioSms.send_otp(@user.mobile,@otp)
@@ -40,6 +43,10 @@ class Api::V1::SessionsController < ApplicationController
 	def verify_otp
 		@user  = User.where(mobile: params[:mobile], otp: params[:otp]).first
 		if @user.present?
+			@user.register_device(params[:user][:device_type], params[:user][:device_token])
+			# @user.update(last_login: DateTime.now, mobile_phone_model: params[:user][:mobile_phone_model])
+			@user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.now, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
+		    @user.save
 			render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token }
 		else
 			render json: {responseCode: 500, responseMessage: "OTP mismatch."}
@@ -52,7 +59,8 @@ class Api::V1::SessionsController < ApplicationController
 		    @user = User.find_or_create_by(email: params[:user][:email]) || User.find_or_create_by(mobile: params[:user][:mobile])
 			
 			if @user.present?
-		       @user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image]}
+			   @user.register_device(params[:user][:device_type], params[:user][:device_token])
+		       @user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.now, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
 		       @user.save
 		       # @user.reload
 		       @user = User.find_by(id: @user.id)
@@ -67,6 +75,12 @@ class Api::V1::SessionsController < ApplicationController
 	  	rescue Exception => e
 	    	return render json: {responseCode: 500, responseMessage: "Something went wrong try again later."}  	
 	  	end
+	end
+
+	def logout
+	 @api_current_user.update(logged_in: false)
+	 @api_current_user.user_devices.destroy_all	
+	 render json: {responseCode: 200, responseMessage: "Logout successfully."}
 	end
 
 	def call_verification

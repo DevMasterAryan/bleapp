@@ -25,6 +25,16 @@ class User
   field :otp_secret_key, :type => String
   field :provider_id, :type => String
   field :provider, :type=> String
+  field :last_login, :type=> Time
+  field :promotions, :type=> String
+  field :lat, :type=> String
+  field :long, :type=> String
+  field :imei, :type=> String
+  field :ip_address, :type=> String
+  field :mobile_phone_model, :type=> String
+  field :location, :type=> String 
+  field :logged_in, :type=> Boolean, default: false
+
   
   before_create :generate_access_token
 
@@ -33,6 +43,12 @@ class User
   has_many :sessions, dependent: :destroy
   has_many :social_logins, dependent: :destroy
   has_many :helps, dependent: :destroy
+  has_many :user_devices, dependent: :destroy
+
+
+  def register_device  device_type, device_token
+    self.user_devices.find_or_create_by(device_type: device_type, device_token: device_token)
+  end
 
 
   def self.generate_otp

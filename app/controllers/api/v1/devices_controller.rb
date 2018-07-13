@@ -8,7 +8,7 @@ class Api::V1::DevicesController < ApplicationController
 		if @device.present?
 			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status } 
 			begin
-				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.location.id)
+				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.location.id, device_batterry_start: params["device_battery_start"])
 			  	return render json: {responseCode: 200, device_detail: @device_detail}	
 			rescue Exception => e
 				return render json: {responseCode: 500, device_detail: e}	

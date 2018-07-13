@@ -3,6 +3,7 @@ require 'open-uri'
 
 class Api::V1::SessionsController < ApplicationController
 	skip_before_action :verify_authenticity_token,only: [:login,:verify_otp,:social_login,:call_verification, :logout]
+    before_action :authenticate,only: [:logout]
 
 	def login
 	    @otp  = User.generate_otp
@@ -12,7 +13,7 @@ class Api::V1::SessionsController < ApplicationController
 		    @user.save
 			@user.register_device(params[:user][:device_type], params[:user][:device_token])
 			if @user.billings.last.present? and (DateTime.now < @user.billings.last.usage_end_ts)
-				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user.credit, mop: @user&.billings&.last&.method_of_payment}
+				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user.credit, mop: @user&.billings&.last&.method_of_payment,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : ""}
 			else
 				@user.update(otp: @otp)
 				# otp = TwilioSms.send_otp(@user.mobile,@otp)
@@ -47,7 +48,7 @@ class Api::V1::SessionsController < ApplicationController
 			# @user.update(last_login: DateTime.now, mobile_phone_model: params[:user][:mobile_phone_model])
 			@user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.now, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
 		    @user.save
-			render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token }
+			render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : "" }
 		else
 			render json: {responseCode: 500, responseMessage: "OTP mismatch."}
 		end
@@ -66,7 +67,7 @@ class Api::V1::SessionsController < ApplicationController
 		       @user = User.find_by(id: @user.id)
 		       @social = @user.social_logins.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
 			   if @user.billings.last.present? and (DateTime.now < @user.billings.last.usage_end_ts)
-			     return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user&.credit, mop: @user&.billings&.last&.method_of_payment }
+			     return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user&.credit, mop: @user&.billings&.last&.method_of_payment,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : "" }
 			   else
 
 			   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, end_time: @user&.billings&.last&.usage_end_ts || "", credit: @user&.credit}

@@ -10,19 +10,20 @@ class Api::V1::UsersController < ApplicationController
 		if !@api_current_user.credit.nil? and @api_current_user&.credit >= @package.package_value
 			@remaining_credit = @api_current_user&.credit -  @package.package_value
 			@api_current_user.update(credit: @remaining_credit)
-			@transaction = Transaction.create(transaction_id: "", status: true, amount: @package&.package_value)
-			@api_current_user.billings.new(method_of_payment: "Credit",session_id: @session.id, package_id: @package.id,
-				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now + @package&.package_time.minutes, transaction_id: @transaction.id).save(validate: false)
-			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || ""}
+			# @transaction = Transaction.create(transaction_id: "", status: true, amount: @package&.package_value)
+			@billing = @api_current_user.billings.new(method_of_payment: "Credit",session_id: @session.id, package_id: @package.id,
+				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
+			@billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
+			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",,site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.location&.name : ""}
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
         elsif params["mop"]=="payment"
-          @transaction = Transaction.new(transaction_id: params["transaction_id"], status: true, amount: @package&.package_value)
+          # @transaction = Transaction.new(transaction_id: params["transaction_id"], status: true, amount: @package&.package_value)
           # @transaction = Transaction.new(transaction_id: Digest::SHA256.hexdigest(Time.now.to_s), status: true, amount: @package&.package_value)
-          if @transaction.save
+          # if @transaction.save
 				@billing = @api_current_user.billings.new(method_of_payment: "Card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
-				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now+@package&.package_time.minutes,transaction_id: @transaction.id )
+				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now+@package&.package_time.minutes,transaction_id: "",amount: @package&.package_value)
 				if @billing.save
 					return render json: {responseCode: 200, responseMessage: "Transaction successful.", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || ""}
 				else
@@ -31,7 +32,7 @@ class Api::V1::UsersController < ApplicationController
 			else
 				return render json: {responseCode: 200, responseMessage: "Something went wrong."}
 			end   	 
-		end		
+		# end		
 	end
 
 	def charge_history

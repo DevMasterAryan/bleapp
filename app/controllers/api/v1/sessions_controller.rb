@@ -44,9 +44,9 @@ class Api::V1::SessionsController < ApplicationController
 	def verify_otp
 		@user  = User.where(mobile: params[:mobile], otp: params[:otp]).first
 		if @user.present?
-			@user.register_device(params[:user][:device_type], params[:user][:device_token])
+			@user.register_device(params[:device_type], params[:device_token])
 			# @user.update(last_login: DateTime.now, mobile_phone_model: params[:user][:mobile_phone_model])
-			@user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.now, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
+			@user.attributes = {email: params[:email], first_name: params[:first_name], last_name: params[:last_name], :remote_image_url=> params[:image], :last_login=> DateTime.now, imei: params[:imei], mobile_phone_model: params[:mobile_phone_model], logged_in: true}
 		    @user.save
 			render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : "" }
 		else

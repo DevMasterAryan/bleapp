@@ -18,7 +18,7 @@ class User
   field :logged_in, type: String
   field :image, type: String
   field :user_lock, type: Mongoid::Boolean
-  field :credit, type: Float
+  field :credit, type: Float, default: 0.0
   field :promotion, type: String
   field :access_token, type: String
   field :otp, type: Integer

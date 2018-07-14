@@ -8,7 +8,7 @@ class Api::V1::TransactionsController < ApplicationController
 			@transaction = Transaction.new(transaction_id: Digest::SHA256.hexdigest(Time.now.to_s), status: true, amount: @package&.package_value   )
 			if @transaction.save
 				@billing = @api_current_user.billings.new(method_of_payment: "Card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
-				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now+@package&.package_time.minutes,transaction_id: @transaction.id )
+				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: @transaction.id )
 				if @billing.save
 					return render json: {responseCode: 200, responseMessage: "Transaction successful."}
 				else

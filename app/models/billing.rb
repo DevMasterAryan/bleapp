@@ -18,7 +18,7 @@ class Billing
   field :device_battery_ts45, type: Time
   field :device_battery_ts60, type: Time
   field :amount, type: Float
-  belongs_to :transaction
+  belongs_to :transaction, optional: true
   belongs_to :session
   belongs_to :package
   belongs_to :user

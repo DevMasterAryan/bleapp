@@ -70,7 +70,7 @@ class Api::V1::SessionsController < ApplicationController
 			     return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user&.credit, mop: @user&.billings&.last&.method_of_payment,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : "" }
 			   else
 
-			   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, end_time: @user&.billings&.last&.usage_end_ts || "", credit: @user&.credit}
+			   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, end_time: @user&.billings&.last&.usage_end_ts.to_i || "",site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : "", credit: @user&.credit}
 			   end
 			end	 		
 	  	rescue Exception => e

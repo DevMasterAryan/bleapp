@@ -20,6 +20,7 @@
  *= require daterangepicker-bs3
  *= require bootstrap-colorpicker
  *= require datepicker3
+ *= require bootstrap.min
  *= require toastr.min
  *= require_self
  */
@@ -28,3 +29,6 @@
 @import "AdminLTE/AdminLTE";
 @import "AdminLTE/skins/skin-blue";
 
+.error{
+	color: red;
+}

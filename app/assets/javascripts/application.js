@@ -27,8 +27,13 @@
 //= require bootstrap-colorpicker
 //= require bootstrap-datepicker
 //= require toastr.min
+//= require jquery.validate
 //= require moment
 //= require jquery.slimscroll
+//= require bootstrap.min.js
 //= require app
 //= require rails-ujs
 //= require_tree .
+
+
+$(".alert").fadeOut(5000);

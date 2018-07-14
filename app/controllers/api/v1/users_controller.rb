@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
 			@billing = @api_current_user.billings.new(method_of_payment: "Credit",session_id: @session.id, package_id: @package.id,
 				usage_start_ts: DateTime.now,usage_end_ts: DateTime.now + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
 			@billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
-			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",,site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.location&.name : ""}
+			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.location&.name : ""}
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end

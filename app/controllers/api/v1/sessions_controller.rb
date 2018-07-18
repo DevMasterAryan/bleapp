@@ -17,7 +17,7 @@ class Api::V1::SessionsController < ApplicationController
 			else
 				@user.update(otp: @otp)
 				# otp = TwilioSms.send_otp(@user.mobile,@otp)
-				response = open("https://2factor.in/API/V1/0144b612-7dc3-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
+				response = open("https://2factor.in/API/V1/b3e8209b-7f80-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
 				# if otp == "send"
 				if response.status.first == "200"
 					render json: {responseCode: 200, responseMessage: "OTP sent successfully."}
@@ -29,7 +29,7 @@ class Api::V1::SessionsController < ApplicationController
 			@user =  User.new(mobile: params[:user][:mobile],otp: @otp)
 			if @user.save
 				 # otp = TwilioSms.send_otp(@user.mobile,@otp)
-				response = open("https://2factor.in/API/V1/0144b612-7dc3-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
+				response = open("https://2factor.in/API/V1/b3e8209b-7f80-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
 				if response.status.first == "200"
 					render json: {responseCode: 200, responseMessage: "OTP sent successfully."}
 				else

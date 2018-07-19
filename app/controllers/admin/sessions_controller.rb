@@ -8,7 +8,6 @@ class Admin::SessionsController < ApplicationController
   end
   
   def create
-    binding.pry
     user = AdminUser.where(email: params[:admin_user][:email].downcase).first
     if user && user.authenticate(params[:admin_user][:password])
       log_in(user)
@@ -26,12 +25,15 @@ class Admin::SessionsController < ApplicationController
 
   def destroy
     log_out
+    flash[:notice] = "Logout successfully."
     redirect_to admin_sessions_login_url
   end
   
   def forgot_password
     
   end
+  
+
 
 
 end

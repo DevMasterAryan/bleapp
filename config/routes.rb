@@ -1,11 +1,18 @@
 Rails.application.routes.draw do
   namespace :admin do
+    get 'accounts/index'
+  end
+
+  namespace :admin do
     get 'sessions/login'
     post "sessions/create"
     delete "sessions/destroy"
     get "dashboard/home"
     get "sessions/forgot_password"
-    
+    post "password_resets/send_reset_password"
+    get "/password_resets/reset_password"
+    put "/password_resets/update"
+    get "/accounts/index"
   
   end
 

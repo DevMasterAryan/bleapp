@@ -1,6 +1,7 @@
 require "active_model_otp"
 require 'twilio_sms.rb'
 require 'twilio-ruby'
+require 'open-uri'
 class User
   include ActiveModel::OneTimePassword 
   include Mongoid::Document

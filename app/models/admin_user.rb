@@ -7,6 +7,7 @@ class AdminUser
   field :remember_created_at,type: Time
   field :type, type: String
   field :reset_digest, type: String
+  field :reset_token, type: String
   field :reset_created_at, type: Time
   has_secure_password
 end

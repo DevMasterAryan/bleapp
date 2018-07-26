@@ -36,6 +36,7 @@ class User
   field :mobile_phone_model, :type=> String
   field :location, :type=> String 
   field :logged_in, :type=> Boolean, default: false
+  field :otp_count, :type=> Integer, default: 0
 
   
   before_create :generate_access_token

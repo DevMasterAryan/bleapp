@@ -27,7 +27,7 @@ class User
   field :provider_id, :type => String
   field :provider, :type=> String
   field :last_login, :type=> Time
-  field :promotions, :type=> String
+  field :promotions, :type=> Integer, default: 0
   field :lat, :type=> String
   field :long, :type=> String
   field :imei, :type=> String

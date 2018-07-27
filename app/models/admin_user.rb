@@ -9,5 +9,7 @@ class AdminUser
   field :reset_digest, type: String
   field :reset_token, type: String
   field :reset_created_at, type: Time
+  field :category_id, type: Integer
   has_secure_password
+  belongs_to :category
 end

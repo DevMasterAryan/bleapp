@@ -1,0 +1,11 @@
+<div class="container">
+  <h2>Create New Category</h2>
+ <%=form_for :category, url: admin_categories_path, html: {:id=> "create-category"} do |f|%>
+    <div class="form-group">
+      <%=f.label :name%>
+      <%=f.text_field :name%>
+    </div>
+    <%=f.submit "Create Category", class: "btn btn-primary"%> 
+   
+  <%end%>
+</div>

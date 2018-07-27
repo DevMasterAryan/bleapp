@@ -5,6 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-StaticContent.create(:title=> "Term & Condition",:content=>"adasdadasdasdasd asdasdasdasdadad asdasdasdasddaasdd asdasdasdsdasda")
-StaticContent.create(:title=> "About Us",:content=>"adasdadasdasdasd asdasdasdasdadad asdasdasdasddaasdd asdasdasdsdasda")
-StaticContent.create(:title=> "Term & Condition",:content=>"adasdadasdasdasd asdasdasdasdadad asdasdasdasddaasdd asdasdasdsdasda")
+
+Category.create(name: "SuperAdmin")
+Category.create(name: "Manager")
+Category.create(name: "Employee")
+Category.create(name: "Admin")

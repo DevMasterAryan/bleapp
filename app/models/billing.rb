@@ -22,6 +22,7 @@ class Billing
   field :help_id, type: String
   field :feedback, type: String
   field :rating, type: Integer, default: 0
+  field :site_name, type: String
 
   index({ user_id: 1,  })
 

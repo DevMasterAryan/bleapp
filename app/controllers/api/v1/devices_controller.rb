@@ -19,6 +19,7 @@ class Api::V1::DevicesController < ApplicationController
 	end
 
 	def device_locations
+		#search params,lat ,long 
 		@locations = Location.all
 		if @locations.present?
 			locations = []

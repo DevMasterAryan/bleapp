@@ -1,6 +1,7 @@
 class Billing
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Pagination
   field :session_id, type: String
   field :method_of_payment, type: String
   field :transaction_id, type: String
@@ -19,7 +20,7 @@ class Billing
   field :device_battery_ts60, type: Time
   field :amount, type: Float
 
-  index({ user_id: 1 })
+  index({ user_id: 1,  })
 
   belongs_to :transaction, optional: true
   belongs_to :session

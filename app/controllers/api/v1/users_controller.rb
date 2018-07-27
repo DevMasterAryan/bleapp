@@ -36,14 +36,14 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def charge_history
-		@billings = @api_current_user&.billings&.reverse
+		@billings = Billing&.paginate(:page =>params[:page], :limit => params[:per_page]).where(user_id: @api_current_user) 	
 		if @billings.present?
 		    @billings_data = []
 		    @billings.each do |billing|
 		    	# billing.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+billing.created_at.strftime("%I:%M %p")
-		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true }
+		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true, rating: 0 }
 		    end
-		    return render json: {responseCode: 200, charge_history: @billings_data}
+		    return render json: {responseCode: 200, charge_history: @billings_data,:pagination=>{page_no: params[:page],per_page: params[:per_page],max_page_size: @api_current_user.billings.count/params[:per_page].to_i+1, total_records: @api_current_user.billings.count}}
 		else
 			return render json: {responseCode: 200, responseMessage: "History not found.", charge_history: []}
 		end
@@ -59,7 +59,7 @@ class Api::V1::UsersController < ApplicationController
 
 		if @last_charge.present?
 			# @last_charge.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+@last_charge.created_at.strftime("%I:%M %p")
-			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true }, additional_topic: additional_topic}
+			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true, rating: 0 }, additional_topic: additional_topic}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found.", additional_topic: additional_topic}
 		end		

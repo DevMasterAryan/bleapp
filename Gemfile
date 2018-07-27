@@ -77,4 +77,4 @@ gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 gem 'cloudinary'
 gem 'jquery-rails'
 gem 'jquery-validation-rails'
-
+gem 'mongoid-pagination', '~> 0.2.0'

@@ -7,7 +7,7 @@ class Api::V1::HelpController < ApplicationController
 	end
     
     def submit_b1_b2
-      @api_current_user.user_responses.new(help_id: params[:help_id], feedback: params[:feedback])
+      @api_current_user.user_responses.new(help_id: params[:help_id], feedback: params[:feedback], billing_id: params[:billing_id])
       if @api_current_user.save
          render json: {responseCode: 200, responseMessage: "Submitted successfully."}   
       else

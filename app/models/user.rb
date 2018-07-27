@@ -47,6 +47,8 @@ class User
   has_many :social_logins, dependent: :destroy
   has_many :helps, dependent: :destroy
   has_many :user_devices, dependent: :destroy
+  has_many :user_responses, dependent: :destroy
+  
 
 
   def register_device  device_type, device_token

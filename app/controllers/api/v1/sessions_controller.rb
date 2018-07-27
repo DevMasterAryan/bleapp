@@ -15,6 +15,7 @@ class Api::V1::SessionsController < ApplicationController
 			if @user.billings.last.present? and (DateTime.current < @user.billings.last.usage_end_ts)
 				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user.credit, mop: @user&.billings&.last&.method_of_payment,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : ""}
 			else
+				return render json: {responseCode: 200, responseMessage: "Please try some other mode of login."} if @user.otp_count >=3 && params[:resend_otp].present?
 				@user.update(otp: @otp)
 				# otp = TwilioSms.send_otp(@user.mobile,@otp)
 				response = open("https://2factor.in/API/V1/b3e8209b-7f80-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
@@ -28,6 +29,7 @@ class Api::V1::SessionsController < ApplicationController
 		else
 			@user =  User.new(mobile: params[:user][:mobile],otp: @otp)
 			if @user.save
+				return render json: {responseCode: 200, responseMessage: "Please try some other mode of login."} if @user.otp_count >=3 && params[:resend_otp].present?
 				 # otp = TwilioSms.send_otp(@user.mobile,@otp)
 				response = open("https://2factor.in/API/V1/b3e8209b-7f80-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
 				if response.status.first == "200"
@@ -87,6 +89,9 @@ class Api::V1::SessionsController < ApplicationController
 	def call_verification
 		@user = User.find_by(:mobile=>params[:mobile])
 		if @user.present?
+           return render json: {responseCode: 200, responseMessage: "Please try some other mode of login."} if @user.otp_count >=3 && params[:resend_otp].present?
+
+
 			begin				
 				User.call_verification(@user)
 			rescue Exception => e

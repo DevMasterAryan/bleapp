@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  namespace :admin do
-    get 'accounts/index'
-  end
+  
 
   namespace :admin do
+    resources :categories, only: [:new,:create, :edit, :update]
+    resources :accounts 
+    get 'accounts/index'
     get 'sessions/login'
     post "sessions/create"
     delete "sessions/destroy"
@@ -12,8 +13,6 @@ Rails.application.routes.draw do
     post "password_resets/send_reset_password"
     get "/password_resets/reset_password"
     put "/password_resets/update"
-    get "/accounts/index"
-  
   end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
@@ -59,9 +58,17 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         post :apply_credit
-        get :charge_history
+        post :charge_history
         get :user_last_charge
       end
+    end
+    
+    resources :help do 
+       collection do
+         get :get_b1_b2_list
+         post :submit_b1_b2
+         get :feedback_and_faq_list
+       end
     end
 
     resources :transactions do

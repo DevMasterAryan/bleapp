@@ -19,6 +19,9 @@ class Billing
   field :device_battery_ts45, type: Time
   field :device_battery_ts60, type: Time
   field :amount, type: Float
+  field :help_id, type: String
+  field :feedback, type: String
+  field :rating, type: Integer, default: 0
 
   index({ user_id: 1,  })
 

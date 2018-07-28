@@ -65,6 +65,10 @@ class Api::V1::UsersController < ApplicationController
 		end		
 
 	end
+
+
+
+	#.billings.where({'created_at' => {'$gt' => Date.today-7.days}})
   
 	
 end

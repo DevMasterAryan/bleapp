@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge]
-	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge]
-
+	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :generate_checksum]
+    include PaytmHelper
 	def apply_credit
 		@package  = Package.find_by(id: params["package_id"])
 		@session = Session.find_by(id: params["session_id"])
@@ -65,6 +65,30 @@ class Api::V1::UsersController < ApplicationController
 		end		
 
 	end
+    
+    def billing_not_rated
+      @bliings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}}).order(created_at: :desc)
+      
+    end
+   
+
+    def checksum
+       paramList = Hash.new
+	    paramList["MID"] = "mobilo96691880612413"
+	    paramList["ORDER_ID"] = "#{Time.now.to_i.to_s}"
+	    paramList["CUST_ID"] = "#{Time.now.to_i.to_s}"
+	    paramList["INDUSTRY_TYPE_ID"] = "Retail"
+	    paramList["CHANNEL_ID"] = "WAP"
+	    paramList["TXN_AMOUNT"] = "1"
+	    paramList["MSISDN"] = "+919997217401"
+	    paramList["EMAIL"] = "gunjackaryan@gmail.com"
+	    paramList["WEBSITE"] = "wavedio.herkuapp.com"
+	    @paramList=paramList
+        @checksum_hash=generate_checksum()
+        render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
+    end 
+
+
 
 
 

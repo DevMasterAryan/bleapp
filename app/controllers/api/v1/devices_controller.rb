@@ -20,7 +20,15 @@ class Api::V1::DevicesController < ApplicationController
 
 	def device_locations
 		#search params,lat ,long 
-		@locations = Location.all
+		if params[:search].present?
+          @locations = Location.where({name: /^params[:search]/i})
+        elsif params[:lat].present? && params[:long].present?
+          @locations = Location.all	
+        else
+		 @locations = Location.all 
+		end
+		
+		
 		if @locations.present?
 			locations = []
 			@locations.each do |location|

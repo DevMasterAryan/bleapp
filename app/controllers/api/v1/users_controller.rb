@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge]
-	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :generate_checksum]
+	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum]
     include PaytmHelper
 	def apply_credit
 		@package  = Package.find_by(id: params["package_id"])
@@ -73,10 +73,10 @@ class Api::V1::UsersController < ApplicationController
    
 
     def checksum
-       paramList = Hash.new
+        paramList = Hash.new
 	    paramList["MID"] = "mobilo96691880612413"
 	    paramList["ORDER_ID"] = "#{Time.now.to_i.to_s}"
-	    paramList["CUST_ID"] = "#{Time.now.to_i.to_s}"
+	    paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
 	    paramList["INDUSTRY_TYPE_ID"] = "Retail"
 	    paramList["CHANNEL_ID"] = "WAP"
 	    paramList["TXN_AMOUNT"] = "1"

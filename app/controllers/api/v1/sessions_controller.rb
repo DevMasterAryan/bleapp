@@ -50,7 +50,7 @@ class Api::V1::SessionsController < ApplicationController
 			# @user.update(last_login: DateTime.now, mobile_phone_model: params[:user][:mobile_phone_model])
 			@user.attributes = {email: params[:email], first_name: params[:first_name], last_name: params[:last_name], :remote_image_url=> params[:image], :last_login=> DateTime.current, imei: params[:imei], mobile_phone_model: params[:mobile_phone_model], logged_in: true}
 		    @user.save
-			render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user&.access_token || "",mop: @user.billings.present? ? @user&.billings&.last&.method_of_payment : "",site_display_name: @user.billings.present? ? @user&.billings&.last&.session&.device&.site_display_name : "", site_name: @user.billings.present? ? @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : "" : "", billing_id: @user.billings.present? ? @user&.billings&.last&.id&.as_json["$oid"] : "", promotion: @user&.promotion || "",, user_id: @user.id.as_json["$oid"] }
+			render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user&.access_token || "",mop: @user.billings.present? ? @user&.billings&.last&.method_of_payment : "",site_display_name: @user.billings.present? ? @user&.billings&.last&.session&.device&.site_display_name : "", site_name: @user.billings.present? ? @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.location&.name : "" : "", billing_id: @user.billings.present? ? @user&.billings&.last&.id&.as_json["$oid"] : "", promotion: @user&.promotion || "", user_id: @user.id.as_json["$oid"] }
 		else
 			render json: {responseCode: 500, responseMessage: "OTP mismatch."}
 		end

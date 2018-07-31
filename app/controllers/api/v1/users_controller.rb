@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge]
+	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum]
 	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum]
     include PaytmHelper
 	def apply_credit
@@ -71,7 +71,7 @@ class Api::V1::UsersController < ApplicationController
 
 		if @last_charge.present?
 			# @last_charge.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+@last_charge.created_at.strftime("%I:%M %p")
-			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true, rating: 0, billing_id: @last_charge.id&.as_json["$oid"], package_value: @last_charge.package.package_value,package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.site_name || "" }, additional_topic: additional_topic}
+			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true, rating: 0, billing_id: @last_charge.id&.as_json["$oid"],package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.site_name || "" }, additional_topic: additional_topic}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found.", additional_topic: additional_topic}
 		end		
@@ -79,22 +79,28 @@ class Api::V1::UsersController < ApplicationController
 	end
     
     def billing_not_rated
-      @bliings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}}).order(created_at: :desc)
-      
+      @billings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'rating'=> {'$lt'=> 1}}).limit(3).map { |r| r }
+
+      render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: @billings} 
     end
    
 
     def checksum
-     paramList = Hash.new
+    
+        paramList = Hash.new
 	    paramList["MID"] = "Wavedi27436137685521"
-	    paramList["ORDER_ID"] = "#{Time.now.to_i.to_s}"
-	    paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
 	    paramList["INDUSTRY_TYPE_ID"] = "Retail"
 	    paramList["CHANNEL_ID"] = "WAP"
-	    paramList["TXN_AMOUNT"] = "1"
-	    paramList["MSISDN"] = "+919997217401"
-	    paramList["EMAIL"] = "gunjackaryan@gmail.com"
-	    paramList["WEBSITE"] = "wavedio.herkuapp.com"
+	    paramList["WEBSITE"] = "APPSTAGING"
+	    paramList["ORDER_ID"] = params[:order_id]
+	    paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
+	    paramList["TXN_AMOUNT"] = params[:txn_amount]
+	    paramList["CURRENCY"] = "INR"
+	    paramList["MSISDN"] = params[:mobile_no]
+	    paramList["REQUEST_TYPE"] = "DEFAULT"
+	    paramList["EMAIL"] = params[:email]
+	    paramList["CALLBACK_URL"]  = params[:callback_url]
+	    
 	    @paramList=paramList
         @checksum_hash=generate_checksum()
         

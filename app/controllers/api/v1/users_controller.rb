@@ -96,7 +96,7 @@ class Api::V1::UsersController < ApplicationController
 	    paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
 	    paramList["TXN_AMOUNT"] = params[:txn_amount]
 	    paramList["CURRENCY"] = "INR"
-	    paramList["MSISDN"] = params[:mobile_no]
+	    paramList["MOBILE_NO"] = params[:mobile_no]
 	    paramList["REQUEST_TYPE"] = "DEFAULT"
 	    paramList["EMAIL"] = params[:email]
 	    paramList["CALLBACK_URL"]  = params[:callback_url]

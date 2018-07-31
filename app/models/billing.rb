@@ -11,7 +11,7 @@ class Billing
   field :usage_end_ts, type: Time
   field :user_id, type: String
   field :rating, type: Integer
-  field :help_id, type: String
+  field :help_id, type: Array, default: []
   field :help_status, type: String
   field :payment_status, type: Boolean, default: false
   field :device_battery_ts15, type: Time
@@ -22,7 +22,7 @@ class Billing
   field :help_id, type: String
   field :feedback, type: String
   field :rating, type: Integer, default: 0
-  
+  field :rating_status, type: Boolean, default: false
 
   index({ user_id: 1,  })
 

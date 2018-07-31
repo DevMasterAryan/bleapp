@@ -61,7 +61,7 @@ Rails.application.routes.draw do
         post :charge_history
         get :user_last_charge
         post :checksum
-        get :billing_not_rated
+        post :billing_not_rated
       end
     end
     

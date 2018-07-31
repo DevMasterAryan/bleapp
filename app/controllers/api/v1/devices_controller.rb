@@ -21,20 +21,20 @@ class Api::V1::DevicesController < ApplicationController
 	def device_locations
 		#search params,lat ,long 
 		if params[:search].present?
-          @locations = Location.where({name: /^params[:search]/i})
+          @devices = Device.where({site_name: /^params[:search]/i})
         elsif params[:lat].present? && params[:long].present?
-          @locations = Location.all	
+          @devices = Device.all	
         else
-		 @locations = Location.all 
+		 @devices = Device.all 
 		end
 		
 		
 		if @locations.present?
-			locations = []
-			@locations.each do |location|
-				locations << {name: location&.name, lat: location&.lat, long: location&.long} 
+			site_names = []
+			@devices.each do |device|
+				site_names << {name: device&.site_name, lat: device&.location&.lat, long: device&.location&.long} 
 			end
-			return render json: {responseCode: 200, location: locations}
+			return render json: {responseCode: 200, location: site_names}
 		else
 			return render json: {responseCode: 500, responseMessage: "No location found."}
 		end		

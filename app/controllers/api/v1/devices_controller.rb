@@ -29,14 +29,14 @@ class Api::V1::DevicesController < ApplicationController
 		end
 		
 		
-		if @locations.present?
+		if @devices.present?
 			site_names = []
 			@devices.each do |device|
 				site_names << {name: device&.site_name, lat: device&.location&.lat, long: device&.location&.long} 
 			end
 			return render json: {responseCode: 200, location: site_names}
 		else
-			return render json: {responseCode: 500, responseMessage: "No location found."}
+			return render json: {responseCode: 200, responseMessage: "No location found.", location: []}
 		end		
 	end
 

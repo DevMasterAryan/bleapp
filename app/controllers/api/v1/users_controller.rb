@@ -5,6 +5,18 @@ class Api::V1::UsersController < ApplicationController
 	def apply_credit
 		@package  = Package.find_by(id: params["package_id"])
 		@session = Session.find_by(id: params["session_id"])
+
+
+        #promotion applied
+        if params["mop"]=="promotion"
+          return render json: {responseCode: 200, responseMessage: "You have not promotion to apply."}  if @api_current_user.promotion<1
+          @billing = @api_current_user.billings.new(method_of_payment: "Promotion",session_id: @session.id, package_id: @package.id,usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
+			# @billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
+          @api_current_user.update(promotion: @api_current_user.promotion - 1) 
+          return render json: {responseCode: 200, responseMessage: "Your promotion applied.", remaining_credit: @api_current_user.credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site_name : "", remaining_promotion: @api_current_user.promotion}
+         	 
+        end 
+        #promotion applied code end
 		# @session.update(device_battery_status: params["device_battery_status"])
 		if params["mop"]=="credit"
 		if !@api_current_user.credit.nil? and @api_current_user&.credit >= @package.package_value
@@ -14,7 +26,7 @@ class Api::V1::UsersController < ApplicationController
 			@billing = @api_current_user.billings.new(method_of_payment: "Credit",session_id: @session.id, package_id: @package.id,
 				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
 			@billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
-			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.location&.name : ""}
+			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site_name : "", remaining_promotion: @api_current_user.promotion}
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end

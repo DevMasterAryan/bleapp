@@ -64,7 +64,8 @@ class User
     begin
       otp = User.generate_otp
       user.update(otp: otp)
-      mobile = user.mobile.slice!(0,3)
+      mobile = user.mobile
+      mobile.slice!(0,3)
       response = open("https://2factor.in/API/V1/b3e8209b-7f80-11e8-a895-0200cd936042/VOICE/#{mobile}/#{otp}")
       # @twilio ||= Twilio::REST::Client.new("AC55732aedd35186f7caa85d360e5dbd01","c575e7358ce88ba822c387bdf2925921")
       # @twilio.calls.create( from: "+1929-377-1326", to: user.mobile, url: "https://wavedio.herokuapp.com/phone_verifications/voice?otp=#{otp}")

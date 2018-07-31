@@ -53,7 +53,7 @@ class Api::V1::UsersController < ApplicationController
 		    @billings_data = []
 		    @billings.each do |billing|
 		    	# billing.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+billing.created_at.strftime("%I:%M %p")
-		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true, rating: 0, billing_id: billing.id&.as_json["$oid"], package_value: billing.package.package_value,package_gst: billing.package.package_gst, package_final: billing.package.package_final, site_name: billing&.site_name || "" }
+		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true, rating: 0, billing_id: billing.id&.as_json["$oid"], package_value: billing.package.package_value,package_gst: billing.package.package_gst, package_final: billing.package.package_final, site_name: billing&.device&.site_name || "" }
 		    end
 		    return render json: {responseCode: 200, charge_history: @billings_data,:pagination=>{page_no: params[:page],per_page: params[:per_page],max_page_size: @api_current_user.billings.count/params[:per_page].to_i+1, total_records: @api_current_user.billings.count}}
 		else
@@ -71,7 +71,7 @@ class Api::V1::UsersController < ApplicationController
 
 		if @last_charge.present?
 			# @last_charge.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+@last_charge.created_at.strftime("%I:%M %p")
-			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true, rating: 0, billing_id: @last_charge.id&.as_json["$oid"],package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.site_name || "" }, additional_topic: additional_topic}
+			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true, rating: 0, billing_id: @last_charge.id&.as_json["$oid"],package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.device&.site_name || "" }, additional_topic: additional_topic}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found.", additional_topic: additional_topic}
 		end		
@@ -79,7 +79,7 @@ class Api::V1::UsersController < ApplicationController
 	end
     
     def billing_not_rated
-      @billings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'rating'=> {'$lt'=> 1}}).limit(3).map { |r| r }
+      @billings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'rating'=> {'$lt'=> 1}}).limit(3).map { |r| [billing_id: r.id.as_json["$oid"], site_name: r&.site_name] }
 
       render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: @billings} 
     end

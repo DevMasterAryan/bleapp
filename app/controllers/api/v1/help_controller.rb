@@ -25,6 +25,11 @@ class Api::V1::HelpController < ApplicationController
     end
     
 
+    def r1_r2_list
+      @rating_list = Help.where(status: "Rating")
+      render json: {responseCode: 200, responseMessage: "List fetched successfully.", rating: @rating_list}
+    end
+
 
 
 

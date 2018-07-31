@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     resources :devices do
       collection do
         post :search_device
-        get :device_locations
+        post :device_locations
         post :stolen_device_location_update
         post :device_location_search
         post :device_status

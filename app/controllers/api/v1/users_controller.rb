@@ -81,7 +81,7 @@ class Api::V1::UsersController < ApplicationController
     
     def billing_not_rated
     if params[:rating_status].present? && params[:billing_id].present?
-    	@billing = Billing.find_by(id: parmas[:billing_id])
+    	@billing = Billing.find_by(id: params[:billing_id])
     	@billing.update(rating_status: params[:rating_status])
        return render json: {responseCode: 200, responseMessage: "Status updated successfully."}
     else

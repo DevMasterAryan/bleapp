@@ -53,7 +53,7 @@ class Api::V1::UsersController < ApplicationController
 		    @billings_data = []
 		    @billings.each do |billing|
 		    	# billing.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+billing.created_at.strftime("%I:%M %p")
-		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true, rating: 0, billing_id: billing.id&.as_json["$oid"], package_value: billing.package.package_value,package_gst: billing.package.package_gst, package_final: billing.package.package_final, site_name: billing&.session&.device&.site&.site_name || "" }
+		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true, rating: 0, billing_id: billing.id&.as_json["$oid"], package_value: billing.package.package_value,package_gst: billing.package.package_gst, package_final: billing.package.package_final, site_name: billing&.session&.device&.site&.site_name || "", start_time: billing&.usage_start_ts&.to_i, end_time: billing&.usage_end_ts&.to_i }
 		    end
 		    return render json: {responseCode: 200, charge_history: @billings_data,:pagination=>{page_no: params[:page],per_page: params[:per_page],max_page_size: @api_current_user.billings.count/params[:per_page].to_i+1, total_records: @api_current_user.billings.count}}
 		else
@@ -71,7 +71,7 @@ class Api::V1::UsersController < ApplicationController
 
 		if @last_charge.present?
 			# @last_charge.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+@last_charge.created_at.strftime("%I:%M %p")
-			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true, rating: 0, billing_id: @last_charge.id&.as_json["$oid"],package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.session&.device&.site&.site_name || "" }, additional_topic: additional_topic}
+			return render json: {responseCode: 200, last_charge: {location:@last_charge&.session&.device&.location&.name || " ",date_time:  @last_charge&.created_at&.to_i|| "",package_time: @last_charge&.package&.package_time || "",package_value: @last_charge&.package&.package_value, active: DateTime.current > @last_charge.usage_end_ts ? false : true, rating: 0, billing_id: @last_charge.id&.as_json["$oid"],package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.session&.device&.site&.site_name || "",, start_time: @last_charge&.usage_start_ts&.to_i, end_time: @last_charge&.usage_end_ts&.to_i }, additional_topic: additional_topic}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found.", additional_topic: additional_topic}
 		end		

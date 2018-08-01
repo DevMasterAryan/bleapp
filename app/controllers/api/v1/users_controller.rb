@@ -31,13 +31,14 @@ class Api::V1::UsersController < ApplicationController
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
         elsif params["mop"]=="payment"
-          # @transaction = Transaction.new(transaction_id: params["transaction_id"], status: true, amount: @package&.package_value)
-          # @transaction = Transaction.new(transaction_id: Digest::SHA256.hexdigest(Time.now.to_s), status: true, amount: @package&.package_value)
-          # if @transaction.save
+                if params[:credit].present?
+                     @remaining_credit = @api_current_user.credit - params[:credit].to_i 
+                     @api_current_user.update(credit: @remaining_credit)
+                end
 				@billing = @api_current_user.billings.new(method_of_payment: "Card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
-				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: "",amount: @package&.package_value)
+				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: "",amount: params[:card].present? ? params[:card] : @package&.package_final)
 				if @billing.save
-					return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @billing.id.as_json["$oid"]}
+					return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @api_current_user.credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @billing.id.as_json["$oid"]}
 				else
 					return render json: {responseCode: 200, responseMessage: "Something went wrong."}
 				end

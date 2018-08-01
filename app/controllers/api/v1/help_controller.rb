@@ -9,7 +9,7 @@ class Api::V1::HelpController < ApplicationController
     def submit_b1_b2
       @billing = @api_current_user.billings.find_by(id: params[:billing_id])
       # @api_current_user.user_responses.new(help_id: params[:help_id], feedback: params[:feedback], billing_id: params[:billing_id])
-      @billing.update_attributes(feedback: params[:feedback], help_id: params[:help_id], rating: params[:rating])      
+      @billing.update_attributes(feedback: params[:feedback], help_id: params[:help_id], rating: params[:rating], rating_status: params[:rating_status])      
       if @api_current_user.save
          render json: {responseCode: 200, responseMessage: "Submitted successfully."}   
       else

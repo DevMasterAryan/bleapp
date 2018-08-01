@@ -6,9 +6,9 @@ class Api::V1::DevicesController < ApplicationController
 		@device = Device.any_of({mac_address: params[:qr_code]},{device: params[:qr_code]}).first
 		# @device = Device.find_by(device: params[:qr_code]) || Device.find_by(mac_address: params[:qr_code])
 		if @device.present?
-			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status, site_display_name: @device&.site_display_name, site_name: @device&.site_display_name? ? @device&.site_name : "" } 
+			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status, site_display_name: @device&.site_display_name, site_name: @device&.site_display_name? ? @device&.site&.site_name : "" } 
 			begin
-				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.location.id)
+				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.site&.id.as_json["$oid"])
 			  	return render json: {responseCode: 200, device_detail: @device_detail, session_id: @session&.id&.as_json["$oid"] || ""}	
 			rescue Exception => e
 				return render json: {responseCode: 500, device_detail: e}	
@@ -21,18 +21,18 @@ class Api::V1::DevicesController < ApplicationController
 	def device_locations
 		#search params,lat ,long 
 		if params[:search].present?
-          @devices = Device.where({site_name: /^params[:search]/i})
+          @sites = Device.where({site_name: /^params[:search]/i})
         elsif params[:lat].present? && params[:long].present?
-          @devices = Device.all	
+          @sites = Device.all	
         else
-		 @devices = Device.all 
+		 @sites = Device.all 
 		end
 		
 		
-		if @devices.present?
+		if @sites.present?
 			site_names = []
-			@devices.each do |device|
-				site_names << {name: device&.site_name, lat: device&.location&.lat, long: device&.location&.long} 
+			@sites.each do |device|
+				site_names << {site_id: device.id.as_json["$oid"], name: device&.site_name, lat: device&.lat, long: device&.long} 
 			end
 			return render json: {responseCode: 200, location: site_names}
 		else
@@ -75,7 +75,7 @@ class Api::V1::DevicesController < ApplicationController
      if @device.present?
        @session = @session.update(device_battery_start: params["device_status"])
        # @device.update(device_status: params["device_status"])
-       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @session&.device_battery_start,site_display_name: @device&.site_display_name, site_name: @device&.site_display_name? ? @device&.site_name : ""  } 
+       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @session&.device_battery_start,site_display_name: @device&.site_display_name, site_name: @device&.site_display_name? ? @device&.site&.site_name : ""  } 
        return render json: { responseCode: 200, responseMessage: "Device status saved successfully.",device_detail: @device_detail }
      else
      	return render json: {responseCode: 500, responseMessage: "Device not found."}

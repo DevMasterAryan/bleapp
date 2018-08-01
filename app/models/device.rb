@@ -14,7 +14,10 @@ class Device
   field :site_display_name, type: Boolean, default: false
   field :ido_old, type: String 
   field :ido_new, type: String 
-  field :site_name, type: String
-  belongs_to :location
+  field :site_id, type: Integer
+  belongs_to :location, optional: true
+
+  belongs_to :site, optional: true
+
   has_one :session, dependent: :destroy
 end

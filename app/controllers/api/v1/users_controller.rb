@@ -48,7 +48,7 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def charge_history
-		@billings = Billing&.paginate(:page =>params[:page], :limit => params[:per_page]).where(user_id: @api_current_user) 	
+		@billings = Billing&.paginate(:page =>params[:page], :limit => params[:per_page]).where(user_id: @api_current_user).reverse 	
 		if @billings.present?
 		    @billings_data = []
 		    @billings.each do |billing|

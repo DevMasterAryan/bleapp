@@ -1,5 +1,5 @@
 class Api::V1::DevicesController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:search_device,:device_locations,:stolen_device_location_update,:device_location_search,:save_battery_ts]
+	skip_before_action :verify_authenticity_token,only: [:search_device,:device_locations,:stolen_device_location_update,:device_location_search,:save_battery_ts,:device_status]
 	before_action :authenticate,only: [:search_device,:device_locations,:stolen_device_location_update,:device_location_search,:save_battery_ts]
 	
 	def search_device

@@ -81,4 +81,12 @@ class Api::V1::DevicesController < ApplicationController
      	return render json: {responseCode: 500, responseMessage: "Device not found."}
      end		
 	end
+
+    def save_batter_ts
+       # @billing = Billing.find_by(id: params[:billing_id])	
+       # if !@billing.device_battery_ts15.present?
+       #     @billing.update(device_battery_ts15: params[:device_battery_ts])
+       # end
+    end
+
 end

@@ -71,6 +71,7 @@ Rails.application.routes.draw do
          post :submit_b1_b2
          get :feedback_and_faq_list
          get :r1_r2_list
+         post :submit_feedback_api
        end
     end
 

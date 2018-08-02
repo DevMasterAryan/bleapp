@@ -29,6 +29,15 @@ class Api::V1::HelpController < ApplicationController
       @rating_list = Help.where(status: "Rating")
       render json: {responseCode: 200, responseMessage: "List fetched successfully.", rating: @rating_list}
     end
+   
+    def submit_feedback_api
+      @user_feedback = UserFeedback.new(user_id: @api_current_user.id, site_id: params[:site_id], help_id: params[:help_id])
+      if @user_feedback.save
+          render json: {responseCode: 200, responseMessage: "Feedback submitted successfully."}
+      else
+        render json: {responseCode: 500, responseMessage: "Try again later."}
+      end 
+    end
 
 
 

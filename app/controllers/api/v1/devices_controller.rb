@@ -75,7 +75,7 @@ class Api::V1::DevicesController < ApplicationController
      if @device.present?
        @session = @session.update(device_battery_start: params["device_status"])
        # @device.update(device_status: params["device_status"])
-       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @session&.device_battery_start,site_display_name: @device&.site_display_name, site_name: @device&.site_display_name? ? @device&.site&.site_name : ""  } 
+       @device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @session.device_battery_start || "",site_display_name: @device&.site_display_name, site_name: @device&.site_display_name? ? @device&.site&.site_name : ""  } 
        return render json: { responseCode: 200, responseMessage: "Device status saved successfully.",device_detail: @device_detail }
      else
      	return render json: {responseCode: 500, responseMessage: "Device not found."}

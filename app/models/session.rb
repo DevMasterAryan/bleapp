@@ -3,7 +3,7 @@ class Session
   include Mongoid::Timestamps
   field :session_ts, type: Time
   field :user_id, type: Integer
-  field :device_battery_start, type: Time
+  field :device_battery_start, type: String
   field :site_id, type: Integer
   field :device_id, type: Integer
   field :session_start_ts, type: Time

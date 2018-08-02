@@ -15,7 +15,6 @@ class Device
   field :ido_old, type: String 
   field :ido_new, type: String 
   field :site_id, type: Integer
-  field :device_battery_start, type: String
   belongs_to :location, optional: true
 
   belongs_to :site, optional: true

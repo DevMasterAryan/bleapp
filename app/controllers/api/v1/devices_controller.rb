@@ -20,7 +20,6 @@ class Api::V1::DevicesController < ApplicationController
 
 	def device_locations
 		#search params,lat ,long 
-		binding.pry
 		if params[:search].present?
           @sites = Site.where({site_name: /^#{params[:search]}/i})
         elsif params[:lat].present? && params[:long].present?

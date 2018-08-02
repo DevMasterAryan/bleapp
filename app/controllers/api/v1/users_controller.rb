@@ -97,19 +97,19 @@ class Api::V1::UsersController < ApplicationController
     def checksum
     
         paramList = Hash.new
-	    paramList["MID"] = "Wavedi27436137685521"
-	    paramList["INDUSTRY_TYPE_ID"] = "Retail"
-	    paramList["CHANNEL_ID"] = "WAP"
-	    paramList["WEBSITE"] = "APPSTAGING"
-	    paramList["ORDER_ID"] = params[:order_id]
-	    paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
-	    paramList["TXN_AMOUNT"] = params[:txn_amount]
-	    paramList["CURRENCY"] = "INR"
-	    paramList["MOBILE_NO"] = params[:mobile_no]
-	    paramList["REQUEST_TYPE"] = "DEFAULT"
-	    paramList["EMAIL"] = params[:email]
-	    paramList["THEME"] = params[:theme]
 	    paramList["CALLBACK_URL"]  = params[:callback_url]
+	    paramList["CHANNEL_ID"] = "WAP"
+	    paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
+	    paramList["EMAIL"] = params[:email]
+	    paramList["INDUSTRY_TYPE_ID"] = "Retail"
+	    paramList["MID"] = "Wavedi27436137685521"
+	    paramList["MOBILE_NO"] = params[:mobile_no]
+	    paramList["ORDER_ID"] = params[:order_id]
+	    paramList["REQUEST_TYPE"] = "DEFAULT"
+	    paramList["TXN_AMOUNT"] = params[:txn_amount]
+	    paramList["WEBSITE"] = "APPSTAGING"
+	    # paramList["CURRENCY"] = "INR"
+	    # paramList["THEME"] = params[:theme]
 	    
 	    @paramList=paramList
         @checksum_hash=generate_checksum()

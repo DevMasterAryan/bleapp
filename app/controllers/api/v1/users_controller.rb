@@ -108,24 +108,8 @@ class Api::V1::UsersController < ApplicationController
 	    paramList["REQUEST_TYPE"] = "DEFAULT"
 	    paramList["TXN_AMOUNT"] = params[:txn_amount]
 	    paramList["WEBSITE"] = "APPSTAGING"
-	    # paramList["CURRENCY"] = "INR"
-	    # paramList["THEME"] = params[:theme]
-	    
 	    @paramList=paramList
         @checksum_hash=generate_checksum()
-        
-     #    paramList = Hash.new
-	    # paramList["MID"] = "mobilo96691880612413"
-	    # paramList["ORDER_ID"] = "#{Time.now.to_i.to_s}"
-	    # paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
-	    # paramList["INDUSTRY_TYPE_ID"] = "Retail"
-	    # paramList["CHANNEL_ID"] = "WAP"
-	    # paramList["TXN_AMOUNT"] = "1"
-	    # paramList["MSISDN"] = "+919997217401"
-	    # paramList["EMAIL"] = "gunjackaryan@gmail.com"
-	    # paramList["WEBSITE"] = "wavedio.herkuapp.com"
-	    # @paramList=paramList
-     #    @checksum_hash=generate_checksum()
         render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
     end 
 

@@ -48,6 +48,7 @@ Rails.application.routes.draw do
         post :stolen_device_location_update
         post :device_location_search
         post :device_status
+        post :save_battery_ts
       end
     end
     resources :packages do

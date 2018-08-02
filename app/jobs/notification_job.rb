@@ -1,4 +1,5 @@
 class NotificationJob < ApplicationJob
+  
   queue_as :default
   require 'notification_keys'
   # def perform()
@@ -34,6 +35,8 @@ class NotificationJob < ApplicationJob
 
 
   def perform()
+    
+    pusher = NotificationKeys::NotiKey.new.apns_key
     notification = Grocer::Notification.new(
                    :device_token => "F0D967C6C1CCCEDC8F59C466DDCBD86A9CC85DC4CF0E457756AFB90146677CF9",
                    :alert => "You got a new notification from dinga.",
@@ -41,5 +44,6 @@ class NotificationJob < ApplicationJob
                    :badge => 1,
                    :sound => "default"                    
                    )
+  push = pusher.push(notification)
   end
 end

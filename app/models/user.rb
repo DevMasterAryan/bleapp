@@ -20,7 +20,7 @@ class User
   field :image, type: String
   field :user_lock, type: Mongoid::Boolean
   field :credit, type: Float, default: 0.0
-  field :promotion, type: String
+  field :promotion, type: Integer, default: 0
   field :access_token, type: String
   field :otp, type: Integer
   field :otp_secret_key, :type => String

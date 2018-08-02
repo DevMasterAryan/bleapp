@@ -35,8 +35,8 @@ class NotificationJob < ApplicationJob
 
   def perform()
     notification = Grocer::Notification.new(
-                   :device_token => device.device_token.to_s,
-                   :alert => "You got a new notification from #{sender}.",
+                   :device_token => "F0D967C6C1CCCEDC8F59C466DDCBD86A9CC85DC4CF0E457756AFB90146677CF9",
+                   :alert => "You got a new notification from dinga.",
                    :custom => { :notification_type => "UserNotification" },
                    :badge => 1,
                    :sound => "default"                    

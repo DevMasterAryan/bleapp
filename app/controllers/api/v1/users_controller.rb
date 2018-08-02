@@ -64,17 +64,14 @@ class Api::V1::UsersController < ApplicationController
 
 	def user_last_charge
 		# @additional_topic = StaticContent.where("additional"=> true)
-        additional_topic = []
-			@additional_topic.each do |at|
-				additional_topic << {id: at&.id&.as_json["$oid"] || "", title: at&.title, content:  at&.content}
-			end
+        
 		@last_charge = @api_current_user&.billings&.last
 
 		if @last_charge.present?
 			# @last_charge.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+@last_charge.created_at.strftime("%I:%M %p")
 			return render json: {responseCode: 200, last_charge: {location: @last_charge&.session&.device&.location&.name || "",billing_ts:  @last_charge.created_at.to_i || "",package_time: @last_charge&.package&.package_time || "", active: DateTime.current > @last_charge&.usage_end_ts ? false : true, rating: @last_charge.rating, billing_id: @last_charge.id&.as_json["$oid"], package_value: @last_charge.package.package_value,package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.session&.device&.site&.site_name || "", start_time: @last_charge&.usage_start_ts&.to_i, end_time: @last_charge&.usage_end_ts&.to_i }}
 		else
-			return render json: {responseCode: 200, responseMessage: "No charge found.", additional_topic: additional_topic}
+			return render json: {responseCode: 200, responseMessage: "No charge found."}
 		end		
 
 	end

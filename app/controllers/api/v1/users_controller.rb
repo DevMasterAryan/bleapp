@@ -20,12 +20,12 @@ class Api::V1::UsersController < ApplicationController
 		# @session.update(device_battery_status: params["device_battery_status"])
 		if params["mop"]=="credit"
 		if !@api_current_user.credit.nil? and @api_current_user&.credit >= @package.package_value
-			@remaining_credit = @api_current_user&.credit -  @package.package_value
+			@remaining_credit = @api_current_user&.credit -  @package.package_final
 			@api_current_user.update(credit: @remaining_credit)
 			# @transaction = Transaction.create(transaction_id: "", status: true, amount: @package&.package_value)
 			@billing = @api_current_user.billings.new(method_of_payment: "Credit",session_id: @session.id, package_id: @package.id,
 				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
-			@billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
+			@billing.update(transaction_id: @package.package_final.to_s+@billing.id.as_json["$oid"])
 			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @billing.id.as_json["$oid"]}
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
@@ -36,7 +36,7 @@ class Api::V1::UsersController < ApplicationController
                      @api_current_user.update(credit: @remaining_credit)
                 end
 				@billing = @api_current_user.billings.new(method_of_payment: "Card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
-				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: "",amount: params[:card].present? ? params[:card] : @package&.package_final)
+				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final)
 				if @billing.save
 					return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @api_current_user.credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @billing.id.as_json["$oid"]}
 				else

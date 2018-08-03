@@ -51,7 +51,8 @@ class User
   has_many :user_promotions
   # has_many :promotions, through: :user_promotions
   def promotions
-    Promotion.in(id: user_promotions.pluck(:promotion_id))
+    # Promotion.in(id: user_promotions.pluck(:promotion_id))
+    Promotion.where({'id'=> {'$in'=> [Promotion.first]}, 'end_date'=> {'$gt'=> DateTime.now}, 'start_date'=> {'$lt'=> DateTime.now}})
   end
 
 

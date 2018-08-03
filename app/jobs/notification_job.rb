@@ -1,5 +1,5 @@
 class NotificationJob < ApplicationJob
-  
+  rquire 'fcm'
   queue_as :default
   require 'notification_keys'
   # def perform()

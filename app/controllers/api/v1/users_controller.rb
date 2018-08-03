@@ -90,7 +90,7 @@ class Api::V1::UsersController < ApplicationController
 
          
          
-       end
+      
       if @billings.present? 
          return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: @billings, promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
       else

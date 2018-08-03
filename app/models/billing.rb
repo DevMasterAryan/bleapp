@@ -14,10 +14,10 @@ class Billing
   field :help_id, type: Array, default: []
   field :help_status, type: String
   field :payment_status, type: Boolean, default: false
-  field :device_battery_ts15, type: Time
-  field :device_battery_ts30, type: Time
-  field :device_battery_ts45, type: Time
-  field :device_battery_ts60, type: Time
+  field :device_battery_ts15, type: String
+  field :device_battery_ts30, type: String
+  field :device_battery_ts45, type: String
+  field :device_battery_ts60, type: String
   field :amount, type: Float
   field :help_id, type: String
   field :feedback, type: String

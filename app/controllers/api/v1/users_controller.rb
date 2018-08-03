@@ -85,7 +85,7 @@ class Api::V1::UsersController < ApplicationController
 
        # @billings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'rating'=> {'$lt'=> 1},'usage_end_ts'=> {'$lt'=> DateTime.current}, 'rating_status'=> false}).limit(3).map { |r| [billing_id: r.id.as_json["$oid"], site_name: r&.session&.device&.site&.site_name] }.flatten!
        billing_rated = @api_current_user.user_feedbacks.map{|r| r.billing_id}
-       @billings = (@api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'usage_end_ts'=> {'$lt'=> DateTime.current}}) - Billing.in(id: billing_rated))first(3).map{|r| [billing_id: r.id.as_json["$oid"], site_name: r&.session&.device&.site&.site_name]}.flatten!  
+       @billings = (@api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'usage_end_ts'=> {'$lt'=> DateTime.current}}) - Billing.in(id: billing_rated)).first(3).map{|r| [billing_id: r.id.as_json["$oid"], site_name: r&.session&.device&.site&.site_name]}.flatten!  
 
          
          

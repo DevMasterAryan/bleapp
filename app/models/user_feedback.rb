@@ -8,4 +8,7 @@ class UserFeedback
   field :rating_status, type: Boolean, default: false
   field :billing_id, type: Integer
   field :feedback, type: String
+
+  belongs_to :billing, optional: true
+  belongs_to :user, optional: true
 end

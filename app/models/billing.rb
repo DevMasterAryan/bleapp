@@ -30,5 +30,7 @@ class Billing
   belongs_to :session
   belongs_to :package
   belongs_to :user
+
+  has_many :user_feedbacks
 end
 

@@ -31,9 +31,10 @@ class Api::V1::HelpController < ApplicationController
     end
    
     def submit_feedback_api
-      @user_feedback = UserFeedback.new(user_id: @api_current_user.id, site_id: params[:site_id], help_id: params[:help_id])
+      billing = Billing.where(id: params["billing_id"]).first
+      @user_feedback = UserFeedback.new(user_id: @api_current_user.id, site_id: params[:site_id], help_id: params[:help_id], billing_id: params[:billing_id], session_id: billing.present? ? billing.session.id : "")
       if @user_feedback.save
-          render json: {responseCode: 200, responseMessage: "Feedback submitted successfully."}
+          render json: {responseCode: 200, responseMessage: "Submitted successfully."}
       else
         render json: {responseCode: 500, responseMessage: "Try again later."}
       end 

@@ -10,7 +10,7 @@ class Api::V1::UsersController < ApplicationController
         #promotion applied
         if params["mop"]=="promotion"
           return render json: {responseCode: 200, responseMessage: "You have not promotion to apply."}  if @api_current_user.promotion<1
-          @billing = @api_current_user.billings.new(method_of_payment: "Promotion",session_id: @session.id, package_id: @package.id,usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
+          @billing = @api_current_user.billings.new(method_of_payment: "promotion",session_id: @session.id, package_id: @package.id,usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
 			# @billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
           @api_current_user.update(promotion: @api_current_user.promotion - 1) 
           return render json: {responseCode: 200, responseMessage: "Your promotion applied.", remaining_credit: @api_current_user.credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
 			@remaining_credit = @api_current_user&.credit -  @package.package_final
 			@api_current_user.update(credit: @remaining_credit)
 			# @transaction = Transaction.create(transaction_id: "", status: true, amount: @package&.package_value)
-			@billing = @api_current_user.billings.new(method_of_payment: "Credit",session_id: @session.id, package_id: @package.id,
+			@billing = @api_current_user.billings.new(method_of_payment: "credit",session_id: @session.id, package_id: @package.id,
 				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
 			@billing.update(transaction_id: @package.package_final.to_s+@billing.id.as_json["$oid"])
 			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
@@ -35,7 +35,7 @@ class Api::V1::UsersController < ApplicationController
                      @remaining_credit = @api_current_user.credit - params[:credit].to_i 
                      @api_current_user.update(credit: @remaining_credit)
                 end
-				@billing = @api_current_user.billings.new(method_of_payment: "Card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
+				@billing = @api_current_user.billings.new(method_of_payment: "card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
 				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final)
 				if @billing.save
 					return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @api_current_user.credit, end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}

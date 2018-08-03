@@ -35,15 +35,22 @@ class NotificationJob < ApplicationJob
 
 
   def perform()
+    fcm = NotificationKeys::NotiKey.new.fcm_key
+    registration_ids = ["fOfJ1JhppLY:APA91bE17G4M0m4S4mN-2zFoxU1oEhJ8dvVCyRGbwkXR8woB6B_7F095Vh5LqRruxRiJTzj2yWIKcG9RD8Y7FHcVBnzoDDReMFlFm_l9EZtcXqtWJV2XWLlYx_lsZy95-eqNyzjMm2ViwuLpSIzbVN8Cs-lzvDLDiQ"] 
+    options = {"data":{
+              'message': ['badge': 1,'alert': "Notification",
+             "title": "New message:","body": "You got a new notification from Wavedio.", "click_action": "FCM_PLUGIN_ACTIVITY","sound": "default"]},"priority":"high"}
+          response = fcm.send_notification(registration_ids,options)
+
     
-    pusher = NotificationKeys::NotiKey.new.apns_key
-    notification = Grocer::Notification.new(
-                   :device_token => "5244303420BF8B8DAFAD7D938CAA7A356CC5CD4F0EC55FE6D7DD7A92E282A234",
-                   :alert => "You got a new notification from dinga.",
-                   :custom => { :notification_type => "UserNotification" },
-                   :badge => 1,
-                   :sound => "default"                    
-                   )
-  push = pusher.push(notification)
+  #   pusher = NotificationKeys::NotiKey.new.apns_key
+  #   notification = Grocer::Notification.new(
+  #                  :device_token => "5244303420BF8B8DAFAD7D938CAA7A356CC5CD4F0EC55FE6D7DD7A92E282A234",
+  #                  :alert => "You got a new notification from dinga.",
+  #                  :custom => { :notification_type => "UserNotification" },
+  #                  :badge => 1,
+  #                  :sound => "default"                    
+  #                  )
+  # push = pusher.push(notification)
   end
 end

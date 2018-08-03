@@ -85,7 +85,7 @@ class Api::V1::UsersController < ApplicationController
 
        @billings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'rating'=> {'$lt'=> 1},'usage_end_ts'=> {'$lt'=> DateTime.current}, 'rating_status'=> false}).limit(3).map { |r| [billing_id: r.id.as_json["$oid"], site_name: r&.session&.device&.site&.site_name] }.flatten!
       if @billings.present? 
-         return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: @billings} 
+         return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: @billings, promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
       else
          return render json: {responseCode: 200, responseMessage: "No billing found.", billing: []} 
       end 

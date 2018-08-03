@@ -47,7 +47,12 @@ class User
   has_many :social_logins, dependent: :destroy
   has_many :helps, dependent: :destroy
   has_many :user_devices, dependent: :destroy
-  
+
+  has_many :user_promotions
+  # has_many :promotions, through: :user_promotions
+  def promotions
+    Promotion.in(id: user_promotions.pluck(:promotion_id))
+  end
 
 
 

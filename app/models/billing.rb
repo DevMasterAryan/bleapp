@@ -1,3 +1,4 @@
+
 class Billing
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -32,5 +33,18 @@ class Billing
   belongs_to :user
 
   has_many :user_feedbacks
+
+# require 'net/http'
+# require 'uri' 
+# require 'json'
+# uri = URI.parse("https://securegw-stage.paytm.in/merchant-status/getTxnStatus")
+# request = Net::HTTP::Post.new(uri) 
+# request.content_type = "application/json" 
+# request["Cache-Control"] = "no-cache"
+# request.body = JSON.dump({ "MID" => "Wavedi27436137685521", "ORDERID" => "1533282036", "CHECKSUMHASH" => "PBDyp5R0v63PSdDe/JswAukraDzmit7pAjZdm8b+vKRTkgWEaqztr1QfNm2w9j+kUqS9wAl5fE3+J7CRmOwFQeaHdBvBQuFTjr0hUewSvy4=" })
+# req_options = { use_ssl: uri.scheme == "https", } 
+# response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http| http.request(request) end
+# response.body
+
 end
 

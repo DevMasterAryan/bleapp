@@ -9,9 +9,11 @@ class UserPromotion
 
 
   after_create :send_notification
+
+
+  private
    
   def send_notification
-  	binding.pry
   	p "=======#{self.user_id}======"
     user = User.find_by(id: self.user_id)
     promotion = Promotion.find_by(id: self.promotion_id)

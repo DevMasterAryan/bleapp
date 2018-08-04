@@ -2,7 +2,8 @@ class NotificationJob < ApplicationJob
   require 'fcm'
   queue_as :default
   require 'notification_keys'
-  def perform(user, promotion_count)
+  def perform(user_id, promotion_count)
+    user = User.find_by(id: user_id)
     # sender = AdminUser.find_by_id(sender_id)
     # sender = "admin@example.com"
     # User.all.find_each(batch_size: 2000) do |receiver|

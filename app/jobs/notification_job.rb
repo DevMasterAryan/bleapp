@@ -15,7 +15,7 @@ class NotificationJob < ApplicationJob
           registration_ids = ["#{device.device_token}"] if device.device_token
           options = {"data":{
              'message': ['badge': 1,'alert': "PromotionNotification",
-            "title": "New message:","body": "Use free charge - #{promotion_count} added to your account.", "click_action": "FCM_PLUGIN_ACTIVITY","sound": "default"]},"priority":"high"}
+            "title": "New message:","body": "Use free charge - #{promotion_count} added to your account.", "click_action": "FCM_PLUGIN_ACTIVITY","sound": "default",promotion_count: "#{promotion_count}"]},"priority":"high"}
           response = fcm.send_notification(registration_ids,options)
 
           p "==========#{response.inspect}"

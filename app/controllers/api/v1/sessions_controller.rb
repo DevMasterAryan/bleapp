@@ -6,6 +6,8 @@ class Api::V1::SessionsController < ApplicationController
     before_action :authenticate,only: [:logout]
 
 	def login
+	begin
+		
 	    @otp  = User.generate_otp
 	    @user = User.find_by(mobile: params[:user][:mobile])
 		if @user.present?
@@ -41,6 +43,9 @@ class Api::V1::SessionsController < ApplicationController
 				render json: {responseCode: 500, responseMessage: "Something went wrong." }
 			end
 		end		
+	   rescue Exception => e
+	      return render json: {responseCode: 500, responseMessage: "We are unable to send OTP. Kindly please use social login."}	
+	   end
 	end
 
 	def verify_otp

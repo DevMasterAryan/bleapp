@@ -86,19 +86,19 @@ class Api::V1::DevicesController < ApplicationController
     def save_battery_ts
       @billing = Billing.find_by(id: params[:billing_id])	
       if !@billing.device_battery_ts15.present?
-        @billing.update(device_battery_ts15: Time.at(params[:device_battery_ts]))
+        @billing.update(device_battery_ts15: params[:device_battery_ts])
         return render json: {responseCode: 200, responseMessage: "Timestamp saved successfully."}
       end
       if !@billing.device_battery_ts30.present? 
-        @billing.update(device_battery_ts30: Time.at(params[:device_battery_ts]))
+        @billing.update(device_battery_ts30: params[:device_battery_ts])
         return render json: {responseCode: 200, responseMessage: "Timestamp saved successfully."}      
       end
       if !@billing.device_battery_ts45.present? 
-        @billing.update(device_battery_ts45: Time.at(params[:device_battery_ts]))
+        @billing.update(device_battery_ts45: params[:device_battery_ts])
         return render json: {responseCode: 200, responseMessage: "Timestamp saved successfully."}      
       end
       if !@billing.device_battery_ts45.present? 
-        @billing.update(device_battery_ts60: Time.at(params[:device_battery_ts]))
+        @billing.update(device_battery_ts60: params[:device_battery_ts])
         return render json: {responseCode: 200, responseMessage: "Timestamp saved successfully."}      
       end
     end

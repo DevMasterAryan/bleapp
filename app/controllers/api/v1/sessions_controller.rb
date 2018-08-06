@@ -65,7 +65,6 @@ class Api::V1::SessionsController < ApplicationController
 	def social_login
 	  	begin	  	
 		    @user = User.find_or_create_by(email: params[:user][:email]) || User.find_or_create_by(mobile: params[:user][:mobile])
-			binding.pry
 			if @user.present?
 			   @user.register_device(params[:user][:device_type], params[:user][:device_token])
 		       @user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.current, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}

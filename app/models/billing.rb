@@ -1,4 +1,6 @@
-
+ require 'net/http'
+ require 'uri' 
+ require 'json'
 class Billing
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -45,6 +47,25 @@ class Billing
 # req_options = { use_ssl: uri.scheme == "https", } 
 # response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http| http.request(request) end
 # response.body
+
+
+
+
+  def self.transaction_status params
+    uri = URI.parse("https://securegw.paytm.in/merchant-status/getTxnStatus")
+    request = Net::HTTP::Post.new(uri) 
+    request.content_type = "application/json" 
+    request["Cache-Control"] = "no-cache"
+    request.body = JSON.dump({ "MID" => "Wavedi71402481589558", "ORDERID" => params[:order_id], "CHECKSUMHASH" => params[:checksum] })
+    req_options = { use_ssl: uri.scheme == "https", } 
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http| http.request(request) end
+    p "......................."
+    if JSON.parse(response.body)["STATUS"]=="TXN_SUCCESS"
+       return true
+    else
+       return false
+    end 
+  end
 
 end
 

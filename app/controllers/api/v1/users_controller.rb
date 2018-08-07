@@ -31,6 +31,11 @@ class Api::V1::UsersController < ApplicationController
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
         elsif params["mop"]=="payment"
+
+
+        	resp= Billing.transaction_status params
+            if resp.present?
+            
                 if params[:credit].present?
                      @remaining_credit = @api_current_user.credit - params[:credit].to_i 
                      @api_current_user.update(credit: @remaining_credit)
@@ -42,6 +47,9 @@ class Api::V1::UsersController < ApplicationController
 				else
 					return render json: {responseCode: 200, responseMessage: "Something went wrong."}
 				end
+            else
+              return render json: {responseCode: 500, responseMessage: "Unsuccessful transaction."}
+            end
 			else
 				return render json: {responseCode: 200, responseMessage: "Something went wrong."}
 			end   	 
@@ -102,19 +110,33 @@ class Api::V1::UsersController < ApplicationController
     end
    
     def checksum
-    
-        paramList = Hash.new
+        #staging key and value   
+        #paramList = Hash.new
+	    # paramList["CALLBACK_URL"]  = params[:callback_url]
+	    # paramList["CHANNEL_ID"] = "WAP"
+	    # paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
+	    # paramList["EMAIL"] = params[:email]
+	    # paramList["INDUSTRY_TYPE_ID"] = "Retail"
+	    # paramList["MID"] = "Wavedi27436137685521"
+	    # paramList["MOBILE_NO"] = params[:mobile_no]
+	    # paramList["ORDER_ID"] = params[:order_id]
+	    # paramList["REQUEST_TYPE"] = "DEFAULT"
+	    # paramList["TXN_AMOUNT"] = params[:txn_amount]
+	    # paramList["WEBSITE"] = "APPSTAGING"
+	    # @paramList=paramList
+
+	    paramList = Hash.new
 	    paramList["CALLBACK_URL"]  = params[:callback_url]
 	    paramList["CHANNEL_ID"] = "WAP"
 	    paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
-	    paramList["EMAIL"] = params[:email]
-	    paramList["INDUSTRY_TYPE_ID"] = "Retail"
-	    paramList["MID"] = "Wavedi27436137685521"
-	    paramList["MOBILE_NO"] = params[:mobile_no]
+	    # paramList["EMAIL"] = params[:email]
+	    paramList["INDUSTRY_TYPE_ID"] = "Retail109"
+	    paramList["MID"] = "Wavedi71402481589558"
+	    # paramList["MOBILE_NO"] = params[:mobile_no]
 	    paramList["ORDER_ID"] = params[:order_id]
-	    paramList["REQUEST_TYPE"] = "DEFAULT"
+	    # paramList["REQUEST_TYPE"] = "DEFAULT"
 	    paramList["TXN_AMOUNT"] = params[:txn_amount]
-	    paramList["WEBSITE"] = "APPSTAGING"
+	    paramList["WEBSITE"] = "APPPROD"
 	    @paramList=paramList
         @checksum_hash=generate_checksum()
         render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}

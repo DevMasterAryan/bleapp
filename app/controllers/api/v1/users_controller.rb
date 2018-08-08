@@ -90,20 +90,33 @@ class Api::V1::UsersController < ApplicationController
     	@billing.update(rating_status: params[:rating_status])
        return render json: {responseCode: 200, responseMessage: "Status updated successfully."}
     else
-
+       #first senario 
        # @billings = @api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'rating'=> {'$lt'=> 1},'usage_end_ts'=> {'$lt'=> DateTime.current}, 'rating_status'=> false}).limit(3).map { |r| [billing_id: r.id.as_json["$oid"], site_name: r&.session&.device&.site&.site_name] }.flatten!
        # billing_rated = @api_current_user.user_feedbacks.map{|r| r.billing_id}
-       billing_rated = @api_current_user.user_feedbacks.map{|r| r.billing_id}
-       @billings = (@api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'usage_end_ts'=> {'$lt'=> DateTime.current}}) - Billing.in(id: billing_rated) ).first(3).map{|r| [billing_id: r.id.as_json["$oid"], site_name: r&.session&.device&.site&.site_name]}.flatten! 
-
-         
+       #second senario
+       # billing_rated = @api_current_user.user_feedbacks.map{|r| r.billing_id}
+       # @billings = (@api_current_user.billings.where({'created_at' => {'$gt' => Date.today-7.days}, 'usage_end_ts'=> {'$lt'=> DateTime.current}}) - Billing.in(id: billing_rated) ).first(3).map{|r| [billing_id: r.id.as_json["$oid"], site_name: r&.session&.device&.site&.site_name]}.flatten! 
+ 
+ 
+      #hit the flow
+      last_billing = @api_current_user.billings.where({'usage_end_ts'=> {'$lt'=> DateTime.current}}).order(created_at: :desc).first
+      check_rated = @api_current_user.user_feedbacks.where(billing_id: last_billing.id) if last_billing.present?
+      if check_rated.present?
+         return render json: {responseMessage: "No billing found.", billing: []} 
+      else
+      	if last_billing.present?
+          return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: [billing_id: last_billing.id.as_json["$oid"], site_name: last_billing&.session&.device&.site&.site_name], promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
+        else
+          return render json: {responseMessage: "No billing found.", billing: []} 	
+      	end
+      end        
          
       
-      if @billings.present? 
-         return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: @billings, promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
-      else
-         return render json: {responseCode: 200, responseMessage: "No billing found.", billing: []} 
-      end 
+      # if @billings.present? 
+      #    return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: @billings, promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
+      # else
+      #    return render json: {responseCode: 200, responseMessage: "No billing found.", billing: []} 
+      # end 
     end
 
 

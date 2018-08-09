@@ -8,12 +8,18 @@ class Api::V1::UsersController < ApplicationController
 
 
         #promotion applied
+        #@package&.package_time.minutes
         if params["mop"]=="promotion"
-          return render json: {responseCode: 200, responseMessage: "You have not promotion to apply."}  if @api_current_user.promotion<1
-          @billing = @api_current_user.billings.new(method_of_payment: "promotion",session_id: @session.id, package_id: @package.id,usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
+          return render json: {responseCode: 200, responseMessage: "You have not promotion to apply."}  if @api_current_user.promotion_count<1
+          @billing = @api_current_user.billings.new(method_of_payment: "promotion",session_id: @session.id, package_id: @package.id,usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + 5.minutes, amount: @package&.package_value, device_id: @session.device.id).save(validate: false)
 			# @billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
-          @api_current_user.update(promotion: @api_current_user.promotion - 1) 
-          return render json: {responseCode: 200, responseMessage: "Your promotion applied.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "",end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
+         
+          rm = @api_current_user.promotion_count - 1
+          @api_current_user.update(promotion_count: rm)
+          bid = @api_current_user.billings.last.id.as_json["$oid"] 
+          Billing.session_destroy bid
+          @api_current_user.reload
+          return render json: {responseCode: 200, responseMessage: "Your promotion applied.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "",end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: rm, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
          	 
         end 
         #promotion applied code end
@@ -24,9 +30,11 @@ class Api::V1::UsersController < ApplicationController
 			@api_current_user.update(credit: @remaining_credit)
 			# @transaction = Transaction.create(transaction_id: "", status: true, amount: @package&.package_value)
 			@billing = @api_current_user.billings.new(method_of_payment: "credit",session_id: @session.id, package_id: @package.id,
-				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value).save(validate: false)
-			@billing.update(transaction_id: @package.package_final.to_s+@billing.id.as_json["$oid"])
-			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
+				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + 5.minutes, amount: @package&.package_value, device_id: @session.device.id).save(validate: false)
+            bid = @api_current_user.billings.last.id.as_json["$oid"]     
+            Billing.session_destroy bid 
+			# @billing.update(transaction_id: @package.package_final.to_s+@api_current_user.billings.last.id.as_json["$oid"])
+			return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @remaining_credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion_count, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
@@ -41,9 +49,11 @@ class Api::V1::UsersController < ApplicationController
                      @api_current_user.update(credit: @remaining_credit)
                 end
 				@billing = @api_current_user.billings.new(method_of_payment: "card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
-				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final)
+				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final, device_id: @session.device.id)
 				if @billing.save
-					return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
+					bid = @api_current_user.billings.last.id.as_json["$oid"] 
+					Billing.session_destroy bid
+					return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion_count, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
 				else
 					return render json: {responseCode: 200, responseMessage: "Something went wrong."}
 				end
@@ -62,7 +72,7 @@ class Api::V1::UsersController < ApplicationController
 		    @billings_data = []
 		    @billings.each do |billing|
 		    	# billing.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+billing.created_at.strftime("%I:%M %p")
-		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true, rating: billing&.user_feedbacks&.first&.rating || "", billing_id: billing.id&.as_json["$oid"], package_value: billing.package.package_value,package_gst: billing.package.package_gst, package_final: billing.package.package_final, site_name: billing&.session&.device&.site&.site_name || "", start_time: billing&.usage_start_ts&.to_i, end_time: billing&.usage_end_ts&.to_i }
+		   		@billings_data << {location: billing&.session&.device&.location&.name || "",billing_ts:  billing.created_at.to_i || "",package_time: billing&.package&.package_time || "", active: DateTime.current > billing&.usage_end_ts ? false : true, rating: billing&.user_feedbacks&.first&.rating.to_i || 0, billing_id: billing.id&.as_json["$oid"], package_value: billing.package.package_value,package_gst: billing.package.package_gst, package_final: billing.package.package_final, site_name: billing&.session&.device&.site&.site_name || "", start_time: billing&.usage_start_ts&.to_i, end_time: billing&.usage_end_ts&.to_i }
 		    end
 		    return render json: {responseCode: 200, charge_history: @billings_data,:pagination=>{page_no: params[:page],per_page: params[:per_page],max_page_size: @api_current_user.billings.count/params[:per_page].to_i+1, total_records: @api_current_user.billings.count}}
 		else
@@ -77,7 +87,7 @@ class Api::V1::UsersController < ApplicationController
 
 		if @last_charge.present?
 			# @last_charge.created_at.strftime("%d/%m/%Y")+ " "+"at"+" "+@last_charge.created_at.strftime("%I:%M %p")
-			return render json: {responseCode: 200, last_charge: {location: @last_charge&.session&.device&.location&.name || "",billing_ts:  @last_charge.created_at.to_i || "",package_time: @last_charge&.package&.package_time || "", active: DateTime.current > @last_charge&.usage_end_ts ? false : true, rating: @last_charge.user_feedbacks&.first&.rating || "", billing_id: @last_charge.id&.as_json["$oid"], package_value: @last_charge.package.package_value,package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.session&.device&.site&.site_name || "", start_time: @last_charge&.usage_start_ts&.to_i, end_time: @last_charge&.usage_end_ts&.to_i }}
+			return render json: {responseCode: 200, last_charge: {location: @last_charge&.session&.device&.location&.name || "",billing_ts:  @last_charge.created_at.to_i || "",package_time: @last_charge&.package&.package_time || "", active: DateTime.current > @last_charge&.usage_end_ts ? false : true, rating: @last_charge.user_feedbacks&.first&.rating&.to_i || 0, billing_id: @last_charge.id&.as_json["$oid"], package_value: @last_charge.package.package_value,package_gst: @last_charge.package.package_gst, package_final: @last_charge.package.package_final, site_name: @last_charge&.session&.device&.site&.site_name || "", start_time: @last_charge&.usage_start_ts&.to_i, end_time: @last_charge&.usage_end_ts&.to_i }}
 		else
 			return render json: {responseCode: 200, responseMessage: "No charge found."}
 		end		
@@ -87,7 +97,7 @@ class Api::V1::UsersController < ApplicationController
     def billing_not_rated
     if params[:rating_status].present? && params[:billing_id].present?
     	@billing = Billing.find_by(id: params[:billing_id])
-    	@billing.user_feedbacks.create(rating_status: params[:rating_status])
+    	@billing.user_feedbacks.create(rating_status: params[:rating_status], user_id: @api_current_user.id)
        return render json: {responseCode: 200, responseMessage: "Status updated successfully."}
     else
        #first senario 
@@ -99,8 +109,11 @@ class Api::V1::UsersController < ApplicationController
  
  
       #hit the flow
-      last_billing = @api_current_user.billings.where({'usage_end_ts'=> {'$lt'=> DateTime.current}}).order(created_at: :desc).first
-      check_rated = @api_current_user.user_feedbacks.where(billing_id: last_billing.id) if last_billing.present?
+      # last_billing = @api_current_user.billings.where({'usage_end_ts'=> {'$lt'=> DateTime.current}}).order(created_at: :desc).first
+       
+       last_billing = @api_current_user.billings.where({'usage_end_ts'=> {'$lt'=> DateTime.current}}).order(created_at: :desc).first
+
+      check_rated = @api_current_user.user_feedbacks.where(billing_id: last_billing.id) 
       if check_rated.present?
          return render json: {responseCode: 200,responseMessage: "No billing found.", billing: [], promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
       else

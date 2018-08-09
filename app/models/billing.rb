@@ -13,19 +13,20 @@ class Billing
   field :usage_start_ts, type: Time
   field :usage_end_ts, type: Time
   field :user_id, type: String
-  field :rating, type: Integer
-  field :help_id, type: Array, default: []
-  field :help_status, type: String
+  # field :rating, type: Integer
+  # field :help_id, type: Array, default: []
+  # field :help_status, type: String
   field :payment_status, type: Boolean, default: false
   field :device_battery_ts15, type: String
   field :device_battery_ts30, type: String
   field :device_battery_ts45, type: String
   field :device_battery_ts60, type: String
   field :amount, type: Float
-  field :help_id, type: String
-  field :feedback, type: String
-  field :rating, type: Integer, default: 0
-  field :rating_status, type: Boolean, default: false
+  field :device_id, type: Integer
+  # field :help_id, type: String
+  # field :feedback, type: String
+  # field :rating, type: Integer, default: 0
+  # field :rating_status, type: Boolean, default: false
 
   index({ user_id: 1,  })
 
@@ -65,6 +66,16 @@ class Billing
     else
        return false
     end 
+  end
+
+  def self.session_destroy  id
+    
+    billing = Billing.find_by(id: id)
+     billing_to_destroy = Billing.where({'device_id'=> billing.device_id, 'usage_end_ts'=> {'$gt'=> DateTime.current}}) - Billing.not_in(id: billing.id)
+     billing_to_destroy.each do |billing|
+       billing.update(usage_end_ts: DateTime.current)
+       SessionExpireJob.perform_later(billing.user.id.as_json["$oid"])
+     end
   end
 
 end

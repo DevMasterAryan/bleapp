@@ -27,7 +27,7 @@ class User
   field :provider_id, :type => String
   field :provider, :type=> String
   field :last_login, :type=> Time
-  field :promotions, :type=> Integer, default: 0
+  field :promotion_count, :type=> Integer, default: 0
   field :lat, :type=> String
   field :long, :type=> String
   field :imei, :type=> String
@@ -53,7 +53,7 @@ class User
   # has_many :promotions, through: :user_promotions
   def promotions
     # Promotion.in(id: user_promotions.pluck(:promotion_id))
-    Promotion.where({'id'=> {'$in'=> [Promotion.first]}, 'end_date'=> {'$gt'=> DateTime.now}, 'start_date'=> {'$lt'=> DateTime.now}})
+    Promotion.where({'id'=> {'$in'=> UserPromotion.pluck(:promotion_id)}, 'end_date'=> {'$gt'=> DateTime.now}, 'start_date'=> {'$lt'=> DateTime.now}})
   end
 
 

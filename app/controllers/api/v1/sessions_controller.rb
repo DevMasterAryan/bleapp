@@ -15,7 +15,7 @@ class Api::V1::SessionsController < ApplicationController
 		    @user.save
 			@user.register_device(params[:user][:device_type], params[:user][:device_token])
 			if @user.billings.last.present? and (DateTime.current < @user.billings.last.usage_end_ts)
-				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, start_time: @user&.billings&.last&.usage_start_ts&.to_i || "",end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user.credit, mop: @user&.billings&.last&.method_of_payment&.downcase,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.site&.site_name : "",billing_id: @user&.billings&.last&.id&.as_json["$oid"], promotion: @user.promotions.pluck(:promotion_count).sum, user_id: @user.id.as_json["$oid"]}
+				render json: {responseCode: 200, responseMessage: "Login successfully.",access_token: @user.access_token, start_time: @user&.billings&.last&.usage_start_ts&.to_i || "",end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user.credit, mop: @user&.billings&.last&.method_of_payment&.downcase,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.site&.site_name : "",billing_id: @user&.billings&.last&.id&.as_json["$oid"], promotion: @user.promotion_count, user_id: @user.id.as_json["$oid"]}
 			else
 				return render json: {responseCode: 200, responseMessage: "Please try some other mode of login."} if @user.otp_count >=3 && params[:resend_otp].present?
 				@user.update(otp: @otp)

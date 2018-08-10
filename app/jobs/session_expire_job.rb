@@ -30,6 +30,8 @@ class SessionExpireJob < ApplicationJob
                   :sound => "default"                    
                   )
             push = pusher.push(notification)
+
+            
             p "------------#{push.inspect}"
        end
     # end

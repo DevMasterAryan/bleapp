@@ -17,7 +17,7 @@ class UserPromotion
   	p "=======#{self.user_id}======"
     user = User.find_by(id: self.user_id)
     promotion = Promotion.find_by(id: self.promotion_id)
-    user.update(promotion_count: Promotion.find_by(id: self.promotion_id).promotion_count)
+    user.update(promotion_count: user.promotion_count.to_i + Promotion.find_by(id: self.promotion_id).promotion_count.to_i)
     NotificationJob.perform_later(user.id.as_json["$oid"], promotion&.promotion_count) 	
 
   end

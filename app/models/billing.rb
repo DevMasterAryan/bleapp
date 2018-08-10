@@ -68,12 +68,12 @@ class Billing
     end 
   end
 
-  def self.session_destroy  id
-    
-    billing = Billing.find_by(id: id)
-     billing_to_destroy = Billing.where({'device_id'=> billing.device_id, 'usage_end_ts'=> {'$gt'=> DateTime.current}}) - Billing.not_in(id: billing.id)
+  def self.session_destroy  id, user_id
+     user = User.find_by(id: user_id)
+     billing = Billing.find_by(id: id)
+     billing_to_destroy = Billing.where({'device_id'=> billing.device_id, 'usage_end_ts'=> {'$gt'=> DateTime.current}}) - Billing.where({'user_id'=> user_id, 'id'=> id})
      billing_to_destroy.each do |billing|
-       billing.update(usage_end_ts: DateTime.current)
+        billing.update(usage_end_ts: DateTime.current)
        SessionExpireJob.perform_later(billing.user.id.as_json["$oid"])
      end
   end

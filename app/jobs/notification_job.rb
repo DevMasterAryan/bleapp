@@ -27,8 +27,10 @@ class NotificationJob < ApplicationJob
                   :badge => 1,
                   :sound => "default"                    
                   )
+            p "....notification.................#{notification.inspect} ................."
+            p "................................." 
             push = pusher.push(notification)
-            p "------------#{push.inspect}"
+            p "--push----------#{push.inspect}"
         end
       end
     # end

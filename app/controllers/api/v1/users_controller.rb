@@ -11,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
         #@package&.package_time.minutes
         if params["mop"]=="promotion"
           return render json: {responseCode: 200, responseMessage: "You have not promotion to apply."}  if @api_current_user.promotion_count<1
-          @billing = @api_current_user.billings.new(method_of_payment: "promotion",session_id: @session.id, package_id: @package.id,usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + 5.minutes, amount: @package&.package_value, device_id: @session.device.id).save(validate: false)
+          @billing = @api_current_user.billings.new(method_of_payment: "promotion",session_id: @session.id, package_id: @package.id,usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value, device_id: @session.device.id).save(validate: false)
 			# @billing.update(transaction_id: credit.to_s+@billing.id.as_json["$oid"])
          
           rm = @api_current_user.promotion_count - 1
@@ -30,7 +30,7 @@ class Api::V1::UsersController < ApplicationController
 			@api_current_user.update(credit: @remaining_credit)
 			# @transaction = Transaction.create(transaction_id: "", status: true, amount: @package&.package_value)
 			@billing = @api_current_user.billings.new(method_of_payment: "credit",session_id: @session.id, package_id: @package.id,
-				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + 5.minutes, amount: @package&.package_value, device_id: @session.device.id).save(validate: false)
+				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current + @package&.package_time.minutes, amount: @package&.package_value, device_id: @session.device.id).save(validate: false)
             bid = @api_current_user.billings.last.id.as_json["$oid"]     
             Billing.session_destroy bid 
 			# @billing.update(transaction_id: @package.package_final.to_s+@api_current_user.billings.last.id.as_json["$oid"])

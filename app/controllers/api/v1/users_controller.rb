@@ -115,12 +115,12 @@ class Api::V1::UsersController < ApplicationController
 
       check_rated = @api_current_user.user_feedbacks.where(billing_id: last_billing.id) 
       if check_rated.present?
-         return render json: {responseCode: 200,responseMessage: "No billing found.", billing: [], promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
+         return render json: {responseCode: 200,responseMessage: "No billing found.", billing: [], promotion: @api_current_user.promotion_count} 
       else
       	if last_billing.present?
-          return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: [billing_id: last_billing.id.as_json["$oid"], site_name: last_billing&.session&.device&.site&.site_name], promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 
+          return render json: {responseCode: 200, responseMessage: "Billing fetched successfully.", billing: [billing_id: last_billing.id.as_json["$oid"], site_name: last_billing&.session&.device&.site&.site_name], promotion: @api_current_user.promotion_count} 
         else
-          return render json: {responseCode: 200,responseMessage: "No billing found.", billing: [], promotions: @api_current_user.promotions.pluck(:promotion_count).sum} 	
+          return render json: {responseCode: 200,responseMessage: "No billing found.", billing: [], promotion: @api_current_user.promotion_count} 	
       	end
       end        
          

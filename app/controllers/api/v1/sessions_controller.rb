@@ -102,6 +102,7 @@ class Api::V1::SessionsController < ApplicationController
 				return render json: {responseCode: 500, responseMessage: "Try again."}
 			end
 			return render json: {responseCode: 200, responseMessage: "Calling."}
+		
 		else
 			return render json: {responseCode: 500, responseMessage: "User not found."}
 		end

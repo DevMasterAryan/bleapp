@@ -167,12 +167,4 @@ class Api::V1::UsersController < ApplicationController
         @checksum_hash=generate_checksum()
         render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
     end 
-
-
-
-
-
-	#.billings.where({'created_at' => {'$gt' => Date.today-7.days}})
-  
-	
 end

@@ -64,7 +64,7 @@ class Api::V1::SessionsController < ApplicationController
 
 	def social_login
 	  	begin	  	
-		    @user = User.find_or_create_by(mobile: params[:user][:mobile]) || User.find_or_create_by(email: params[:user][:email])
+		    @user = User.find(mobile: params[:user][:mobile]) || User.find(email: params[:user][:email])
 			if @user.present?
 			   @user.register_device(params[:user][:device_type], params[:user][:device_token])
 		       @user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.current, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
@@ -78,6 +78,20 @@ class Api::V1::SessionsController < ApplicationController
 
 			   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, start_time: "", end_time: "",mop: "",site_display_name: "", site_name: "", credit: @user&.credit, billing_id:  "", promotion: @user.promotion_count, user_id: @user.id.as_json["$oid"]}
 			   end
+			else
+			   @user = User.create(mobile: params[:user][:mobile], email: params[:user][:email])	
+			   @user.register_device(params[:user][:device_type], params[:user][:device_token])
+		       @user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.current, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
+		       @user.save
+		       # @user.reload
+		       @user = User.find_by(id: @user.id)
+		       @social = @user.social_logins.find_or_create_by(provider_id: params[:user][:provider_id], provider: params[:user][:provider])
+			   if @user.billings.last.present? and (DateTime.current < @user.billings.last.usage_end_ts)
+			     return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, start_time: @user&.billings&.last&.usage_start_ts&.to_i,end_time: @user&.billings&.last&.usage_end_ts&.to_i || "", credit: @user&.credit, mop: @user&.billings&.last&.method_of_payment&.downcase,site_display_name: @user&.billings&.last&.session&.device&.site_display_name, site_name: @user&.billings&.last&.session&.device&.site_display_name? ? @user&.billings&.last&.session&.device&.site&.site_name : "", billing_id: @user&.billings&.last&.id&.as_json["$oid"], promotion: @user.promotion_count, user_id: @user.id.as_json["$oid"] }
+			   else
+
+			   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, start_time: "", end_time: "",mop: "",site_display_name: "", site_name: "", credit: @user&.credit, billing_id:  "", promotion: @user.promotion_count, user_id: @user.id.as_json["$oid"]}
+			   end	 
 			end	 		
 	  	rescue Exception => e
 	    	return render json: {responseCode: 500, responseMessage: "Something went wrong try again later."}  	

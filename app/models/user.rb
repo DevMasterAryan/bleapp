@@ -50,6 +50,9 @@ class User
 
   has_many :user_promotions
   has_many :user_feedbacks
+
+  has_one :user_payment_method, dependent: :destroy
+
   # has_many :promotions, through: :user_promotions
   def promotions
     # Promotion.in(id: user_promotions.pluck(:promotion_id))

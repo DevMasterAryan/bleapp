@@ -3,7 +3,7 @@ class Api::V1::PaymentMethodsController < ApplicationController
  skip_before_action :verify_authenticity_token
 
  def list 
-  	render json: {responseCode: 500, reponseMessage: "Payment method list fetched successfully.", payment_methods: PaymentMethod.pluck(:name)}
+  	render json: {responseCode: 200, reponseMessage: "Payment method list fetched successfully.", payment_methods: PaymentMethod.pluck(:name)}
  end 
  
  def add
@@ -19,7 +19,15 @@ class Api::V1::PaymentMethodsController < ApplicationController
      @api_current_user.user_payment_method  = UserPaymentMethod.new(method: payment_methods)  
      return render json: {responseCode: 200, reponseMessage: "Payment method added successfully.", added_methods: @api_current_user.user_payment_method.method}  
    end
- end 
+   
 
+ end 
+ 
+
+ def remove
+   payment_methods = []
+   @api_current_user.user_payment_method.update(method: @api_current_user.user_payment_method.method.delete(params[:payment_method]))
+   render json: {responseCode: 200, reponseMessage: "Method remove successfully.", payment_methods: @api_current_user.user_payment_method.method}
+ end 
  
 end

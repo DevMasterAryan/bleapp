@@ -53,7 +53,7 @@ class Api::V1::UsersController < ApplicationController
 				if @billing.save
 					bid = @api_current_user.billings.last.id.as_json["$oid"] 
 					Billing.session_destroy bid, @api_current_user.id.as_json["$oid"]
-					return render json: {responseCode: 200, responseMessage: "Your credit applied.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion_count, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
+					return render json: {responseCode: 200, responseMessage: "Payment done successfully applied.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion_count, billing_id: @api_current_user.billings.last.id.as_json["$oid"]}
 				else
 					return render json: {responseCode: 200, responseMessage: "Something went wrong."}
 				end

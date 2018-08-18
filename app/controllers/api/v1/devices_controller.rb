@@ -23,7 +23,7 @@ class Api::V1::DevicesController < ApplicationController
 		if params[:search].present?
           @sites = Site.where({site_name: /^#{params[:search]}/i})
         elsif params[:lat].present? && params[:long].present?
-          @sites = Site.all	
+          @sites = Site.search params[:lat].to_f, params[:long].to_f	
         else
 		 @sites = Site.all 
 		end
@@ -32,7 +32,7 @@ class Api::V1::DevicesController < ApplicationController
 		if @sites.present?
 			site_names = []
 			@sites.each do |device|
-				site_names << {site_id: device.id.as_json["$oid"], name: device&.site_name, lat: device&.lat, long: device&.long} 
+				site_names << {site_id: device.id.as_json["$oid"], name: device&.site_name, lat: device&.lat.to_s, long: device&.long.to_s} 
 			end
 			return render json: {responseCode: 200, location: site_names}
 		else

@@ -70,9 +70,16 @@ class Billing
 
   def self.session_destroy  id, user_id
      user = User.find_by(id: user_id)
+
+
+
+     p ".........#{user.inspect}..........................."
+    
      if user.billings[-2].present?
-       if user.billings[-2].usage_end_ts > DateTime.current
-           user.billings[-2].update(usage_end_ts: DateTime.current - 5.seconds)
+       if user.billings.order(created_at: :asc)[-2].usage_end_ts > DateTime.current
+        p "........#{user.billings[-2].usage_end_ts.inspect}.................................."
+
+           user.billings.order(created_at: :asc)[-2].update(usage_end_ts: DateTime.current - 5.seconds)
        end
      end
      billing = Billing.find_by(id: id)

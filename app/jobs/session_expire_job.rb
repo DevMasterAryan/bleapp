@@ -26,8 +26,8 @@ class SessionExpireJob < ApplicationJob
                   :device_token => device.device_token.to_s,
                   :alert => "",
                   :custom => { :notification_type => "SessionExpire"},
-                  :badge => 1,
-                  :sound => "default"                    
+                  :badge => 0,
+                  :sound => ""                    
                   )
             push = pusher.push(notification)
 

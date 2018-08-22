@@ -79,7 +79,7 @@ class Api::V1::SessionsController < ApplicationController
 			   return render json: {responseCode: 200, responseMessage: "Login successfully." ,access_token: @user.access_token, first_name: @user&.first_name, last_name: @user.last_name, image: @user&.image&.url,provider_id: @social&.provider_id, start_time: "", end_time: "",mop: "",site_display_name: "", site_name: "", credit: @user&.credit, billing_id:  "", promotion: @user.promotion_count, user_id: @user.id.as_json["$oid"]}
 			   end
 			else
-			   @user = User.create(mobile: params[:user][:mobile], email: params[:user][:email])	
+			   @user = User.create(email: params[:user][:email])	
 			   @user.register_device(params[:user][:device_type], params[:user][:device_token])
 		       @user.attributes = {email: params[:user][:email], first_name: params[:user][:first_name], last_name: params[:user][:last_name], :remote_image_url=> params[:user][:image], :last_login=> DateTime.current, imei: params[:user][:imei], mobile_phone_model: params[:user][:mobile_phone_model], logged_in: true}
 		       @user.save

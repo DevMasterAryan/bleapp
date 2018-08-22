@@ -19,13 +19,14 @@ class Api::V1::DevicesController < ApplicationController
 	end
 
 	def device_locations
+
 		#search params,lat ,long 
 		if params[:search].present?
           @sites = Site.where({site_name: /^#{params[:search]}/i})
         elsif params[:lat].present? && params[:long].present?
           @sites = Site.search params[:lat].to_f, params[:long].to_f	
         else
-		 @sites = Site.all 
+		 @sites = Site.all.order(site_name: :asc) 
 		end
 		
 		

@@ -26,7 +26,7 @@ class Site
       lat = position.lat
       long = position.long
       distance_in_km = Geocoder::Calculations.distance_between([lati,longi], [lat,long]) * 1.60934
-      result << position if distance_in_km < 3
+      result << position if distance_in_km <= 3
     end
     result
   end

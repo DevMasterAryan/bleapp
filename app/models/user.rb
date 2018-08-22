@@ -49,7 +49,7 @@ class User
   has_many :user_devices, dependent: :destroy
 
   has_many :user_promotions
-  has_many :user_feedbacks
+  has_many :user_feedbacks, dependent: :destroy
 
   has_one :user_payment_method, dependent: :destroy
 

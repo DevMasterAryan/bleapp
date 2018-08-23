@@ -113,7 +113,7 @@ class Api::V1::UsersController < ApplicationController
        
        last_billing = @api_current_user.billings.where({'usage_end_ts'=> {'$lt'=> DateTime.current}}).order(created_at: :desc).first
 
-      check_rated = @api_current_user.user_feedbacks.where(billing_id: last_billing.id) if last_billing.present? 
+      check_rated = @api_current_user.user_feedbacks.where(billing_id: last_billing.id, help_id: "R1"||"R2") if last_billing.present? 
       if check_rated.present?
          return render json: {responseCode: 200,responseMessage: "No billing found.", billing: [], promotion: @api_current_user.promotion_count, credit: @api_current_user.credit} 
       else

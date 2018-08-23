@@ -31,7 +31,10 @@ class Api::V1::HelpController < ApplicationController
     def submit_feedback_api
       billing = Billing.where(id: params[:billing_id]).first
       if params[:help_id] == ["B1"] || ["B2"]
-        if @api_current_user.user_feedbacks.where(billing_id: params[:billing_id], help_id: ["B1"]|| ["B2"]).present?
+        if @api_current_user.user_feedbacks.where(billing_id: params[:billing_id], help_id: ["B1"]).present?
+         return render json: {responseCode: 401, responseMessage: "You have already used this option."}
+        end
+        if @api_current_user.user_feedbacks.where(billing_id: params[:billing_id], help_id: ["B2"]).present?
          return render json: {responseCode: 401, responseMessage: "You have already used this option."}
         end
       end

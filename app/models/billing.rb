@@ -23,6 +23,7 @@ class Billing
   field :device_battery_ts60, type: String
   field :amount, type: Float
   field :device_id, type: String
+  field :charging_status, type: Boolean, default: true
   # field :help_id, type: String
   # field :feedback, type: String
   # field :rating, type: Integer, default: 0

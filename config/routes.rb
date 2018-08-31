@@ -63,6 +63,7 @@ Rails.application.routes.draw do
         get :user_last_charge
         post :checksum
         post :billing_not_rated
+        post :charging_status
       end
     end
     

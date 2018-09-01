@@ -172,11 +172,16 @@ class Api::V1::UsersController < ApplicationController
     def charging_status
       billing  = Billing.find_by(id: params[:billing_id])	
       if billing.present?
+      
         billing.update(charging_status: params[:charging_status])
         unless params[:charging_status].present?
-          @api_current_user.update(credit: billing.package.package_final) 
+          if billing.method_of_payment == "promotion"
+            @api_current_user.update(promotion_count: @api_current_user.promotion_count + 1)
+          else
+            @api_current_user.update(credit: billing.package.package_final) 
+          end
           billing.update(usage_end_ts: billing.usage_start_ts)  
-          return render json: {responseCode: 200, responseMessage: "Charge failed, balance credited."}
+          return render json: {responseCode: 200, responseMessage: "Sorry! Due to some technical reasons, your charge could not start. Your amount will be credited back.", promotion: @api_current_user.promotion_count, credit: @api_current_user.credit}
         end
         
       else

@@ -33,7 +33,7 @@ class Api::V1::DevicesController < ApplicationController
 		if @sites.present?
 			site_names = []
 			@sites.each do |device|
-				site_names << {site_id: device.id.as_json["$oid"], name: device&.site_name, lat: device&.lat.to_s, long: device&.long.to_s} 
+				site_names << {site_id: device&.site&.id&.as_json["$oid"], name: device&.site_name, lat: device&.lat.to_s, long: device&.long.to_s} 
 			end
 			return render json: {responseCode: 200, location: site_names}
 		else

@@ -23,10 +23,21 @@ class Api::V1::DevicesController < ApplicationController
 		#search params,lat ,long 
 		if params[:search].present?
           @sites = Site.where({site_name: /^#{params[:search]}/i})
+          if @sites.present?
+            @sites.order(site_name: :asc)
+          else
+            @sites = Site.all.order(site_name: :asc)
+          end
+          p "................#{@sites.pluck(:site_name)}.............."
         elsif params[:lat].present? && params[:long].present?
-          @sites = Site.search params[:lat].to_f, params[:long].to_f	
+          @sites = Site.search params[:lat].to_f, params[:long].to_f
+          unless @sites.present?
+             @sites = Site.all.order(site_name: :asc)
+          end	
+          p "...........#{@sites.pluck(:site_name)}............"
         else
 		 @sites = Site.all.order(site_name: :asc) 
+		 p "...........#{@sites.pluck(:site_name)}............"
 		end
 		
 		

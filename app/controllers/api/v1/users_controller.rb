@@ -174,7 +174,9 @@ class Api::V1::UsersController < ApplicationController
       if billing.present?
       
         billing.update(charging_status: params[:charging_status])
-        unless params[:charging_status].present?
+        #charging_status changed from boolean to string
+        #unless params[:charging_status].present?
+        if params[:charging_status]=="00"
           if billing.method_of_payment == "promotion"
             @api_current_user.update(promotion_count: @api_current_user.promotion_count + 1)
           else

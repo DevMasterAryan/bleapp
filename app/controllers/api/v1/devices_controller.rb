@@ -67,7 +67,7 @@ class Api::V1::DevicesController < ApplicationController
 			# results = Geocoder.search(params["location"])
 			# @coordinates = results.first.coordinates
 			# @device.location.update(name: params["location"],lat: @coordinates[0], long: @coordinates[1])
-			  @device.location.update(lat: params["lat"], long: params["long"])
+			  # @device.location.update(lat: params["lat"], long: params["long"])
 			  results = Geocoder.search([params["lat"], params["long"]])
 			  @api_current_user.update(lat: params["lat"], long: params["long"], location: results.first.address)
 			rescue Exception => e

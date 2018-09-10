@@ -2,10 +2,10 @@ class Session
   include Mongoid::Document
   include Mongoid::Timestamps
   field :session_ts, type: Time
-  field :user_id, type: Integer
+  field :user_id, type: String
   field :device_battery_start, type: String
-  field :site_id, type: Integer
-  field :device_id, type: Integer
+  field :site_id, type: String
+  field :device_id, type: String
   field :session_start_ts, type: Time
   field :session_end_ts, type: Time
 

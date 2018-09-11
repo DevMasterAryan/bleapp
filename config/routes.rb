@@ -80,6 +80,10 @@ Rails.application.routes.draw do
     resources :transactions do
       collection do
         post :package_payment
+        post :send_paytm_otp
+        post :validate_paytm_otp
+        post :check_paytm_balance
+        post :validate_paytm_access_token
       end
     end
 

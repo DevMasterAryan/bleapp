@@ -3,6 +3,7 @@ require 'twilio_sms.rb'
 require 'twilio-ruby'
 require 'open-uri'
 class User
+  extend PaytmHelper
   include ActiveModel::OneTimePassword 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -37,6 +38,9 @@ class User
   field :location, :type=> String 
   field :logged_in, :type=> Boolean, default: false
   field :otp_count, :type=> Integer, default: 0
+  field :paytm_mobile, :type=> String, default: ""
+  field :paytm_access_token, :type=> String, default: ""
+  field :paytm_access_token_exp_date, type: Time
 
   
   before_create :generate_access_token
@@ -91,6 +95,31 @@ class User
 
   def generate_access_token
     self.access_token = Digest::SHA256.hexdigest(Time.now.to_s)      
+  end
+
+  def self.checksum(api_current_user,order_id,txn_amount)
+      # paramList = Hash.new
+      # paramList["mid"] = "Wavedi71402481589558"
+      # paramList["totalAmount"] = "1"
+      # paramList["userToken"] = User.first.paytm_access_token
+      # paramList["amountDetails"] = {"others": "","food": ""}
+      # @paramList=paramList.to_json
+      # p 
+      v = User.first.paytm_access_token
+      @paramList = {"userToken": "bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900","totalAmount": "1","mid": "Wavedi71402481589558","amountDetails": {"others": "","food": ""}}
+
+      # paramList = Hash.new
+      # paramList["mid"] = "Wavedi71402481589558"
+      # paramList["totalAmount"] = "1"
+      # paramList["userToken"] = User.first.paytm_access_token
+      # paramList["amountDetails"] = {"others": "","food": ""}
+      # @paramList=paramList.to_json
+      # p @paramList
+
+      # @paramList = '{"userToken": "#{api_current_user.paytm_access_token}","totalAmount": "1","mid": "Wavedi71402481589558","amountDetails": {"others": ","food": "}}'
+      # @paramList = @paramList.to_json
+
+      @checksum_hash=generate_checksum()  
   end
 
 

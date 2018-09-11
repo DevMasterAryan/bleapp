@@ -8,7 +8,7 @@ class Api::V1::DevicesController < ApplicationController
 		if @device.present?
 			@device_detail = {id: @device&.id&.as_json["$oid"] || "", bt_id: @device&.bluetooth_id || "", stolen_status: @device&.stolen || false, identifier: @device&.identifier || "", mac_address: @device&.mac_address || "", device_status: @device&.device_status, site_display_name: @device&.site_display_name, site_name: @device&.site_display_name? ? @device&.site&.site_name : "" } 
 			begin
-				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.site&.id.as_json["$oid"])
+				@session = Session.create(user_id: @api_current_user.id, device_id: @device.id, site_id: @device&.site&.id&.as_json["$oid"])
 			  	return render json: {responseCode: 200, device_detail: @device_detail, session_id: @session&.id&.as_json["$oid"] || ""}	
 			rescue Exception => e
 				return render json: {responseCode: 500, device_detail: e}	
@@ -22,18 +22,27 @@ class Api::V1::DevicesController < ApplicationController
 
 		#search params,lat ,long 
 		if params[:search].present?
-          @sites = Site.where({site_name: /^#{params[:search]}/i})
+          @sites = Site.where({site_name: /.*#{params[:search]}.*/i})
+          if @sites.present?
+            @sites.order(site_name: :asc)
+          end
+          p "................#{@sites.pluck(:site_name)}.............."
         elsif params[:lat].present? && params[:long].present?
-          @sites = Site.search params[:lat].to_f, params[:long].to_f	
+          @sites = Site.search params[:lat].to_f, params[:long].to_f
+          unless @sites.present?
+             @sites = Site.all.order(site_name: :asc)
+          end	
+          p "...........#{@sites.pluck(:site_name)}............"
         else
 		 @sites = Site.all.order(site_name: :asc) 
+		 p "...........#{@sites.pluck(:site_name)}............"
 		end
 		
 		
 		if @sites.present?
 			site_names = []
 			@sites.each do |device|
-				site_names << {site_id: device.id.as_json["$oid"], name: device&.site_name, lat: device&.lat.to_s, long: device&.long.to_s} 
+				site_names << {site_id: device&.id&.as_json["$oid"], name: device&.site_name, lat: device&.lat.to_s, long: device&.long.to_s} 
 			end
 			return render json: {responseCode: 200, location: site_names}
 		else
@@ -58,7 +67,7 @@ class Api::V1::DevicesController < ApplicationController
 			# results = Geocoder.search(params["location"])
 			# @coordinates = results.first.coordinates
 			# @device.location.update(name: params["location"],lat: @coordinates[0], long: @coordinates[1])
-			  @device.location.update(lat: params["lat"], long: params["long"])
+			  # @device.location.update(lat: params["lat"], long: params["long"])
 			  results = Geocoder.search([params["lat"], params["long"]])
 			  @api_current_user.update(lat: params["lat"], long: params["long"], location: results.first.address)
 			rescue Exception => e

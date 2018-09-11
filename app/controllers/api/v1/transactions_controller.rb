@@ -117,46 +117,62 @@ class Api::V1::TransactionsController < ApplicationController
 	end
 
 	def check_paytm_balance
-		begin
-			uri = URI.parse("https://securegw.paytm.in/paymentservices/pay/consult")
-			request = Net::HTTP::Post.new(uri)
-			request.content_type = "application/json"
-			request["Authorization"] = "basic bWVyY2hhbnQtd2F2ZWRpbzpsbXJhaTF6cE9hT1JTbXdCdGVMdHhKYnRFRDh5\nUDVvZw=="
-			request["Cache-Control"] = "no-cache"
-			request.body = JSON.dump({
-			  "head" => {
-			    "clientId" => "merchant-wavedio",
-			    "requestTimestamp" => DateTime.now.to_i.to_s,
-			    "signature" => User.checksum(@api_current_user,"ORDER120987","1"),
-			    "version" => "v1",
-			    "channelId" => "WAP"
-			  },
-			  "body" => {
-			    "userToken" => "bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900",
-			    "totalAmount" => "1",
-			    "mid" => "Wavedi71402481589558",
-			    "amountDetails" => {
-			      "others" => "400.0",
-			      "food" => "100.0"
-			    }
-			  }
-			})
+		# binding.pry
+		txn_amount = "1"
+		v = User.first.paytm_access_token
+		# str_url = "https://securegw.paytm.in/paymentservices/pay/consult"
+		# str_data = {
+		# 	"head":{
+		# 		 "clientId":"C11",  "version":"v1","requestTimestamp":"Time", "channelId":"WAP","signature":"G6tfe3WFNZvdH5qG6dklSyoXzViy476T325/TkPudzwEaSKVC2AuxKvdp1ygrg7i+XDafSEjQ4BnExfFDivuXFLHwph1q6MCK0+fGktxYSE="
+		# 	},"body":{"userToken":"bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900","totalAmount":"1","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}
+		# 	}
 
-			req_options = {
-			  use_ssl: uri.scheme == "https",
-			}
+		# 	response = HTTParty.post(str_url,
+		# 		:body => str_data.to_json,
+		# 		:headers => {'Content-Type' => 'application/json'})
+		checksum = User.checksum(@api_current_user,"ORDER120987","1")
+		response = ActiveSupport::JSON.decode(`curl -X POST -k -H 'Content-Type: application/json' -i 'https://securegw.paytm.in/paymentservices/pay/consult' --data '{
+			"head":{
+				 "clientId":"C11",  "version":"v1","requestTimestamp":"Time", "channelId":"WAP","signature":"#{checksum}"
+			},"body":{"userToken":"#{v}","totalAmount":"#{txn_amount}","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}
+			}'`)
+p response
+binding.pry
 
-			response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-			  http.request(request)
-			end
-			response = JSON.parse(response.body)
-			if response["TxnId"].present?
-
-			else
-			end
-		rescue Exception => e
 			
-		end	
+		# begin
+# 			uri = URI.parse("https://securegw.paytm.in/paymentservices/pay/consult")
+# 			request = Net::HTTP::Post.new(uri)
+# 			request.content_type = "application/json"
+# 			request["Authorization"] = "basic bWVyY2hhbnQtd2F2ZWRpbzpsbXJhaTF6cE9hT1JTbXdCdGVMdHhKYnRFRDh5\nUDVvZw=="
+# 			request["Cache-Control"] = "no-cache"
+# 			request.body = {
+# 				"head":{
+# 					 "clientId":"C11",  "version":"v1",  
+# 					 "requestTimestamp":"Time", 
+# 					 "channelId":"WAP",  
+# 					 "signature":"mUjNk63xHFKqb6nChHjd2mHPC8PdlnikGQTPGDzV8kRV3TzKzAvScJBvJbzsRdSpXvyD5QloQCvMoa7NtMWAWqwz2wtWFd+zOIdCX8rJBm0="
+# 				},
+# 				"body":{"userToken":"bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900","totalAmount":"1","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}}
+
+# 			req_options = {
+# 			  use_ssl: uri.scheme == "https",
+# 			}
+# 			request.body = request.body.to_json
+# p request.body
+# 			response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+# 			  http.request(request)
+# 			end
+# 			binding.pry
+
+# 			response = JSON.parse(response.body)
+# 			if response["TxnId"].present?
+
+# 			else
+# 			end
+# 		rescue Exception => e
+			
+# 		end	
 	end
 
 	def paytm_withdraw_api

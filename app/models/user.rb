@@ -106,15 +106,16 @@ class User
       # @paramList=paramList.to_json
       # p 
       v = User.first.paytm_access_token
-      @paramList = {"userToken": "bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900","totalAmount": "1","mid": "Wavedi71402481589558","amountDetails": {"others": "","food": ""}}
-
+      txn_amount = txn_amount
+      @paramList = '{"userToken":"'+v+'","totalAmount":"'+txn_amount+'''","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}'
+  
       # paramList = Hash.new
       # paramList["mid"] = "Wavedi71402481589558"
       # paramList["totalAmount"] = "1"
       # paramList["userToken"] = User.first.paytm_access_token
       # paramList["amountDetails"] = {"others": "","food": ""}
       # @paramList=paramList.to_json
-      # p @paramList
+      p @paramList
 
       # @paramList = '{"userToken": "#{api_current_user.paytm_access_token}","totalAmount": "1","mid": "Wavedi71402481589558","amountDetails": {"others": ","food": "}}'
       # @paramList = @paramList.to_json

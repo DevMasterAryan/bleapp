@@ -84,6 +84,7 @@ Rails.application.routes.draw do
         post :validate_paytm_otp
         post :check_paytm_balance
         post :validate_paytm_access_token
+        post :paytm_withdraw_api
       end
     end
 

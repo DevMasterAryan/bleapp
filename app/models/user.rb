@@ -3,6 +3,8 @@ require 'twilio_sms.rb'
 require 'twilio-ruby'
 require 'open-uri'
 class User
+  require './lib/encryption_new_pg.rb'
+  include EncryptionNewPG
   extend PaytmHelper
   include ActiveModel::OneTimePassword 
   include Mongoid::Document
@@ -97,30 +99,18 @@ class User
     self.access_token = Digest::SHA256.hexdigest(Time.now.to_s)      
   end
 
-  def self.checksum(api_current_user,order_id,txn_amount)
-      # paramList = Hash.new
-      # paramList["mid"] = "Wavedi71402481589558"
-      # paramList["totalAmount"] = "1"
-      # paramList["userToken"] = User.first.paytm_access_token
-      # paramList["amountDetails"] = {"others": "","food": ""}
-      # @paramList=paramList.to_json
-      # p 
+  def self.checksum(api_current_user,txn_amount,type) 
+  if type == "consult"  
       v = User.first.paytm_access_token
       txn_amount = txn_amount
       @paramList = '{"userToken":"'+v+'","totalAmount":"'+txn_amount+'''","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}'
-  
-      # paramList = Hash.new
-      # paramList["mid"] = "Wavedi71402481589558"
-      # paramList["totalAmount"] = "1"
-      # paramList["userToken"] = User.first.paytm_access_token
-      # paramList["amountDetails"] = {"others": "","food": ""}
-      # @paramList=paramList.to_json
-      p @paramList
-
-      # @paramList = '{"userToken": "#{api_current_user.paytm_access_token}","totalAmount": "1","mid": "Wavedi71402481589558","amountDetails": {"others": ","food": "}}'
-      # @paramList = @paramList.to_json
-
       @checksum_hash=generate_checksum()  
+    else
+      p "-----------WITHDRAW CheckSum----------------"
+      @paramList = '{"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "1","AppIP": "127.0.0.1","OrderId": "ORDER11","Currency": "INR","DeviceId": "9997217401","SSOToken": "bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail","Channel": "WAP","AuthMode": "USRPWD"}'
+      @checksum_hash=generate_checksum() 
+      # new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM") 
+    end
   end
 
 

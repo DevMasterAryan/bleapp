@@ -118,7 +118,7 @@ i.content
 
 <% @data.map do |x| %>
 <% end %>
-<% headers = ['Session ID','Session TS' ,'User Mobile','User Email','Dev_batt_start','Site_ID','Device'] %> 
+<% headers = ['Session ID','Session TS' ,'User Mobile','User Email','Dev_batt_start','Device'] %> 
 <%= CSV.generate_line(headers).strip %> 
 <% @data.each do |i| %> 
 <%= CSV.generate_line([                          
@@ -127,7 +127,6 @@ i.session_ts,
 i&.user&.mobile,
 i&.user&.email,
 i.device_battery_start,
-i&.site&.site_name
 i&.device&.device                       
 ]).strip.html_safe %>
 <% end %>

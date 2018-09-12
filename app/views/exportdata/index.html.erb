@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="col-md-12">
+    <h3>Export CSV</h3>                                      
+    <label>Select Table </label>
+    </div>
+    <%= form_with scope: :exportdata, url: exportdata_path(format: "csv"), local: true, method: :get do |form| %>
+    <div class="col-md-6">
+      <div class="form-group">
+        <select class="form-control" name="table">
+          <option value="User">User</option>
+          <option value="Device">Device</option>
+          <option value="UserDevice">User Device</option>
+          <option value="UserFeedback">User Feedback</option>
+          <option value="Billing">Billing</option>
+          <option value="Help">Help</option>
+          <option value="Package">Package</option>
+          <option value="Site">Site</option>
+          <option value="Session">Session</option>
+          <option value="StaticContent">Static Content</option>
+          <option value="SocialLogin">Social Login</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <button type="submit" class="btn btn-success">Export</button>
+    </div>
+    <% end %>
+</div>
+
+</body>
+</html>

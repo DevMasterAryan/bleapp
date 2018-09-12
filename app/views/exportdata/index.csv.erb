@@ -1,0 +1,203 @@
+<% if params[:table] == "User" %>
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['User id','Created at','First name','Last name','Email','Mobile no.', 'IMEI','Latitude','Longitude','Mobile Phone Model','Last login','Logged in','Credits','Promotions'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([ 
+i.id,     
+i.created_at,                   
+i.first_name,                          
+i.last_name,                                                 
+i.email,
+i.mobile,
+i.imei,
+i.lat,
+i.long,
+i.mobile_phone_model,
+i.last_login,
+i.logged_in,
+i.credit,
+i.promotion
+]).strip.html_safe %>
+<% end %> 
+
+<% elsif params[:table] == "Device" %>
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Stolen','Mac Address','Identifier','Device','Device Status','Site Display Name','Ido_old','Ido_new','Site_id'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([  
+                          
+i.stolen,
+i.mac_address,                                                 
+i.identifier,
+i.device,
+i.device_status,
+i.site_display_name,
+i.ido_old,
+i.ido_new,
+i&.site&.site_name
+
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "UserDevice" %>
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Device ID','User Mobile','User Email','Device Type','Device Token'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([  
+
+i.id,                          
+i&.user&.mobile,
+i&.user&.email,                                                 
+i.device_type,
+i.device_token
+
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "SocialLogin" %> 
+
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Social ID','User Mobile','User Email' ,'Provider','Provider Id','Created at'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([                          
+i.id,                          
+i&.user&.mobile,
+i&.user&.email,                                                 
+i.provider,   
+i.provider_id,
+i.created_at                    
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "StaticContent" %> 
+
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Title','Content'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([                          
+i.title,                          
+i.content                    
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "Billing" %>
+
+<% @data.map do |x| %>
+<% end %> 
+<% headers = ['Session_ID','Billing_ID','MOP','Transaction ID','Payment_TS','Package Time','Usage_Start_TS','Usage_End_TS','DeviceBattery_TS15','DeviceBattery_TS30','DeviceBattery_TS45','DeviceBattery_TS60'] %> 
+<%= CSV.generate_line(headers).strip %>   
+<% @data.each do |i| %>  
+<%= CSV.generate_line([ 
+ i.session_id,
+ i.id,                                                  
+ i.method_of_payment,
+ i.transaction_id,
+ i.payment_time_stamp,
+ i&.package&.package_time,
+ i.usage_start_ts,
+ i.usage_end_ts,
+ i.device_battery_ts15,
+ i.device_battery_ts30,
+ i.device_battery_ts45,
+ i.device_battery_ts60
+ ]).strip.html_safe %> 
+ <% end %>
+
+
+<% elsif params[:table] == "Session" %>
+
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Session ID','Session TS' ,'User Mobile','User Email','Dev_batt_start','Site_ID','Device'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([                          
+i.id,                          
+i.session_ts,                                                 
+i&.user&.mobile,
+i&.user&.email,
+i.device_battery_start,
+i&.site&.site_name
+i&.device&.device                       
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "Help" %>
+
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Help ID','Help Description','Faq Answer'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([                          
+i.help_id,                          
+i.help_description,
+i.faq_answer                                                                   
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "Package" %>
+
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['PKG_ID','PKG_TIME' ,'PKG_COST','PKG_GST','PKG_Final'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([                          
+i.id,                          
+i.package_time,                                                 
+i.package_value, 
+i.package_gst,
+i.package_final                      
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "Site" %>
+
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Site ID','Site Name' ,'Location Address','Address','Latitude','Longitude'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([                          
+i.id,                          
+i.site_name,                                                 
+i.location_address,
+i.address,
+i.lat,
+i.long                       
+]).strip.html_safe %>
+<% end %>
+
+<% elsif params[:table] == "UserFeedback" %>
+
+<% @data.map do |x| %>
+<% end %>
+<% headers = ['Feedback ID','Help ID' ,'User Mobile','User Email','Site ID','Rating','Session ID','Rating Status','Billing ID','Feedback'] %> 
+<%= CSV.generate_line(headers).strip %> 
+<% @data.each do |i| %> 
+<%= CSV.generate_line([  
+i.id,                        
+i.help_id,                          
+i&.user&.mobile,
+i&.user&.email,                                                 
+i.site_id,
+i.rating,
+i.session_id,
+i.rating_status,
+i.billing_id,
+i.feedback                       
+]).strip.html_safe %>
+<% end %>
+
+<% end %> 

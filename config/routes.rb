@@ -20,7 +20,13 @@ Rails.application.routes.draw do
 
   # post 'auth/login', to: 'users#login'
   # get 'test', to: 'users#test'
-
+  
+  resources :exportdata do
+      collection do
+        get :exportxls
+      end 
+    end
+  
   post 'phone_verifications/voice' => 'api/v1/phone_verifications#voice'
 
   api_version(:module => "api/V1", :header => {:name => "Accept", :value => "application/Wavedio; version=1"}) do
@@ -96,6 +102,7 @@ Rails.application.routes.draw do
   #       post :voice
   #     end
   #   end
-  end
+
+end
 
 end

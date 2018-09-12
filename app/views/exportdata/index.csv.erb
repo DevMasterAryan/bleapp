@@ -25,7 +25,7 @@ i.promotion
 <% elsif params[:table] == "Device" %>
 <% @data.map do |x| %>
 <% end %>
-<% headers = ['Stolen','Mac Address','Identifier','Device','Device Status','Site Display Name','Ido_old','Ido_new','Site_id'] %> 
+<% headers = ['Stolen','Mac Address','Identifier','Device','Site Display Name','Ido_old','Ido_new','Site_id'] %> 
 <%= CSV.generate_line(headers).strip %> 
 <% @data.each do |i| %> 
 <%= CSV.generate_line([  
@@ -34,7 +34,6 @@ i.stolen,
 i.mac_address,                                                 
 i.identifier,
 i.device,
-i.device_status,
 i.site_display_name,
 i.ido_old,
 i.ido_new,
@@ -64,12 +63,11 @@ i.device_token
 
 <% @data.map do |x| %>
 <% end %>
-<% headers = ['Social ID','User Mobile','User Email' ,'Provider','Provider Id','Created at'] %> 
+<% headers = ['Social ID','User Email' ,'Provider','Provider Id','Created at'] %> 
 <%= CSV.generate_line(headers).strip %> 
 <% @data.each do |i| %> 
 <%= CSV.generate_line([                          
 i.id,                          
-i&.user&.mobile,
 i&.user&.email,                                                 
 i.provider,   
 i.provider_id,
@@ -94,7 +92,7 @@ i.content
 
 <% @data.map do |x| %>
 <% end %> 
-<% headers = ['Session_ID','Billing_ID','MOP','Transaction ID','Payment_TS','Package Time','Usage_Start_TS','Usage_End_TS','DeviceBattery_TS15','DeviceBattery_TS30','DeviceBattery_TS45','DeviceBattery_TS60'] %> 
+<% headers = ['Session_ID','Billing_ID','MOP','Transaction ID','Payment_ID','Package Time','Usage_Start_TS','Usage_End_TS','DeviceBattery_TS15','DeviceBattery_TS30','DeviceBattery_TS45','DeviceBattery_TS60','Charging Status'] %> 
 <%= CSV.generate_line(headers).strip %>   
 <% @data.each do |i| %>  
 <%= CSV.generate_line([ 
@@ -102,7 +100,7 @@ i.content
  i.id,                                                  
  i.method_of_payment,
  i.transaction_id,
- i.payment_time_stamp,
+ i.payment_id,
  i&.package&.package_time,
  i.usage_start_ts,
  i.usage_end_ts,
@@ -110,6 +108,7 @@ i.content
  i.device_battery_ts30,
  i.device_battery_ts45,
  i.device_battery_ts60
+ i.charging_status
  ]).strip.html_safe %> 
  <% end %>
 
@@ -118,12 +117,11 @@ i.content
 
 <% @data.map do |x| %>
 <% end %>
-<% headers = ['Session ID','Session TS' ,'User Mobile','User Email','Dev_batt_start','Device'] %> 
+<% headers = ['Session ID','User Mobile','User Email','Dev_batt_start','Device'] %> 
 <%= CSV.generate_line(headers).strip %> 
 <% @data.each do |i| %> 
 <%= CSV.generate_line([                          
-i.id,                          
-i.session_ts,                                                 
+i.id,                                                                         
 i&.user&.mobile,
 i&.user&.email,
 i.device_battery_start,

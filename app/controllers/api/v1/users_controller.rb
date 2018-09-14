@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status]
-	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status]
+	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status,:billing_status]
+	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status,:billing_status]
     include PaytmHelper
 	def apply_credit
 		@package  = Package.find_by(id: params["package_id"])
@@ -188,6 +188,14 @@ class Api::V1::UsersController < ApplicationController
         
       else
         return render json: {responseMessage: 500, responseMessage: "Try again later."}
+      end
+    end
+
+
+    def billing_status
+      billing  = Billing.find_by(id: params[:billing_id]) 
+      if billing.present?
+        return render json: {responseCode: 200, responseMessage: "Status fetched successfully.",status: @billing.usage_end_ts > DateTime.current ? true : false}
       end
     end
 end

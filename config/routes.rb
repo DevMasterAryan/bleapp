@@ -70,6 +70,7 @@ Rails.application.routes.draw do
         post :checksum
         post :billing_not_rated
         post :charging_status
+        post :billing_status
       end
     end
     

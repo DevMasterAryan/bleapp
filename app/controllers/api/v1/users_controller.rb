@@ -195,7 +195,7 @@ class Api::V1::UsersController < ApplicationController
     def billing_status
       billing  = Billing.find_by(id: params[:billing_id]) 
       if billing.present?
-        return render json: {responseCode: 200, responseMessage: "Status fetched successfully.",status: @billing.usage_end_ts > DateTime.current ? true : false}
+        return render json: {responseCode: 200, responseMessage: "Status fetched successfully.",status: billing.usage_end_ts > DateTime.current ? true : false}
       end
     end
 end

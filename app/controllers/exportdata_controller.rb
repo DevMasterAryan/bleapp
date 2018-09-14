@@ -2,7 +2,7 @@ class ExportdataController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "password"
     layout :false
     def index
-            @data = eval("@data = #{params[:table]}.all") if params[:table].present?
+            @data = eval("@data = #{params[:table]}.all.order(created_at: :desc)") if params[:table].present?
               respond_to do |format|
                 format.html
                 format.csv do

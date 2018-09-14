@@ -1,7 +1,7 @@
 <% if params[:table] == "User" %>
 <% @data.map do |x| %>
 <% end %>
-<% headers = ['User id','Created at','First name','Last name','Email','Mobile no.', 'IMEI','Latitude','Longitude','Mobile Phone Model','Last login','Logged in','Credits','Promotions'] %> 
+<% headers = ['User id','Created at','First name','Last name','Email','Mobile no.', 'IMEI','Latitude','Longitude','Address','Mobile Phone Model','Last login','Logged in','Credits','Promotions'] %> 
 <%= CSV.generate_line(headers).strip %> 
 <% @data.each do |i| %> 
 <%= CSV.generate_line([ 
@@ -14,6 +14,7 @@ i.mobile,
 i.imei,
 i.lat,
 i.long,
+i.location,
 i.mobile_phone_model,
 i.last_login,
 i.logged_in,

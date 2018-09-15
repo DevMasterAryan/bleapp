@@ -40,7 +40,7 @@ class Api::V1::HelpController < ApplicationController
          return render json: {responseCode: 401, responseMessage: "You have already used this option."}
         end
       end
-      @user_feedback = UserFeedback.new(user_id: @api_current_user.id, site_id: params[:site_id], help_id: params[:help_id], billing_id: params[:billing_id], session_id: billing.present? ? billing.session.id : "", rating: params[:rating], rating_status: params[:rating_status])
+      @user_feedback = UserFeedback.new(user_id: @api_current_user.id, site_id: params[:site_id], help_id: params[:help_id], billing_id: params[:billing_id], session_id: billing.present? ? billing.session.id : "", rating: params[:rating], rating_status: params[:rating_status],feedback: params[:feedback])
       if @user_feedback.save
           render json: {responseCode: 200, responseMessage: "Submitted successfully."}
       else

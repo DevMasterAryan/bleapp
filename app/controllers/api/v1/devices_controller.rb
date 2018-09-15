@@ -107,7 +107,7 @@ class Api::V1::DevicesController < ApplicationController
         @billing.update(device_battery_ts45: params[:device_battery_ts])
         return render json: {responseCode: 200, responseMessage: "Timestamp saved successfully."}      
       end
-      if !@billing.device_battery_ts45.present? 
+      if !@billing.device_battery_ts60.present? 
         @billing.update(device_battery_ts60: params[:device_battery_ts])
         return render json: {responseCode: 200, responseMessage: "Timestamp saved successfully."}      
       end

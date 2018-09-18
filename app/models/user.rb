@@ -99,20 +99,43 @@ class User
     self.access_token = Digest::SHA256.hexdigest(Time.now.to_s)      
   end
 
-  def self.checksum(api_current_user,txn_amount,type) 
+  def self.checksum(api_current_user,txn_amount,type,order_id = nil) 
   if type == "consult"  
       v = User.first.paytm_access_token
       txn_amount = txn_amount
       @paramList = '{"userToken":"'+v+'","totalAmount":"'+txn_amount+'''","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}'
       @checksum_hash=generate_checksum()  
     else
-      p "-----------WITHDRAW CheckSum----------------"
-      @paramList = '{"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "1","AppIP": "127.0.0.1","OrderId": "ORDER11","Currency": "INR","DeviceId": "9997217401","SSOToken": "bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail","Channel": "WAP","AuthMode": "USRPWD"}'
-      @checksum_hash=generate_checksum() 
-      # new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM") 
+      @paramList = {"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "#{txn_amount}","AppIP": "127.0.0.1","OrderId": "#{order_id}","Currency": "INR","DeviceId": "#{api_current_user.paytm_mobile}","SSOToken": "#{api_current_user.paytm_access_token}","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD"}
+      p @paramList
+      # @checksum=generate_checksum() 
+      new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM") 
     end
+  end
+
+  def self.paytm_withdraw_api(api_current_user,txn_amount)
+    begin
+      order_id = DateTime.now.to_i
+      checksum = self.checksum(api_current_user,txn_amount,"",order_id)
+      response =  eval(ActiveSupport::JSON.decode(`curl -X POST -k -H 'Content-Type: application/json' -i 'https://securegw.paytm.in/paymentservices/HANDLER_FF/withdrawScw' --data '{"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "#{"txn_amount"}","AppIP": "127.0.0.1","OrderId": "#{order_id}","Currency": "INR","DeviceId": "#{api_current_user.paytm_mobile}","SSOToken": "#{api_current_user.paytm_access_token}","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD","CheckSum":  "#{checksum}"}'`.to_json).split("\r\n\r\n")[1]) 
+      return resonse
+    rescue Exception => e
+      return false
+    end
+    
   end
 
 
 
 end
+
+
+
+class Test
+  include PaytmRuby
+  def ts
+        @paramList = {"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "1","AppIP": "127.0.0.1","OrderId": "121212","Currency": "INR","DeviceId": "999999999","SSOToken": "2121212121","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD"}
+        generate_checksum("consult_balance")
+        @merchant_key = "MUBUL!hKGtxvcmXM"
+  end
+  end

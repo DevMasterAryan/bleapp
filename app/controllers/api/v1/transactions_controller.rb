@@ -134,45 +134,10 @@ class Api::V1::TransactionsController < ApplicationController
 
 	def paytm_withdraw_api
 		begin
-			uri = URI.parse("https://securegw.paytm.in/paymentservices/HANDLER_FF/withdrawScw")
-			request = Net::HTTP::Post.new(uri)
-			request.content_type = "application/json"
-			request["Cache-Control"] = "no-cache"
-			json_data = JSON.dump(
-	        {
-	          "MID" => " Wavedi71402481589558 ",    
-	          "ReqType" => "WITHDRAW",
-	          "TxnAmount" => "1",
-	          "AppIP" => "127.0.0.1",
-	          "OrderId" => "ORDER10",
-	          "Currency" => "INR",
-	          "DeviceId" => "9997217401",
-	          "SSOToken" => "bfcdbeb8-16ee-4c18-9bc4-cdf19cbc6900",
-	          "PaymentMode" => "PPI",
-	          "CustId" => "1040",
-	          "IndustryType" => "Retail",
-	          "Channel" => "WAP",
-	          "AuthMode" => "USRPWD",
-	          "CheckSum" => User.checksum(@api_current_user,params["txn_amount"],"")
-	          })
-			request.body = "JsonData=#{json_data}"
-
-			req_options = {
-			  use_ssl: uri.scheme == "https",
-			}
-
-			response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-			  http.request(request)
-			end
-
-
-
-# response.code
-# response.body
-
-
-
-			
+			order_id = DateTime.now.to_i
+			checksum = User.checksum(@api_current_user,params["txn_amount"],"",order_id)
+			response =  eval(ActiveSupport::JSON.decode(`curl -X POST -k -H 'Content-Type: application/json' -i 'https://securegw.paytm.in/paymentservices/HANDLER_FF/withdrawScw' --data '{"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "#{params["txn_amount"]}","AppIP": "127.0.0.1","OrderId": "#{order_id}","Currency": "INR","DeviceId": "#{@api_current_user.paytm_mobile}","SSOToken": "#{@api_current_user.paytm_access_token}","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD","CheckSum":  "#{checksum}"}'`.to_json).split("\r\n\r\n")[1])	
+			# binding.pry	
 		rescue Exception => e
 			
 		end

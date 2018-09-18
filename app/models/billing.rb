@@ -24,6 +24,7 @@ class Billing
   field :amount, type: Float
   field :device_id, type: String
   field :charging_status, type: String
+  field :paytm_data, :type => Hash
   # field :help_id, type: String
   # field :feedback, type: String
   # field :rating, type: Integer, default: 0

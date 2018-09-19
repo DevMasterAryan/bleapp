@@ -54,6 +54,7 @@ class Api::V1::TransactionsController < ApplicationController
 			end
 			response = JSON.parse(response.body)
 			if response["status"] == "SUCCESS"
+				@api_current_user.update(paytm_mobile: params[:mobile])
 				return render json: {responseCode: 200, responseMessage: response["message"],state: response["state"]}
 			else
 				return render json: {responseCode: 500, responseMessage: response["message"]}
@@ -122,7 +123,7 @@ class Api::V1::TransactionsController < ApplicationController
 			p signature
 			response = eval(ActiveSupport::JSON.decode(`curl -X POST -H 'Content-Type: application/json' -i 'https://securegw.paytm.in/paymentservices/pay/consult' --data '{"head":{"clientId":"merchant-wavedio",  "version":"v1","requestTimestamp":"Time", "channelId":"WAP","signature":"#{signature}"},"body":{"userToken":"#{@api_current_user.paytm_access_token}","totalAmount":"#{params["txn_amount"]}","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}}'`.to_json).split("\r\n\r\n")[1])
 			if response[:body][:fundsSufficient]
-				return render json: {responseCode: 200, fundsSufficient: true}
+				return render json: {responseCode: 200, fundsSufficient: true, sso_token: @api_current_user&.paytm_access_token}
 			else
 				return render json: {responseCode: 200, fundsSufficient: false, deficitAmount: response[:body][:deficitAmount]}
 			end

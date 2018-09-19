@@ -19,7 +19,6 @@ class User
   field :login_method, type: String
   field :first_login_date, type: Time
   field :last_login_date, type: Time
-  field :logged_in, type: String
   field :image, type: String
   field :user_lock, type: Mongoid::Boolean
   field :credit, type: Float, default: 0.0
@@ -35,7 +34,6 @@ class User
   field :long, :type=> String
   field :imei, :type=> String
   field :ip_address, :type=> String
-  field :location, :type=> String
   field :mobile_phone_model, :type=> String
   field :location, :type=> String 
   field :logged_in, :type=> Boolean, default: false
@@ -130,12 +128,3 @@ class User
 end
 
 
-
-class Test
-  include PaytmRuby
-  def ts
-        @paramList = {"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "1","AppIP": "127.0.0.1","OrderId": "121212","Currency": "INR","DeviceId": "999999999","SSOToken": "2121212121","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD"}
-        generate_checksum("consult_balance")
-        @merchant_key = "MUBUL!hKGtxvcmXM"
-  end
-  end

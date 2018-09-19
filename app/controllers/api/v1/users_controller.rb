@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status]
-	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status]
+	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status, :checksum_add_money]
+	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status,:checksum_add_money]
     include PaytmHelper
 	def apply_credit
 		@package  = Package.find_by(id: params["package_id"])
@@ -162,6 +162,10 @@ class Api::V1::UsersController < ApplicationController
 	    # paramList["REQUEST_TYPE"] = "DEFAULT"
 	    paramList["TXN_AMOUNT"] = params[:txn_amount]
 	    paramList["WEBSITE"] = "APPPROD"
+      
+      paramList["PAYMENT_MODE_ONLY"] = params[:payment_mode_only]
+      paramsList["AUTH_MODE"] = params[:auth_mode]
+      paramList["PAYMENT_TYPE_ID"] = params[:payment_type_id]
 	    @paramList=paramList
         @checksum_hash=generate_checksum()
         render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
@@ -170,10 +174,10 @@ class Api::V1::UsersController < ApplicationController
 
     def checksum_add_money
       paramList = Hash.new
-      paramList["CALLBACK_URL"]  = params[:callback_url]
+      # paramList["CALLBACK_URL"]  = params[:callback_url]
       paramList["CHANNEL_ID"] = "WAP"
       paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
-      paramsList["REQUEST_TYPE"] = params[:request_type]
+      paramsList["REQUEST_TYPE"] = "ADD_MONEY" 
       # paramList["EMAIL"] = params[:email]
       paramList["INDUSTRY_TYPE_ID"] = "Retail109"
       paramList["MID"] = "Wavedi71402481589558"

@@ -1,7 +1,11 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status, :checksum_add_money]
 	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status,:checksum_add_money]
-    include PaytmHelper
+    # include PaytmHelper
+   require './lib/encryption_new_pg.rb'
+  include EncryptionNewPG
+  extend PaytmHelper
+
 	def apply_credit
 		@package  = Package.find_by(id: params["package_id"])
 		@session = Session.find_by(id: params["session_id"])
@@ -162,22 +166,23 @@ class Api::V1::UsersController < ApplicationController
 	    # paramList["REQUEST_TYPE"] = "DEFAULT"
 	    paramList["TXN_AMOUNT"] = params[:txn_amount]
 	    paramList["WEBSITE"] = "APPPROD"
-      
+
       paramList["PAYMENT_MODE_ONLY"] = params[:payment_mode_only]
-      paramsList["AUTH_MODE"] = params[:auth_mode]
+      paramList["AUTH_MODE"] = params[:auth_mode]
       paramList["PAYMENT_TYPE_ID"] = params[:payment_type_id]
 	    @paramList=paramList
-        @checksum_hash=generate_checksum()
-        render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
+        # @checksum_hash=generate_checksum()
+        @checksum=new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM")
+        render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum}
     end 
 
 
     def checksum_add_money
-      paramList = Hash.new
-      # paramList["CALLBACK_URL"]  = params[:callback_url]
+       paramList = Hash.new
+       paramList["CALLBACK_URL"]  = params[:callback_url]
       paramList["CHANNEL_ID"] = "WAP"
       paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
-      paramsList["REQUEST_TYPE"] = "ADD_MONEY" 
+      paramList["REQUEST_TYPE"] = "ADD_MONEY" 
       # paramList["EMAIL"] = params[:email]
       paramList["INDUSTRY_TYPE_ID"] = "Retail109"
       paramList["MID"] = "Wavedi71402481589558"
@@ -186,9 +191,10 @@ class Api::V1::UsersController < ApplicationController
       # paramList["REQUEST_TYPE"] = "DEFAULT"
       paramList["TXN_AMOUNT"] = params[:txn_amount]
       paramList["WEBSITE"] = "APPPROD"
-      params["SSO_TOKEN"] = @api_current_user.paytm_access_token
+      paramList["SSO_TOKEN"] = @api_current_user.paytm_access_token
       @paramList=paramList
-        @checksum_hash=generate_checksum()
+        @checksum_hash=new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM") 
+      # signature = User.checksum(@api_current_user,params["txn_amount"],"ADD_MONEY")
         render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
       
     end

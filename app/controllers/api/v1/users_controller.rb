@@ -168,6 +168,28 @@ class Api::V1::UsersController < ApplicationController
     end 
 
 
+    def checksum_add_money
+      paramList = Hash.new
+      paramList["CALLBACK_URL"]  = params[:callback_url]
+      paramList["CHANNEL_ID"] = "WAP"
+      paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
+      paramsList["REQUEST_TYPE"] = params[:request_type]
+      # paramList["EMAIL"] = params[:email]
+      paramList["INDUSTRY_TYPE_ID"] = "Retail109"
+      paramList["MID"] = "Wavedi71402481589558"
+      # paramList["MOBILE_NO"] = params[:mobile_no]
+      paramList["ORDER_ID"] = params[:order_id]
+      # paramList["REQUEST_TYPE"] = "DEFAULT"
+      paramList["TXN_AMOUNT"] = params[:txn_amount]
+      paramList["WEBSITE"] = "APPPROD"
+      params["SSO_TOKEN"] = @api_current_user.paytm_access_token
+      @paramList=paramList
+        @checksum_hash=generate_checksum()
+        render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
+      
+    end
+
+
     def charging_status
       billing  = Billing.find_by(id: params[:billing_id])	
       if billing.present?

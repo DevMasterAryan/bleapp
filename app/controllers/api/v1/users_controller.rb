@@ -138,8 +138,7 @@ class Api::V1::UsersController < ApplicationController
 
     end
    
-    def checksum
-        #staging key and value   
+    def checksum  
         #paramList = Hash.new
 	    # paramList["CALLBACK_URL"]  = params[:callback_url]
 	    # paramList["CHANNEL_ID"] = "WAP"
@@ -171,7 +170,6 @@ class Api::V1::UsersController < ApplicationController
       paramList["AUTH_MODE"] = params[:auth_mode]
       paramList["PAYMENT_TYPE_ID"] = params[:payment_type_id]
 	    @paramList=paramList
-        # @checksum_hash=generate_checksum()
         @checksum=new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM")
         render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum}
     end 
@@ -183,10 +181,8 @@ class Api::V1::UsersController < ApplicationController
       paramList["CHANNEL_ID"] = "WAP"
       paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
       paramList["REQUEST_TYPE"] = "ADD_MONEY" 
-      # paramList["EMAIL"] = params[:email]
       paramList["INDUSTRY_TYPE_ID"] = "Retail109"
       paramList["MID"] = "Wavedi71402481589558"
-      # paramList["MOBILE_NO"] = params[:mobile_no]
       paramList["ORDER_ID"] = params[:order_id]
       # paramList["REQUEST_TYPE"] = "DEFAULT"
       paramList["TXN_AMOUNT"] = params[:txn_amount]

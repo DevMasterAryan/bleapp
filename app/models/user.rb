@@ -99,7 +99,7 @@ class User
 
   def self.checksum(api_current_user,txn_amount,type,order_id = nil) 
   if type == "consult"  
-      v = User.first.paytm_access_token
+      v = api_current_user.paytm_access_token
       txn_amount = txn_amount
       @paramList = '{"userToken":"'+v+'","totalAmount":"'+txn_amount+'''","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}'
       @checksum_hash=generate_checksum()  

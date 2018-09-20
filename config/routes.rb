@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :categories, only: [:new,:create, :edit, :update]
     resources :accounts 
+    resources :users do
+      collection{
+        post :import
+      }
+    end
     get 'accounts/index'
     get 'sessions/login'
     post "sessions/create"

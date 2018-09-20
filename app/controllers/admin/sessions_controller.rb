@@ -8,9 +8,15 @@ class Admin::SessionsController < ApplicationController
   end
   
   def create
+
     user = AdminUser.where(email: params[:admin_user][:email].downcase).first
     if user && user.authenticate(params[:admin_user][:password])
       log_in(user)
+      if params[:remember_me]
+      cookies.signed[:user_id] = { value: user.id, expires: 2.weeks.from_now }
+      else
+      cookies.signed[:user_id] = user.id
+      end
       remember_me(user) if params[:remember_me].present?
       flash[:notice] = "Login successfully."
       redirect_to admin_dashboard_home_path
@@ -24,6 +30,7 @@ class Admin::SessionsController < ApplicationController
 
 
   def destroy
+    cookies.delete :user_id
     log_out
     flash[:notice] = "Logout successfully."
     redirect_to admin_sessions_login_url

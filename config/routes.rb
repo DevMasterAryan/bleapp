@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :categories, only: [:new,:create, :edit, :update]
     resources :accounts 
-    resources :users do
+    resources :admin_users do
       collection{
         post :import
       }

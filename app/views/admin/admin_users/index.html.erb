@@ -33,7 +33,7 @@
                 <thead>
                 <tr>
                   <th>First Name</th>
-                    <th>Account ID</th>
+                    <th>Emp ID</th>
                     <th>User Email</th>
                     <th>Category</th>
                     <th>Send Login Credential</th>
@@ -45,7 +45,7 @@
                 <% @admin_users.each do |admin_user|%>
                   <tr>
                     <td><%= admin_user&.first_name%></td>
-                    <td><%= admin_user.try(:account_id)%></td>
+                    <td><%= admin_user.try(:emp_id)%></td>
                     <!-- <td><span class="tag tag-success">Approved</span></td> -->
                     <td><%= admin_user.try(:email)%></td>
                     <td>
@@ -55,7 +55,7 @@
                   <td>  
                     <div class="action-btn">
                       <a>
-                        <%= submit_tag 'Send'.html_safe, :class=>"btn btn-sm btn-info"%>
+                        <%= submit_tag 'Send'.html_safe, :class=>"btn btn-sm btn-info", style: "width: 99px;" %>
                       <%end%>
                           </a>
                     </div>
@@ -65,7 +65,11 @@
                      <% if admin_user&.is_active? == true %>
                  <a><%= link_to '<i class="fa fa-ban" aria-hidden="true"></i> Suspend'.html_safe, suspend_user_admin_admin_users_path(id: admin_user.id), :class=>"btn btn-sm btn-danger"  , style: "width: 99px;",:data => {:confirm => 'Are you sure you want to Suspend the User?'}%></a>
                  <% elsif admin_user&.is_active? == false %>
-                 <a><%= link_to '<i class="fa fa-certificate" aria-hidden="true"></i> Inactive'.html_safe, "#", :class=>"btn btn-sm btn-success", style: "width: 99px;"%></a>
+                 <a>
+                  <span class="bg-green">
+                    Inactive
+                  </span>
+                  <%#= link_to '<i class="fa fa-certificate" aria-hidden="true"></i> Inactive'.html_safe, "#", :class=>"btn btn-sm btn-success", style: "width: 99px;"%></a>
                  <% end %>
                  </div>
                    </td>
@@ -73,6 +77,9 @@
                   <%end%>
                 </tbody>
               </table>
+    <div class="custom-pagination pull-right">
+    <%= will_paginate @admin_users %>
+    </div>
             </div>
             <!-- /.box-body -->
           </div>

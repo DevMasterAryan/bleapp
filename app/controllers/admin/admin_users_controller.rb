@@ -4,7 +4,9 @@ class Admin::AdminUsersController < ApplicationController
   
   def index
     # @admin_user = AdminUser.where(id: session[:user_id]["$oid"]).first
-    @admin_users = AdminUser.all.order("created_at desc")
+    @search = AdminUser.any_of({first_name: Regexp.new(".*#{params[:search]}.*","i")},{email: Regexp.new(".*#{params[:search]}.*","i")}).where(role: "user")
+    @admin_users = @search.order("created_at desc")
+    # @admin_users = AdminUser.all.order("created_at desc")
   end
 
   def import

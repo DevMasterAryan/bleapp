@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status, :checksum_add_money]
-	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status,:checksum_add_money]
+	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status, :checksum_add_money,:add_money_transaction_status]
+	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status,:checksum_add_money,:add_money_transaction_status]
     # include PaytmHelper
    require './lib/encryption_new_pg.rb'
   include EncryptionNewPG
@@ -42,11 +42,11 @@ class Api::V1::UsersController < ApplicationController
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
-        elsif params["mop"]=="payment"
-          txn_amount = params[:card]
-          response = User.paytm_withdraw_api(@api_current_user,"0.10")
-        	# resp= Billing.transaction_status params
-            if response[:Status] == "TXN_SUCCESS"
+        # elsif params["mop"] ==  "Credit Card" || "Debit Card" || "Internet Banking" || "Wallet"
+          # txn_amount = params[:card]
+          # response = User.paytm_withdraw_api(@api_current_user,"0.10")
+        	 resp= Billing.transaction_status params
+            if resp
               if params[:credit].present?
                    @remaining_credit = @api_current_user.credit - params[:credit].to_i 
                    @api_current_user.update(credit: @remaining_credit)
@@ -176,8 +176,8 @@ class Api::V1::UsersController < ApplicationController
 
 
     def checksum_add_money
-       paramList = Hash.new
-       paramList["CALLBACK_URL"]  = params[:callback_url]
+      paramList = Hash.new
+      paramList["CALLBACK_URL"]  = params[:callback_url]
       paramList["CHANNEL_ID"] = "WAP"
       paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
       paramList["REQUEST_TYPE"] = "ADD_MONEY" 
@@ -216,5 +216,16 @@ class Api::V1::UsersController < ApplicationController
       else
         return render json: {responseMessage: 500, responseMessage: "Try again later."}
       end
+    end
+
+
+    def add_money_transaction_status
+      resp= Billing.transaction_status params
+      if resp
+        return render json: {responseCode: 200, responseMessage: "Add Money Transaction verfied successfully."}
+      else
+        return render json: {responseCode: 500, responseMessage: "Add Money Transaction verification failed."}
+      end
+
     end
 end

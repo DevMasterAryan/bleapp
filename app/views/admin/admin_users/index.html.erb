@@ -4,11 +4,9 @@
       </h1>
       <h1>
         <form action="<%= admin_admin_users_path %>"  method="get" >
-            <input type="text" name="search" placeholder="Search user" class="form-control" > 
-          <button class="btn btn-black">Search</button>
+            <input type="text" name="search" placeholder="Search"> 
+          <button>Search</button>
       </form>
-        Data Tables
-        <small>advanced tables</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -35,23 +33,34 @@
                 <thead>
                 <tr>
                   <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Department</th>
-                    <th>Designation</th>
-                    <th>Territory</th>
+                    <th>Account ID</th>
+                    <th>User Email</th>
+                    <th>Category</th>
+                    <th>Send Login Credential</th>
+                    <!-- <th>Territory</th> -->
                 </tr>
                 </thead>
                 <tbody>
                 <% @admin_users.each do |admin_user|%>
                   <tr>
-                    <td><%= admin_user.try(:first_name)%></td>
-                    <td><%= admin_user.try(:last_name)%></td>
+                    <td><%= admin_user&.first_name%></td>
+                    <td><%= admin_user.try(:account_id)%></td>
                     <!-- <td><span class="tag tag-success">Approved</span></td> -->
                     <td><%= admin_user.try(:email)%></td>
-                    <td><%= admin_user.try(:department)%></td>
-                    <td><%= admin_user.try(:designation)%></td>
-                    <td><%= admin_user.try(:territory)%></td>
+                    <td>
+                      <%= form_tag create_category_admin_admin_users_path(admin_user_id: admin_user.id), method: :patch do %>
+                      <%=select_tag "categories", options_from_collection_for_select(get_categories, "id", "name") , :onchange => 'this.form.submit()'%>
+                      <%end%>
+                  </td>
+                    <td>  
+                      <div class="action-btn">
+                        <a>
+                          <%= link_to '<i class="fa fa-send" aria-hidden="true"></i> Send'.html_safe, admin_admin_users_path(search: "lalit"), :class=>"btn btn-sm btn-info"%>
+                            
+                          </a>
+                        </div>
+                    </td>
+                   
                   </tr>
                   <%end%>
                 </tbody>
@@ -66,3 +75,10 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
+<script type="text/javascript">
+  $('select').change(alert_me_test);
+  function alert_me_test(selectedValue){
+  var selectedValue = selectedValue.value;
+  alert(selectedValue);
+  }
+</script>

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :admin_users do
       collection{
         post :import
+        patch :create_category
       }
     end
     get 'accounts/index'

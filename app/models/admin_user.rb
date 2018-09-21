@@ -18,8 +18,11 @@ class AdminUser
   field :first_name, type: String
   field :last_name, type: String
   field :phone, type: String
-  has_secure_password
+  field :is_active?, type: Boolean, default: false
+  has_secure_password validations: false
   belongs_to :category, optional: true
+  validates :password, presence: false, :on => :create
+  validates :password_confirmation, presence: false, :on => :create
 
 
   def self.import(file)

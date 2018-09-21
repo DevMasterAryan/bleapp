@@ -7,7 +7,8 @@ Rails.application.routes.draw do
     resources :admin_users do
       collection{
         post :import
-        patch :create_category
+        post :send_credential
+        get :suspend_user
       }
     end
     get 'accounts/index'

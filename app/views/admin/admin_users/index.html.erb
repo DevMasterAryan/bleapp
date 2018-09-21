@@ -9,9 +9,9 @@
       </form>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">Tables</a></li>
-        <li class="active">Data tables</li>
+        <li class="active">Data tables</li> -->
       </ol>
     </section>
     <!-- Main content -->
@@ -37,6 +37,7 @@
                     <th>User Email</th>
                     <th>Category</th>
                     <th>Send Login Credential</th>
+                    <th>Action</th>
                     <!-- <th>Territory</th> -->
                 </tr>
                 </thead>
@@ -48,19 +49,26 @@
                     <!-- <td><span class="tag tag-success">Approved</span></td> -->
                     <td><%= admin_user.try(:email)%></td>
                     <td>
-                      <%= form_tag create_category_admin_admin_users_path(admin_user_id: admin_user.id), method: :patch do %>
-                      <%=select_tag "categories", options_from_collection_for_select(get_categories, "id", "name") , :onchange => 'this.form.submit()'%>
-                      <%end%>
+                      <%= form_tag send_credential_admin_admin_users_path(admin_user_id: admin_user.id), method: :post do %>
+                      <%=select_tag "categories", options_from_collection_for_select(get_categories, "id", "name") %>
                   </td>
-                    <td>  
-                      <div class="action-btn">
-                        <a>
-                          <%= link_to '<i class="fa fa-send" aria-hidden="true"></i> Send'.html_safe, admin_admin_users_path(search: "lalit"), :class=>"btn btn-sm btn-info"%>
-                            
+                  <td>  
+                    <div class="action-btn">
+                      <a>
+                        <%= submit_tag 'Send'.html_safe, :class=>"btn btn-sm btn-info"%>
+                      <%end%>
                           </a>
-                        </div>
+                    </div>
                     </td>
-                   
+                   <td>
+                    <div class="action-btn">
+                     <% if admin_user&.is_active? == true %>
+                 <a><%= link_to '<i class="fa fa-ban" aria-hidden="true"></i> Suspend'.html_safe, suspend_user_admin_admin_users_path(id: admin_user.id), :class=>"btn btn-sm btn-danger"  , style: "width: 99px;",:data => {:confirm => 'Are you sure you want to Suspend the User?'}%></a>
+                 <% elsif admin_user&.is_active? == false %>
+                 <a><%= link_to '<i class="fa fa-certificate" aria-hidden="true"></i> Inactive'.html_safe, "#", :class=>"btn btn-sm btn-success", style: "width: 99px;"%></a>
+                 <% end %>
+                 </div>
+                   </td>
                   </tr>
                   <%end%>
                 </tbody>
@@ -75,10 +83,3 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
-<script type="text/javascript">
-  $('select').change(alert_me_test);
-  function alert_me_test(selectedValue){
-  var selectedValue = selectedValue.value;
-  alert(selectedValue);
-  }
-</script>

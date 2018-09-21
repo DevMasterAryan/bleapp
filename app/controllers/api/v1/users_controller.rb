@@ -7,6 +7,7 @@ class Api::V1::UsersController < ApplicationController
   extend PaytmHelper
 
 	def apply_credit
+
 		@package  = Package.find_by(id: params["package_id"])
 		@session = Session.find_by(id: params["session_id"])
 
@@ -42,7 +43,7 @@ class Api::V1::UsersController < ApplicationController
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
-        # elsif params["mop"] ==  "Credit Card" || "Debit Card" || "Internet Banking" || "Wallet"
+   elsif params["mop"] !=  "credit" || "promotion" 
           # txn_amount = params[:card]
           # response = User.paytm_withdraw_api(@api_current_user,"0.10")
         	 resp= Billing.transaction_status params
@@ -51,20 +52,20 @@ class Api::V1::UsersController < ApplicationController
                    @remaining_credit = @api_current_user.credit - params[:credit].to_i 
                    @api_current_user.update(credit: @remaining_credit)
               end
-        				@billing = @api_current_user.billings.new(method_of_payment: "card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
-        				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final, device_id: @session.device.id,paytm_data: response)
+        				@billing = @api_current_user.billings.new(method_of_payment: params["mop"],session_id: @api_current_user.sessions.last.id, package_id: @package.id,
+        				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final, device_id: @session.device.id)
       				if @billing.save
       					bid = @api_current_user.billings.last.id.as_json["$oid"] 
       					Billing.session_destroy bid, @api_current_user.id.as_json["$oid"]
       					return render json: {responseCode: 200, responseMessage: "Payment done successfully.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion_count, billing_id: @api_current_user.billings.last.id.as_json["$oid"], remaining_time:  (@api_current_user&.billings&.last&.usage_end_ts.to_f - DateTime.current.to_f).to_i || 0, time_spend: (DateTime.current.to_f - @api_current_user&.billings&.last&.usage_start_ts.to_f).to_i || 0}
       				else
-      					return render json: {responseCode: 200, responseMessage: "Something went wrong."}
+      					return render json: {responseCode: 500, responseMessage: "Unsuccessful transaction."}
       				end
             else
               return render json: {responseCode: 500, responseMessage: "Unsuccessful transaction."}
             end
 			else
-				return render json: {responseCode: 200, responseMessage: "Something went wrong."}
+				return render json: {responseCode: 500, responseMessage: "Unsuccessful transaction."}
 			end   	 
 		# end		
 	end
@@ -222,7 +223,7 @@ class Api::V1::UsersController < ApplicationController
     def add_money_transaction_status
       resp= Billing.transaction_status params
       if resp
-        return render json: {responseCode: 200, responseMessage: "Add Money Transaction verfied successfully."}
+        return render json: {responseCode: 200, responseMessage: "Add Money Transaction verified successfully."}
       else
         return render json: {responseCode: 500, responseMessage: "Add Money Transaction verification failed."}
       end

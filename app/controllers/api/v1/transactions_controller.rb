@@ -140,6 +140,7 @@ class Api::V1::TransactionsController < ApplicationController
 			checksum = User.checksum(@api_current_user,params["txn_amount"],"",order_id)
 			response =  eval(ActiveSupport::JSON.decode(`curl -X POST -k -H 'Content-Type: application/json' -i 'https://securegw.paytm.in/paymentservices/HANDLER_FF/withdrawScw' --data '{"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "#{params["txn_amount"]}","AppIP": "127.0.0.1","OrderId": "#{order_id}","Currency": "INR","DeviceId": "#{@api_current_user.paytm_mobile}","SSOToken": "#{@api_current_user.paytm_access_token}","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD","CheckSum":  "#{checksum}"}'`.to_json).split("\r\n\r\n")[1])
 		   if response[:Status]=="TXN_SUCCESS"
+		   	p "................#{response.inspect}............"
 			return render json:{responseCode: 200, responseMessage: "Payment done successfully.",response: response} 	
 		   else
 		   	return render json:{responseCode: 500, responseMessage: "Payment failed.",response: response} 	

@@ -23,7 +23,7 @@ class Api::V1::SessionsController < ApplicationController
 				response = open("https://2factor.in/API/V1/b3e8209b-7f80-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
 				# if otp == "send"
 				if response.status.first == "200"
-					render json: {responseCode: 200, responseMessage: "OTP sent successfully."}
+					render json: {responseCode: 200, responseMessage: "OTP has been sent successfully."}
 				else
 					render json: {responseCode: 500, responseMessage: "Something went wrong.",otp: @otp}
 				end
@@ -35,7 +35,7 @@ class Api::V1::SessionsController < ApplicationController
 				 # otp = TwilioSms.send_otp(@user.mobile,@otp)
 				response = open("https://2factor.in/API/V1/b3e8209b-7f80-11e8-a895-0200cd936042/SMS/#{@user.mobile}/#{@otp}")
 				if response.status.first == "200"
-					render json: {responseCode: 200, responseMessage: "OTP sent successfully."}
+					render json: {responseCode: 200, responseMessage: "OTP has been sent successfully."}
 				else
 					render json: {responseCode: 500, responseMessage: "Something went wrong."}
 				end

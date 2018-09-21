@@ -78,6 +78,8 @@ Rails.application.routes.draw do
         post :billing_not_rated
         post :charging_status
         post :billing_status
+        post :checksum_add_money
+        post :add_money_transaction_status
       end
     end
     
@@ -94,6 +96,11 @@ Rails.application.routes.draw do
     resources :transactions do
       collection do
         post :package_payment
+        post :send_paytm_otp
+        post :validate_paytm_otp
+        post :check_paytm_balance
+        post :validate_paytm_access_token
+        post :paytm_withdraw_api
       end
     end
 

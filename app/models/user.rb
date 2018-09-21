@@ -3,6 +3,9 @@ require 'twilio_sms.rb'
 require 'twilio-ruby'
 require 'open-uri'
 class User
+  require './lib/encryption_new_pg.rb'
+  include EncryptionNewPG
+  extend PaytmHelper
   include ActiveModel::OneTimePassword 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -16,7 +19,6 @@ class User
   field :login_method, type: String
   field :first_login_date, type: Time
   field :last_login_date, type: Time
-  field :logged_in, type: String
   field :image, type: String
   field :user_lock, type: Mongoid::Boolean
   field :credit, type: Float, default: 0.0
@@ -32,11 +34,13 @@ class User
   field :long, :type=> String
   field :imei, :type=> String
   field :ip_address, :type=> String
-  field :location, :type=> String
   field :mobile_phone_model, :type=> String
   field :location, :type=> String 
   field :logged_in, :type=> Boolean, default: false
   field :otp_count, :type=> Integer, default: 0
+  field :paytm_mobile, :type=> String, default: ""
+  field :paytm_access_token, :type=> String, default: ""
+  field :paytm_access_token_exp_date, type: Time
 
   
   before_create :generate_access_token
@@ -93,6 +97,34 @@ class User
     self.access_token = Digest::SHA256.hexdigest(Time.now.to_s)      
   end
 
+  def self.checksum(api_current_user,txn_amount,type,order_id = nil) 
+  if type == "consult"  
+      v = api_current_user.paytm_access_token
+      txn_amount = txn_amount
+      @paramList = '{"userToken":"'+v+'","totalAmount":"'+txn_amount+'''","mid":"Wavedi71402481589558","amountDetails": {"others": "","food": ""}}'
+      @checksum_hash=generate_checksum()  
+    else
+      @paramList = {"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "#{txn_amount}","AppIP": "127.0.0.1","OrderId": "#{order_id}","Currency": "INR","DeviceId": "#{api_current_user.paytm_mobile}","SSOToken": "#{api_current_user.paytm_access_token}","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD"}
+      p @paramList
+      # @checksum=generate_checksum() 
+      new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM") 
+    end
+  end
+
+  def self.paytm_withdraw_api(api_current_user,txn_amount)
+    begin
+      order_id = DateTime.now.to_i
+      checksum = self.checksum(api_current_user,txn_amount,"",order_id)
+      response =  eval(ActiveSupport::JSON.decode(`curl -X POST -k -H 'Content-Type: application/json' -i 'https://securegw.paytm.in/paymentservices/HANDLER_FF/withdrawScw' --data '{"MID": "Wavedi71402481589558","ReqType": "WITHDRAW","TxnAmount": "#{"txn_amount"}","AppIP": "127.0.0.1","OrderId": "#{order_id}","Currency": "INR","DeviceId": "#{api_current_user.paytm_mobile}","SSOToken": "#{api_current_user.paytm_access_token}","PaymentMode": "PPI","CustId": "1040","IndustryType": "Retail109","Channel": "WAP","AuthMode": "USRPWD","CheckSum":  "#{checksum}"}'`.to_json).split("\r\n\r\n")[1]) 
+      return resonse
+    rescue Exception => e
+      return false
+    end
+    
+  end
+
 
 
 end
+
+

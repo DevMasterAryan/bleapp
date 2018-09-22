@@ -5,16 +5,16 @@
   <section class="sidebar">
 
     <!-- Sidebar user panel (optional) -->
-    <!-- <div class="user-panel">
+    <div class="user-panel">
       <div class="pull-left image">
-        <img src="/assets/user2-160x160.jpg" class="img-circle" alt="User Image" />
+        <!-- <img src="/assets/user2-160x160.jpg" class="img-circle" alt="User Image" /> -->
       </div>
       <div class="pull-left info">
-        <p><%#=current_user.email%></p>
-        
-        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        <p><%=current_user.email%></p>
+        <p><%=current_user&.category&.name%></p>
+        <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
       </div>
-    </div> -->
+    </div>
 
     <!-- search form (Optional) -->
     <!-- <form action="#" method="get" class="sidebar-form">
@@ -47,3 +47,14 @@
   </section>
   <!-- /.sidebar -->
 </aside>
+<!-- if image is not use in user-panel -->
+<style type="text/css">
+  .user-panel {
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    overflow: hidden;
+    height: 60px;
+}
+</style>>
+<!-- if image is not use in user-panel -->

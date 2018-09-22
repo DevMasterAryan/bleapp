@@ -1,54 +1,92 @@
-      <div class="container-fluid">
-        
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">User Management</h3>
-
-                <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                    <div class="input-group-append">
-                      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
-					<%= form_tag import_admin_admin_users_path, multipart: true do %>
-					<%= submit_tag "Import" ,class: "float-inline-end"%>
-					<%= file_field_tag :file, required: true ,class: "float-inline-end" %>
-					<%end%>
-				</div>	
-              <div class="card-body table-responsive p-0">
-                <table class="table table-hover">
+ <section class="content-header">
+      <h1>
+        Admin Users
+      </h1>
+      <h1>
+        <form action="<%= admin_admin_users_path %>"  method="get" >
+            <input type="text" name="search" placeholder="Search"> 
+          <button>Search</button>
+      </form>
+      </h1>
+      <ol class="breadcrumb">
+        <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Tables</a></li>
+        <li class="active">Data tables</li> -->
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">
+                <%= form_tag import_admin_admin_users_path, multipart: true do %>
+                <%= file_field_tag :file, required: true %>
+              </h3>
+                <%= submit_tag "Import" %>
+                <%end%>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>First Name</th>
+                    <th>Emp ID</th>
+                    <th>User Email</th>
+                    <th>Category</th>
+                    <th>Send Login Credential</th>
+                    <th>Action</th>
+                    <!-- <th>Territory</th> -->
+                </tr>
+                </thead>
+                <tbody>
+                <% @admin_users.each do |admin_user|%>
                   <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Department</th>
-                    <th>Designation</th>
-                    <th>Territory</th>
-                  </tr>
-                  <% @admin_users.each do |admin_user|%>
-                  <tr>
-                    <td><%= admin_user.try(:first_name)%></td>
-                    <td><%= admin_user.try(:last_name)%></td>
+                    <td><%= admin_user&.first_name%></td>
+                    <td><%= admin_user.try(:emp_id)%></td>
                     <!-- <td><span class="tag tag-success">Approved</span></td> -->
                     <td><%= admin_user.try(:email)%></td>
-                    <td><%= admin_user.try(:department)%></td>
-                    <td><%= admin_user.try(:designation)%></td>
-                    <td><%= admin_user.try(:territory)%></td>
+                    <td>
+                      <%= form_tag send_credential_admin_admin_users_path(admin_user_id: admin_user.id), method: :post do %>
+                      <%=select_tag "categories", options_from_collection_for_select(get_categories, "id", "name") %>
+                  </td>
+                  <td>  
+                    <div class="action-btn">
+                      <a>
+                        <%= submit_tag 'Send'.html_safe, :class=>"btn btn-sm btn-info", style: "width: 99px;" %>
+                      <%end%>
+                          </a>
+                    </div>
+                    </td>
+                   <td>
+                    <div class="action-btn">
+                     <% if admin_user&.is_active? == true %>
+                 <a><%= link_to '<i class="fa fa-ban" aria-hidden="true"></i> Suspend'.html_safe, suspend_user_admin_admin_users_path(id: admin_user.id), :class=>"btn btn-sm btn-danger"  , style: "width: 99px;",:data => {:confirm => 'Are you sure you want to Suspend the User?'}%></a>
+                 <% elsif admin_user&.is_active? == false %>
+                 <a>
+                  <span class="bg-green">
+                    Inactive
+                  </span>
+                  <%#= link_to '<i class="fa fa-certificate" aria-hidden="true"></i> Inactive'.html_safe, "#", :class=>"btn btn-sm btn-success", style: "width: 99px;"%></a>
+                 <% end %>
+                 </div>
+                   </td>
                   </tr>
                   <%end%>
-                </table>
-              </div>
-              <!-- /.card-body -->
+                </tbody>
+              </table>
+    <div class="custom-pagination pull-right">
+    <%= will_paginate @admin_users %>
+    </div>
             </div>
-            <!-- /.card -->
+            <!-- /.box-body -->
           </div>
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

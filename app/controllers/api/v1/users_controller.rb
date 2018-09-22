@@ -1,8 +1,14 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status,:billing_status]
-	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status,:billing_status]
     include PaytmHelper
+	skip_before_action :verify_authenticity_token,only: [:apply_credit,:charge_history,:user_last_charge, :checksum,:billing_not_rated, :charging_status, :checksum_add_money,:add_money_transaction_status]
+	before_action :authenticate,only: [:apply_credit,:charge_history,:user_last_charge,:billing_not_rated, :checksum,:billing_not_rated, :charging_status,:checksum_add_money,:add_money_transaction_status]
+    # include PaytmHelper
+   require './lib/encryption_new_pg.rb'
+  include EncryptionNewPG
+  extend PaytmHelper
+
 	def apply_credit
+
 		@package  = Package.find_by(id: params["package_id"])
 		@session = Session.find_by(id: params["session_id"])
 
@@ -38,30 +44,29 @@ class Api::V1::UsersController < ApplicationController
 		else
 			return render json: {responseCode: 500, responseMessage: "Your credit is not enough."}
 		end
-        elsif params["mop"]=="payment"
-
-
-        	resp= Billing.transaction_status params
-            if resp.present?
-            
-                if params[:credit].present?
-                     @remaining_credit = @api_current_user.credit - params[:credit].to_i 
-                     @api_current_user.update(credit: @remaining_credit)
-                end
-				@billing = @api_current_user.billings.new(method_of_payment: "card",session_id: @api_current_user.sessions.last.id, package_id: @package.id,
-				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final, device_id: @session.device.id)
-				if @billing.save
-					bid = @api_current_user.billings.last.id.as_json["$oid"] 
-					Billing.session_destroy bid, @api_current_user.id.as_json["$oid"]
-					return render json: {responseCode: 200, responseMessage: "Payment done successfully.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion_count, billing_id: @api_current_user.billings.last.id.as_json["$oid"], remaining_time:  (@api_current_user&.billings&.last&.usage_end_ts.to_f - DateTime.current.to_f).to_i || 0, time_spend: (DateTime.current.to_f - @api_current_user&.billings&.last&.usage_start_ts.to_f).to_i || 0}
-				else
-					return render json: {responseCode: 200, responseMessage: "Something went wrong."}
-				end
+   elsif params["mop"] !=  "credit" || "promotion" 
+          # txn_amount = params[:card]
+          # response = User.paytm_withdraw_api(@api_current_user,"0.10")
+        	 resp= Billing.transaction_status params
+            if resp
+              if params[:credit].present?
+                   @remaining_credit = @api_current_user.credit - params[:credit].to_i 
+                   @api_current_user.update(credit: @remaining_credit)
+              end
+        				@billing = @api_current_user.billings.new(method_of_payment: params["mop"],session_id: @api_current_user.sessions.last.id, package_id: @package.id,
+        				usage_start_ts: DateTime.current,usage_end_ts: DateTime.current+@package&.package_time.minutes,transaction_id: params[:transaction_id],amount: params[:card].present? ? params[:card] : @package&.package_final, device_id: @session.device.id)
+      				if @billing.save
+      					bid = @api_current_user.billings.last.id.as_json["$oid"] 
+      					Billing.session_destroy bid, @api_current_user.id.as_json["$oid"]
+      					return render json: {responseCode: 200, responseMessage: "Payment done successfully.", remaining_credit: @api_current_user.credit,start_time: @api_current_user&.billings&.last&.usage_start_ts&.to_i || "", end_time: @api_current_user&.billings&.last&.usage_end_ts&.to_i || "",site_display_name: @api_current_user&.billings&.last&.session&.device&.site_display_name, site_name: @api_current_user&.billings&.last&.session&.device&.site_display_name? ? @api_current_user&.billings&.last&.session&.device&.site&.site_name : "", remaining_promotion: @api_current_user.promotion_count, billing_id: @api_current_user.billings.last.id.as_json["$oid"], remaining_time:  (@api_current_user&.billings&.last&.usage_end_ts.to_f - DateTime.current.to_f).to_i || 0, time_spend: (DateTime.current.to_f - @api_current_user&.billings&.last&.usage_start_ts.to_f).to_i || 0}
+      				else
+      					return render json: {responseCode: 500, responseMessage: "Unsuccessful transaction."}
+      				end
             else
               return render json: {responseCode: 500, responseMessage: "Unsuccessful transaction."}
             end
 			else
-				return render json: {responseCode: 200, responseMessage: "Something went wrong."}
+				return render json: {responseCode: 500, responseMessage: "Unsuccessful transaction."}
 			end   	 
 		# end		
 	end
@@ -135,8 +140,7 @@ class Api::V1::UsersController < ApplicationController
 
     end
    
-    def checksum
-        #staging key and value   
+    def checksum  
         #paramList = Hash.new
 	    # paramList["CALLBACK_URL"]  = params[:callback_url]
 	    # paramList["CHANNEL_ID"] = "WAP"
@@ -163,10 +167,35 @@ class Api::V1::UsersController < ApplicationController
 	    # paramList["REQUEST_TYPE"] = "DEFAULT"
 	    paramList["TXN_AMOUNT"] = params[:txn_amount]
 	    paramList["WEBSITE"] = "APPPROD"
+
+      paramList["PAYMENT_MODE_ONLY"] = params[:payment_mode_only]
+      paramList["AUTH_MODE"] = params[:auth_mode]
+      paramList["PAYMENT_TYPE_ID"] = params[:payment_type_id]
 	    @paramList=paramList
-        @checksum_hash=generate_checksum()
-        render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
+        @checksum=new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM")
+        render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum}
     end 
+
+
+    def checksum_add_money
+      paramList = Hash.new
+      paramList["CALLBACK_URL"]  = params[:callback_url]
+      paramList["CHANNEL_ID"] = "WAP"
+      paramList["CUST_ID"] = @api_current_user.id&.as_json["$oid"]
+      paramList["REQUEST_TYPE"] = "ADD_MONEY" 
+      paramList["INDUSTRY_TYPE_ID"] = "Retail109"
+      paramList["MID"] = "Wavedi71402481589558"
+      paramList["ORDER_ID"] = params[:order_id]
+      # paramList["REQUEST_TYPE"] = "DEFAULT"
+      paramList["TXN_AMOUNT"] = params[:txn_amount]
+      paramList["WEBSITE"] = "APPPROD"
+      paramList["SSO_TOKEN"] = @api_current_user.paytm_access_token
+      @paramList=paramList
+        @checksum_hash=new_pg_checksum(@paramList,"MUBUL!hKGtxvcmXM") 
+      # signature = User.checksum(@api_current_user,params["txn_amount"],"ADD_MONEY")
+        render json: {responseCode: 200, responseMessage: "Checksum generated successfully.",checksum_hash: @checksum_hash}
+      
+    end
 
 
     def charging_status
@@ -198,4 +227,14 @@ class Api::V1::UsersController < ApplicationController
         return render json: {responseCode: 200, responseMessage: "Status fetched successfully.",status: billing.usage_end_ts > DateTime.current ? true : false}
       end
     end
+    
+    def add_money_transaction_status
+      resp= Billing.transaction_status params
+      if resp
+        return render json: {responseCode: 200, responseMessage: "Add Money Transaction verified successfully."}
+      else
+        return render json: {responseCode: 500, responseMessage: "Add Money Transaction verification failed."}
+      end
+    end
+
 end

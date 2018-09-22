@@ -7,6 +7,27 @@ class Site
   field :address, type: String
   field :lat, type: Float
   field :long, type: Float
+
+  field :account_id, type: String
+  field :site_person, type: String
+  field :site_mobile, type: String
+  field :estimated_value, type: String
+  field :sales_emp_id, type: String  # auto
+  field :attachment, type: String
+  field :quotation_id, type: String
+  field :emp_remarks, type: String
+  field :escalation_one, type: String
+  field :escalation_two, type: String
+  field :status_one, type: String
+  field :status_two, type: String
+  field :site_manager_id, type: String
+  field :manager_id, type: String #auto
+  field :est_close_date, type: Time
+  field :s1_close_date, type: Time
+  field :s2_close_date, type: Time
+  field :manager_remark, type: String
+
+  
   # field :coordinates, :type => Array
   # field :longitude, :type=> Float
   # field :latitude, :type=> Float

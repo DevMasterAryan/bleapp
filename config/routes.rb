@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     resources :admin_users do
       collection{
         post :import
+        post :send_credential
+        get :suspend_user
       }
     end
     get 'accounts/index'
@@ -75,6 +77,8 @@ Rails.application.routes.draw do
         post :checksum
         post :billing_not_rated
         post :charging_status
+        post :checksum_add_money
+        post :add_money_transaction_status
         post :billing_status
       end
     end
@@ -92,6 +96,11 @@ Rails.application.routes.draw do
     resources :transactions do
       collection do
         post :package_payment
+        post :send_paytm_otp
+        post :validate_paytm_otp
+        post :check_paytm_balance
+        post :validate_paytm_access_token
+        post :paytm_withdraw_api
       end
     end
 

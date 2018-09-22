@@ -1,6 +1,16 @@
+require 'will_paginate/array'
 class Admin::CategoriesController < ApplicationController
   layout 'admin_lte_2'
   before_action :authenticate_admin_user
+
+  def index
+    if params[:search].present?
+    @search = Category.any_of({name: Regexp.new(".*#{params[:search]}.*","i")})
+    @categories = @search.order("created_at desc").paginate(:page => params[:page], :per_page => 2)
+    else
+    @categories = Category.all.order("created_at desc").paginate(:page => params[:page], :per_page => 2)
+    end    
+  end
 
   def new
   end
@@ -13,7 +23,7 @@ class Admin::CategoriesController < ApplicationController
        category = Category.new(name: params[:category][:name])  
        if category.save
           flash[:notice] = "Category created successfully."
-          redirect_to admin_dashboard_home_path
+          redirect_to admin_categories_path
        end
     end
   end

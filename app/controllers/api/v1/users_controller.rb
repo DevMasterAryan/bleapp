@@ -6,6 +6,7 @@ class Api::V1::UsersController < ApplicationController
    require './lib/encryption_new_pg.rb'
   include EncryptionNewPG
   extend PaytmHelper
+
 	def apply_credit
 
 		@package  = Package.find_by(id: params["package_id"])
@@ -225,7 +226,8 @@ class Api::V1::UsersController < ApplicationController
       if billing.present?
         return render json: {responseCode: 200, responseMessage: "Status fetched successfully.",status: billing.usage_end_ts > DateTime.current ? true : false}
       end
-
+    end
+    
     def add_money_transaction_status
       resp= Billing.transaction_status params
       if resp
@@ -233,6 +235,6 @@ class Api::V1::UsersController < ApplicationController
       else
         return render json: {responseCode: 500, responseMessage: "Add Money Transaction verification failed."}
       end
-
     end
+
 end

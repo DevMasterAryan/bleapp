@@ -3,10 +3,10 @@
         Category
       </h1> -->
       <!-- <h1> -->
-        <form action="#"  method="get" >
-            <input type="text" name="search" placeholder="Search Category"> 
+        <!-- <form action="#"  method="get" >
+            <input type="text" name="search" placeholder="Search Tab"> 
           <button class="btn-primary">Search</button>
-      </form>
+      </form> -->
       <!-- </h1> -->
       <ol class="breadcrumb">
         <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -17,7 +17,7 @@
     <!-- Main content -->
     <section class="content" >
           <div class="action-btn" align="right" style="padding-bottom: 4px">
-          <a><%= link_to '<i class="fa fa-edit" aria-hidden="true"></i> Create Tab'.html_safe, "#", :class=>"btn btn-sm btn-success"%>
+          <a><%= link_to '<i class="fa fa-edit" aria-hidden="true"></i> Create Tab'.html_safe, new_admin_category_tab_path(@category), :class=>"btn btn-sm btn-success"%>
           </a>
         </div>
       <div class="row">

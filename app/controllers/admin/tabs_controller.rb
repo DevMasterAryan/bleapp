@@ -7,4 +7,17 @@ class Admin::TabsController < ApplicationController
   	@category = Category.find_by(id: params[:category_id])
   	@tabs = @category.tabs.paginate(:page => params[:page], :per_page => 15)
   end
+
+  def new
+  	@category = Category.find_by(id: params[:category_id])
+    @tab = @category.tabs.new	  
+  end
+
+  def create
+  	
+  end
+
+  def destroy
+    
+  end
 end

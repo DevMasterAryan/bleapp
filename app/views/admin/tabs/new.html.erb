@@ -1,0 +1,26 @@
+<h4> Category Name: <%=@category&.name%></h4> 
+<div class="form-control">
+
+  <%=form_for(@tab, url: "#", method: :post)do |f|%>
+  <%=f.label :name, " Tab Name"%>
+  <%=f.text_field :name%> 
+  <h5>DB tables</h5>
+  <%=select_tag :table_name, options_for_select(["Account", "Lead", "Quotation", "DeployDocumentData", "WireHouse", "SiteManagement"]), id: "db-table-list" %><br>
+   
+   <div id = "table-columns">
+   <%=render "table"%>
+   	
+   </div>
+
+
+
+  <%=f.submit "Create Tab", :class=>"btn-primary"%>
+  <%end%>
+</div>
+
+
+<script type="text/javascript">
+  $("#db-table-list").on("change", function(){
+     alert($(this).val())
+  });
+</script>

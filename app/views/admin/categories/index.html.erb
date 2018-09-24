@@ -40,7 +40,7 @@
                 <% @categories.each do |category|%>
                   <tr>
                     <td><%= category&.name%></td>
-                    <td><%=link_to "view tabs", "javascript:;"%>
+                    <td><%=link_to "view tabs", admin_category_tabs_path(category)%>
                       
                     </td>
                   </tr>

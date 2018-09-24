@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
   
 
+  # namespace :admin do
+  #   get 'tabs/index'
+  # end
+
   namespace :admin do
-    resources :categories #, only: [:new,:create, :edit, :update, :index]
+    resources :categories do
+       resources :tabs
+    end#, only: [:new,:create, :edit, :update, :index]
     resources :accounts 
     resources :admin_users do
       collection{

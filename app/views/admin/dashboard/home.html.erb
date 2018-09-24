@@ -1,85 +1,20 @@
-      <!-- Small boxes (Stat box) -->
-     <div class="center">
-       
-      <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3></h3>
-
-              <p>Create Category</p>
-            </div>
-            <div class="icon">
-            </div>
-            <a href="/admin/categories/new" class="small-box-footer">
-               <i class="fa fa-arrow-circle-right"></i>
+    <div class="center" style="padding-right: 400px" style="padding-left: 400px">
+      
+     <div class="action-btn" align="center" style="padding-bottom: 10px">
+            <a>
+              <%= link_to 'Create Category'.html_safe, new_admin_category_path, :class=>"btn btn-block btn-info btn-lg"%>
             </a>
-          </div>
-        </div>
-        <!-- ./col -->
-        
-        <!-- ./col -->
-        
-        <!-- ./col -->
-      </div>
-      <!-- /.row -->
-
-
-
-            <!-- Small boxes (Stat box) -->
-      <div class="row">
-       
-        <!-- ./col -->
-        
-        <!-- ./col -->
-        <div class="col-lg-4 col-md-6 col-sm-12">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3></h3>
-
-              <p>HR Users</p>
-            </div>
-            <div class="icon">
-            </div>
-            <a href="/admin/admin_users" class="small-box-footer">
-               <i class="fa fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <!-- ./col -->
-        
-        <!-- ./col -->
-      </div>
-      <!-- /.row -->
-
-
-            <!-- Small boxes (Stat box) -->
-      <div class="row">
-       
-        <!-- ./col -->
-        <div class="col-lg-4 col-md-6 col-sm-12">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3></h3>
-
-              <p>View Categories</p>
-            </div>
-            <div class="icon">
-            </div>
-            <a href="/admin/categories" class="small-box-footer">
-               <i class="fa fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <!-- ./col -->
-      </div>
-      <!-- /.row -->
-
      </div>
 
-<style type="text/css">
-  
-</style>
+     <div class="action-btn" align="center" style="padding-bottom: 10px">
+            <a>
+              <%= link_to 'HR USERS'.html_safe, admin_admin_users_path, :class=>"btn btn-block btn-info btn-lg"%>
+            </a>
+     </div>
+
+     <div class="action-btn" align="center" style="padding-bottom: 10px">
+            <a>
+              <%= link_to 'View Categories'.html_safe, admin_categories_path , :class=>"btn btn-block btn-info btn-lg" %>
+            </a>
+     </div>
+    </div>

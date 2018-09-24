@@ -51,7 +51,10 @@
           </ul>
         </li> -->
 
-       
+
+        
+        
+
         <li class="dropdown notifications-menu">
           <a href="/admin/admin_users" id="admin_users" >
           <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"> -->
@@ -108,26 +111,41 @@
           </ul>
         </li> -->
         <!-- User Account Menu -->
-        <li class="dropdown user user-menu">
-        <%if logged_in?%>
+
+        <li class="dropdown notifications-menu">
+          <%if logged_in?%>
+          <%= link_to admin_sessions_destroy_path,class: "dropdown-toggle",data: {confirm: "Are you sure you want to logout?"}, method: :delete do%>
+            <!-- <i class="fa fa-sign-out"> -->Log out</i>
+            <%end%>
+            <%else%>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="hidden-xs">Dinga</span>
+          </a>
+          <%end%>
+        </li>
+
+
+
+        <!-- <li class="dropdown user user-menu"> -->
+        <%#if logged_in?%>
           <!-- Menu Toggle Button -->
           <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"> -->
-          <%= link_to admin_sessions_destroy_path,class: "dropdown-toggle", method: :delete do%>
+          <%#= link_to admin_sessions_destroy_path,class: "dropdown-toggle", method: :delete do%>
             <!-- The user image in the navbar-->
             <!-- <img src="/assets/user2-160x160.jpg" class="user-image" alt="User Image"/> -->
             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-            <span class="hidden-xs">Log out</span>
-            <%end%>
+            <!-- <span class="hidden-xs">Log out</span> -->
+            <%#end%>
           <!-- </a> -->
-          <%else%>
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <%#else%>
+          <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"> -->
             <!-- The user image in the navbar-->
             <!-- <img src="/assets/user2-160x160.jpg" class="user-image" alt="User Image"/> -->
             <!-- hidden-xs hides the username on small devices so only the image appears. -->
             <%#=@current_user%>
-            <span class="hidden-xs">Dinga</span>
-          </a>
-          <%end%>
+            <!-- <span class="hidden-xs">Dinga</span> -->
+          <!-- </a> -->
+          <%#end%>
          <!--  <ul class="dropdown-menu"> -->
             <!-- The user image in the menu -->
             <!-- <li class="user-header">
@@ -137,7 +155,7 @@
                 <small>Member since Nov. 2012</small>
               </p>
             </li>
- -->            <!-- Menu Body -->
+ -->            <!-- Menu Body  129,130,133,137,138,140,141,146,147,148,180-->
             <!-- <li class="user-body">
               <div class="col-xs-4 text-center">
                 <a href="#">Followers</a>
@@ -159,7 +177,7 @@
               </div>
             </li> -->
           <!-- </ul> -->
-        </li>
+        <!-- </li> -->
         <!-- <li>
           <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
         </li> -->

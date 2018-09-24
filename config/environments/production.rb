@@ -89,11 +89,33 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   # config.active_record.dump_schema_after_migration = false
+  config.action_mailer.raise_delivery_errors = true
+
+  # set delivery method to :smtp, :sendmail or :test
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    :address        => 'smtp.sendgrid.net',
+    :port           => '25',
+    :authentication => :plain,
+    :user_name      => 'DevJackAryan',
+    :password       => '007@Master',
+    :domain         => "sendgrid.com"
+  }
+
+  config.action_mailer.default_url_options = { host: 'wavedio.herokuapp.com'}
+
+  # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = true
+
+  config.action_mailer.perform_caching = false 
+
+
 
   config.middleware.use ExceptionNotification::Rack,
   :email => {
     :email_prefix => "WaveDio",
     :sender_address => %{"WaveDio" <admin@wavedio.com>},
-    :exception_recipients => %w[subhash.gupta@mobiloitte.in rohan.khanna@mobiloittegroup.com aryan.arora@mobiloitte.in]
+    :exception_recipients => %w[aryan.arora@mobiloitte.in]
   }
 end

@@ -3,7 +3,7 @@
         Category
       </h1> -->
       <!-- <h1> -->
-        <form action="<%= admin_categories_path %>"  method="get" >
+        <form action="#"  method="get" >
             <input type="text" name="search" placeholder="Search Category"> 
           <button class="btn-primary">Search</button>
       </form>
@@ -17,30 +17,30 @@
     <!-- Main content -->
     <section class="content" >
           <div class="action-btn" align="right" style="padding-bottom: 4px">
-          <a><%= link_to '<i class="fa fa-edit" aria-hidden="true"></i> Create Category'.html_safe, new_admin_category_path, :class=>"btn btn-sm btn-success"%>
+          <a><%= link_to '<i class="fa fa-edit" aria-hidden="true"></i> Create Tab'.html_safe, "#", :class=>"btn btn-sm btn-success"%>
           </a>
         </div>
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">
+              <h3 class="box-title"> <%=@category&.name%></h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>Cateogory Name</th>
+                    <th>Tab Name</th>
                     <th>Action</th>
                     <!-- <th>Territory</th> -->
                 </tr>
                 </thead>
                 <tbody>
-                <% @categories.each do |category|%>
+                <% @tabs.each do |tab|%>
                   <tr>
-                    <td><%= category&.name%></td>
-                    <td><%=link_to "view tabs", admin_category_tabs_path(category)%>
+                    <td><%= tab&.name%></td>
+                    <td><%=link_to "view tab", "#"%>
                       
                     </td>
                   </tr>
@@ -48,7 +48,7 @@
                 </tbody>
               </table>
     <div class="custom-pagination pull-right">
-    <%= will_paginate @categories %>
+    <%= will_paginate @tabs %>
     </div>
             </div>
             <!-- /.box-body -->

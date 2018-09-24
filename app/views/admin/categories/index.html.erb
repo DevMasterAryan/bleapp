@@ -1,13 +1,13 @@
  <section class="content-header">
-      <h1>
+      <!-- <h1>
         Category
-      </h1>
-      <h1>
+      </h1> -->
+      <!-- <h1> -->
         <form action="<%= admin_categories_path %>"  method="get" >
-            <input type="text" name="search" placeholder="Search"> 
-          <button>Search</button>
+            <input type="text" name="search" placeholder="Search Category"> 
+          <button class="btn-primary">Search</button>
       </form>
-      </h1>
+      <!-- </h1> -->
       <ol class="breadcrumb">
         <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">Tables</a></li>
@@ -17,7 +17,7 @@
     <!-- Main content -->
     <section class="content" >
           <div class="action-btn" align="right" style="padding-bottom: 4px">
-          <a><%= link_to '<i class="fa fa-edit" aria-hidden="true"></i> Create Category'.html_safe, new_admin_category_path, :class=>"btn btn-sm btn-danger"%>
+          <a><%= link_to '<i class="fa fa-edit" aria-hidden="true"></i> Create Category'.html_safe, new_admin_category_path, :class=>"btn btn-sm btn-success"%>
           </a>
         </div>
       <div class="row">
@@ -31,7 +31,7 @@
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Cateogory Name</th>
                     <th>Action</th>
                     <!-- <th>Territory</th> -->
                 </tr>
@@ -40,7 +40,9 @@
                 <% @categories.each do |category|%>
                   <tr>
                     <td><%= category&.name%></td>
-                    <td><%= "N/A" %></td>
+                    <td><%=link_to "view tabs", "javascript:;"%>
+                      
+                    </td>
                   </tr>
                   <%end%>
                 </tbody>

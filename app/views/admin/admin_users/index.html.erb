@@ -18,6 +18,11 @@
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
+        <div class="action-btn" align="right" style="padding-bottom: 3px">
+        <a>
+          <%= link_to '<i class="fa fa-download" aria-hidden="true"></i> Export Sample'.html_safe, export_admin_admin_users_path(format: "csv") , method: :post, :class=>"btn btn-sm btn-info"%>
+        </a>
+      </div>
           <div class="box">
             <div class="box-header" style="display: block;">
                 <%= form_tag import_admin_admin_users_path, multipart: true do %>

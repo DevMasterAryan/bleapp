@@ -31,4 +31,13 @@ class AdminUser
     end    
   end
 
+  def self.export(options = {})
+    headers = ['first_name','last_name','emp_id','email','phone','department','designation','territory']  
+    dummy = ['Lalit','Saini','02091995','saini.lalitkmr@gmail.com','9876543210','ROR','dev','LA']  
+    CSV.generate(options) do |csv|
+      csv << headers
+      csv << dummy
+    end
+  end
+
 end

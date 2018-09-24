@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :admin_users do
       collection{
         post :import
+        post :export
         post :send_credential
         get :suspend_user
       }

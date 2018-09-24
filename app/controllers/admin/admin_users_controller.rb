@@ -41,4 +41,11 @@ class Admin::AdminUsersController < ApplicationController
     redirect_to request.referer, notice: "HRMS User List imported."
   end
 
+  def export
+    @user = AdminUser.all
+    respond_to do |format|
+      format.html
+      format.csv{ send_data @user.export,filename: "users-dummy-csv.csv"}
+    end
+  end
 end

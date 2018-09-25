@@ -39582,6 +39582,10 @@ $("#create-category").validate({
 
 }).call(this);
 (function() {
+
+
+}).call(this);
+(function() {
   var context = this;
 
   (function() {

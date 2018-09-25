@@ -20,4 +20,10 @@ class Admin::TabsController < ApplicationController
   def destroy
     
   end
+
+  def render_table
+     @column_names = params[:table].camelize.constantize.attribute_names - ["created_at", "updated_at"]
+     @tab_type = params[:type]
+  end
+
 end

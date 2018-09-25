@@ -3,12 +3,13 @@
 
   <%=form_for(@tab, url: "#", method: :post , html: {:id=> "create-tabs"})do |f|%>
   <%=f.label :name, " Tab Name"%>
-  <%=f.text_field :name%> 
+  <%=f.text_field :name%> <br>
+  <%= f.radio_button :type, 'form' %> form<br />
+  <%= f.radio_button :type, 'table' %> table
   <h5>DB tables</h5>
-  <%=select_tag :table_name, options_for_select(["Account", "Lead", "Quotation", "DeployDocumentData", "WireHouse", "SiteManagement"]), id: "db-table-list" %><br>
+  <%=select_tag :table_name, options_for_select([["select table", ""],"Account", "Site", "Quotation", "DeploymentDocumentDatum", "Warehouse", "SiteManagement"]), id: "db-table-list" %><br>
    
    <div id = "table-columns">
-   <%=render "table"%>
    	
    </div>
 
@@ -21,6 +22,18 @@
 
 <script type="text/javascript">
   $("#db-table-list").on("change", function(){
-     alert($(this).val())
+     var table = $(this).val();
+     var tab_type = $("input[name='tab[type]']:checked").val(); 
+     // alert(tab_type)
+     $.ajax({
+        type: "post",
+        url: "/admin/categories/<%=@category.id%>/tabs/render_table" ,
+        datascript: "js",
+        data: {
+             table: table,
+             type: tab_type
+
+        }
+     });
   });
 </script>

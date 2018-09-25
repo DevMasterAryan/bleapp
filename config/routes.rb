@@ -7,7 +7,11 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :categories do
-       resources :tabs
+       resources :tabs do 
+           collection do
+             post :render_table
+           end
+       end
     end#, only: [:new,:create, :edit, :update, :index]
     resources :accounts 
     resources :admin_users do

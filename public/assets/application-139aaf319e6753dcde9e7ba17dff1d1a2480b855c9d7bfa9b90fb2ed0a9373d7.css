@@ -17149,3 +17149,17 @@ element.style {
   padding-top: 6px;
   border-radius: 3px;
 }
+
+/* line 75, /home/aryan.arora/projects/wavedio-18053249-ror/app/assets/stylesheets/application.scss */
+.content-wrapper {
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
+
+/* line 79, /home/aryan.arora/projects/wavedio-18053249-ror/app/assets/stylesheets/application.scss */
+.col-lg-4 {
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+  height: 180px;
+}

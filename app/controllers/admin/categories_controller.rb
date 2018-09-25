@@ -6,9 +6,9 @@ class Admin::CategoriesController < ApplicationController
   def index
     if params[:search].present?
     @search = Category.any_of({name: Regexp.new(".*#{params[:search]}.*","i")})
-    @categories = @search.order("created_at desc").paginate(:page => params[:page], :per_page => 15)
+    @categories = @search.where(:id.nin=> Category.where(name: "SuperAdmin").pluck(:id)).order("created_at desc").paginate(:page => params[:page], :per_page => 15)
     else
-    @categories = Category.all.order("created_at desc").paginate(:page => params[:page], :per_page => 15)
+    @categories = Category.where(:id.nin=> Category.where(name: "SuperAdmin").pluck(:id)).order("created_at desc").paginate(:page => params[:page], :per_page => 15)
     end    
   end
 

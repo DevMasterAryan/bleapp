@@ -7,4 +7,5 @@ class Tab
 
   belongs_to :category
   has_many :tab_tables, dependent: :destroy
+  validates :name, :presence => true, length: {minimum: 3, maximum: 30} ,format: { with: /[A-Za-z ]+/}
 end

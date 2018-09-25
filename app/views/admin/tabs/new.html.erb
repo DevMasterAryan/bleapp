@@ -1,7 +1,7 @@
 <h4> Category Name: <%=@category&.name%></h4> 
 <div class="form-control">
+  <%=form_for(@tab, url: admin_category_tabs_path, method: :post , html: {:id=> "create-tabs"})do |f|%>
 
-  <%=form_for(@tab, url: admin_category_tabs_path, method: :post)do |f|%>
   <%=f.label :name, " Tab Name"%>
   <%=f.text_field :name%> <br>
   <%= f.radio_button :type, 'form' %> form<br />

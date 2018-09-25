@@ -1,7 +1,7 @@
 <h4> Category Name: <%=@category&.name%></h4> 
 <div class="form-control">
 
-  <%=form_for(@tab, url: "#", method: :post)do |f|%>
+  <%=form_for(@tab, url: "#", method: :post , html: {:id=> "create-tabs"})do |f|%>
   <%=f.label :name, " Tab Name"%>
   <%=f.text_field :name%> 
   <h5>DB tables</h5>

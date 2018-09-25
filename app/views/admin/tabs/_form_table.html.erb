@@ -1,9 +1,10 @@
+ 
  <table class="table table-bordered table-hover">
 				<thead>
 				<tr>
 				<th>Columns Name</th>
 				<th>Create</th>
-			  <th>Compulsary</th>
+			    <th>Compulsary</th>
 					<!-- <th>Territory</th> -->
 				</tr>
 				</thead>
@@ -11,6 +12,8 @@
 			<% @column_names.each do |tab|%>
 	    	<tr>
 			<td><%= tab%></td>
+			<td><input type="checkbox" name="tab[column_names[create]][]" value="<%=tab%>"></td>
+			<td><input type="checkbox" name="tab[column_names[compulsary]][]" value="<%=tab%>"></td>
 		</tr>
 
 		<%end%>

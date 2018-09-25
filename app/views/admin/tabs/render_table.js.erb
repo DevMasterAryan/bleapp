@@ -1,5 +1,3 @@
 <%if @tab_type=="form"%>
 $("#table-columns").html("<%= escape_javascript(render("form_table")) %>");
-<%else%>
-$("#table-columns").html("<%= escape_javascript(render("table_table")) %>");
 <%end%>

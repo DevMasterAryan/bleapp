@@ -12,19 +12,23 @@
    <div id = "table-columns">
    	
    </div>
-
+   
+   <input type="hidden" name="table_col[]" id="tab-col">
 
 
   <%=f.submit "Create Tab", :class=>"btn-primary"%>
   <%end%>
 </div>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-storage-api/1.9.4/jquery.storageapi.js"></script>
 <script type="text/javascript">
+  var arr = [];
   $("#db-table-list").on("change", function(){
      var table = $(this).val();
      var tab_type = $("input[name='tab[type]']:checked").val(); 
      // alert(tab_type)
+     if(tab_type=="form"){
+
      $.ajax({
         type: "post",
         url: "/admin/categories/<%=@category.id%>/tabs/render_table" ,
@@ -35,5 +39,24 @@
 
         }
      });
+     }
+     else{ 
+      
+      $.ajax({
+        type: "post",
+        url: "/admin/categories/<%=@category.id%>/tabs/render_table_table" ,
+        datascript: "js",
+        data: {
+             table: table,
+             type: tab_type
+
+        }
+     });   
+
+    }
+
   });
+
+  
+
 </script>

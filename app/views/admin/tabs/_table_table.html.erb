@@ -1,0 +1,44 @@
+ 
+ <table class="table table-bordered table-hover">
+				<thead>
+				<tr>
+				<th>Columns Name</th>
+				<th>View</th>
+			    <!-- <th>Compulsary</th> -->
+					<!-- <th>Territory</th> -->
+				</tr>
+				</thead>
+				<tbody>
+			<% @column_names.each do |tab|%>
+	    	<tr>
+			<td><%= tab%></td>
+			<td><input type="checkbox" name="tab[column_names[view]][]" value="<%=tab%>" class="view-col"></td>
+			<!-- <td><input type="checkbox" name="tab[column_names[compulsary]][]" value="<%=tab%>" id="com-col"></td> -->
+		</tr>
+
+		<%end%>
+  </tbody>
+</table>
+
+
+<script type="text/javascript">
+	$(".view-col").on("change", function(){
+		alert()
+     if(this.checked)
+     {  
+          var table = $("#db-table-list").val();
+        
+          var table_column = $(this).val();
+          $.ajax({
+             type: "post",
+             url: "/admin/categories/<%=params[:category_id]%>/tabs/checkbox_session",
+             datascript: "js",
+             data: {
+           	  table: table,
+           	  table_column: table_column
+             }
+          });
+     }
+  });  
+
+</script>

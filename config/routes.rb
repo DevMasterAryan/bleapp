@@ -10,6 +10,8 @@ Rails.application.routes.draw do
        resources :tabs do 
            collection do
              post :render_table
+             post :render_table_table
+             post :checkbox_session
            end
        end
     end#, only: [:new,:create, :edit, :update, :index]

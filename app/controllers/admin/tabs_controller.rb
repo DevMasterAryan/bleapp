@@ -30,9 +30,25 @@ class Admin::TabsController < ApplicationController
     
   end
 
-  def render_table
+  def render_table #form_table
      @column_names = params[:table].camelize.constantize.attribute_names - ["_id","updated_at"]
      @tab_type = params[:type]
+  end
+
+  def render_table_table
+    @column_names = params[:table].camelize.constantize.attribute_names - ["updated_at"]
+    @tab_type = params[:type]
+  end
+
+  def checkbox_session
+    session ||=[]
+  @session_hash ||= {}
+  @session_hash[params[:table]] ||= {}
+  @session_hash[params[:table]]["view"] ||= []
+  @session_hash[params[:table]]["view"] << params[:table_column]
+  @session <<  @session_hash
+  p session
+  
   end
 
 end

@@ -61,18 +61,18 @@ body {font-family: Arial;}
         <thead>
         <tr>
         <th>Columns Name</th>
-        <th>View</th>
-        <!-- <th>Compulsary</th>
-        <th>Deactive</th> -->
+        <th>Create</th>
+        <th>Compulsary</th>
+        <th>Deactive</th>
         </tr>
         </thead>
         <tbody>
       <% @account_columns.each do |tab|%>
         <tr>
       <td><%= tab%></td>
-      <td><input type="checkbox" name="tab[columns][account[<%=tab%>]][]" value="view" class="view-col"></td>
-      <!-- <td><input type="checkbox" name="tab[columns][account[<%=tab%>]][]" value="compulsary" class="view-col"></td>
-      <td><input type="checkbox" name="tab[columns][account[<%=tab%>]][]" value="deactive" class="view-col"></td> -->
+      <td><input type="checkbox" name="tab[columns][account[<%=tab%>]][]" value="create" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][account[<%=tab%>]][]" value="compulsary" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][account[<%=tab%>]][]" value="deactive" class="view-col"></td>
     </tr>
 
     <%end%>
@@ -85,18 +85,18 @@ body {font-family: Arial;}
         <thead>
         <tr>
         <th>Columns Name</th>
-        <th>View</th>
-        <!-- <th>Compulsary</th>
-        <th>Deactive</th> -->
+        <th>Create</th>
+        <th>Compulsary</th>
+        <th>Deactive</th>
         </tr>
         </thead>
         <tbody>
       <% @lead_columns.each do |tab|%>
         <tr>
       <td><%= tab%></td>
-      <td><input type="checkbox" name="tab[columns][site[<%=tab%>]][]" value="view" class="view-col"></td>
-      <!-- <td><input type="checkbox" name="tab[columns][site[<%=tab%>]][]" value="compulsary" class="view-col"></td>
-      <td><input type="checkbox" name="tab[columns][site[<%=tab%>]][]" value="deactive" class="view-col"></td> -->
+      <td><input type="checkbox" name="tab[columns][site[<%=tab%>]][]" value="create" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][site[<%=tab%>]][]" value="compulsary" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][site[<%=tab%>]][]" value="deactive" class="view-col"></td>
       
     </tr>
 
@@ -111,18 +111,18 @@ body {font-family: Arial;}
         <thead>
         <tr>
         <th>Columns Name</th>
-        <th>View</th>
-        <!-- <th>Compulsary</th>
-        <th>Deactive</th> -->
+        <th>Create</th>
+        <th>Compulsary</th>
+        <th>Deactive</th>
         </tr>
         </thead>
         <tbody>
       <% @quotation_columns.each do |tab|%>
         <tr>
       <td><%= tab%></td>
-      <td><input type="checkbox" name="tab[columns][quotation[<%=tab%>]][]" value="view" class="view-col"></td>
-      <!-- <td><input type="checkbox" name="tab[columns][quotation[<%=tab%>]][]" value="compulsary" class="view-col"></td>
-      <td><input type="checkbox" name="tab[columns][quotation[<%=tab%>]][]" value="deactive" class="view-col"></td> -->
+      <td><input type="checkbox" name="tab[columns][quotation[<%=tab%>]][]" value="create" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][quotation[<%=tab%>]][]" value="compulsary" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][quotation[<%=tab%>]][]" value="deactive" class="view-col"></td>
       
     </tr>
 
@@ -136,19 +136,19 @@ body {font-family: Arial;}
         <thead>
         <tr>
         <th>Columns Name</th>
-        <th>View</th>
-        <!-- <th>Compulsary</th>
-        <th>Deactive</th> -->
+        <th>Create</th>
+        <th>Compulsary</th>
+        <th>Deactive</th>
         </tr>
         </thead>
         <tbody>
       <% @ddd_columns.each do |tab|%>
         <tr>
       <td><%= tab%></td>
-      <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="view" class="view-col"></td>
-      <!-- <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="compulsary" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="create" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="compulsary" class="view-col"></td>
       <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="deactive" class="view-col"></td>
-       -->
+      
     </tr>
 
     <%end%>

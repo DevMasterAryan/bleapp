@@ -24,17 +24,40 @@
   $("#tab_type_form").click(function(){
        var table = $(this).val();
        var tab_type = $("input[name='tab[type]']:checked").val(); 
-       $.ajax({
-        type: "post",
-        url: "/admin/categories/<%=@category.id%>/tabs/render_table" ,
-        datascript: "js",
-        data: {
-             table: table,
-             type: tab_type
+       if(tab_type='form'){
 
-        }
-     });
+           $.ajax({
+            type: "post",
+            url: "/admin/categories/<%=@category.id%>/tabs/render_table" ,
+            datascript: "js",
+            data: {
+                 table: table,
+                 type: tab_type
+
+            }
+         });
+       }
+       
   });
+
+$("#tab_type_table").click(function(){
+       var table = $(this).val();
+       var tab_type = $("input[name='tab[type]']:checked").val(); 
+      
+           $.ajax({
+            type: "post",
+            url: "/admin/categories/<%=@category.id%>/tabs/render_table_table" ,
+            datascript: "js",
+            data: {
+                 table: table,
+                 type: tab_type
+
+            }
+         });
+
+       
+});
+
 </script>
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-storage-api/1.9.4/jquery.storageapi.js"></script>

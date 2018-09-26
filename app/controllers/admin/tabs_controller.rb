@@ -14,15 +14,20 @@ class Admin::TabsController < ApplicationController
   end
 
   def create
+    binding.pry
     @category = Category.find_by(id: params[:category_id])
-    @tab = @category.tabs.new(name: params[:tab][:name], type: params[:tab][:type])
-    if @tab.save
-       @tab_tables = @tab.tab_tables.new(table_name: params[:table_name], table_columns: params[:tab][:column_names].to_unsafe_hash)
-       if @tab_tables.save
+     @tab = @category.tabs.new(tab_params)
+     if @tab.save
           flash[:notice] =  "Tab created successfully"
-          redirect_to admin_category_tabs_path    
-       end
-    end
+          redirect_to admin_category_tabs_path       
+     end
+    # if @tab.save
+    #    @tab_tables = @tab.tab_tables.new(table_name: params[:table_name], table_columns: params[:tab][:column_names].to_unsafe_hash)
+    #    if @tab_tables.save
+    #       flash[:notice] =  "Tab created successfully"
+    #       redirect_to admin_category_tabs_path    
+    #    end
+    # end
   	
   end
 
@@ -39,7 +44,11 @@ class Admin::TabsController < ApplicationController
   end
 
   def render_table #form_table
-     @column_names = params[:table].camelize.constantize.attribute_names - ["_id","updated_at"]
+      @account_columns = ["name", "contact_person", "contact_email", "contact_mobile", "potential_site", "emp_id"]
+      @lead_columns = ["site_name", "location_address", "address", "lat", "long", "account_id", "site_person", "site_mobile", "estimated_value", "sales_emp_id", "attachment", "quotation_id", "emp_remarks", "escalation_one", "escalation_two", "status_one", "status_two", "site_manager_id", "manager_id", "est_close_date", "s1_close_date", "s2_close_date", "manager_remark"] 
+      @quotation_columns = ["site_id", "device_quantity", "hub_quantity", "one_time_retail_fee", "manager_approval", "qt_approval_date"] 
+      @ddd_columns = [ "quotation_id", "site_id", "site_name", "site_location", "quotation_date", "device_id", "device_type", "attachment", "d3_id", "d3_creation_date", "wh_pickup_date"] 
+    
      @tab_type = params[:type]
   end
 
@@ -58,5 +67,11 @@ class Admin::TabsController < ApplicationController
   p session
   
   end
+  
 
+  private
+  def tab_params
+    params[:tab][:columns] = params[:tab][:columns].to_unsafe_hash 
+    params.require(:tab).permit(:name, :type, :columns)   
+  end 
 end

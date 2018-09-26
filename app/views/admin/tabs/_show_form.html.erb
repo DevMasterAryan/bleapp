@@ -1,0 +1,47 @@
+ 
+ <table class="table table-bordered table-hover">
+				<thead>
+				<tr>
+				<th>Columns Name</th>
+				<th>Create</th>
+			    <th>Compulsary</th>
+			    <th>Deactive</th>
+				</tr>
+				</thead>
+				<tbody>
+			<% @column_names.each do |tab|%>
+	    	<tr>
+			<td><%= tab%></td>
+			<td> 
+                <%if check_create @tab,tab%>                
+    			 <%=check_box_tag 'tab[column_names[create]][]',1, checked:true %></td>
+			    <%else%>
+			    <%=check_box_tag 'tab[column_names[create]][]'%></td>
+			    <%end%>
+			<td>
+				<%if check_compulsary @tab,tab%>                
+    			 <%=check_box_tag 'tab[column_names[compulsary]][]',1, checked:true %></td>
+			    <%else%>
+			    <%=check_box_tag 'tab[column_names[compulsary]][]'%></td>
+			    <%end%>
+			</td>
+			<td>
+				<%if check_deactive @tab,tab%>                
+    			 <%=check_box_tag 'tab[column_names[deactive]][]',1, checked:true %></td>
+			    <%else%>
+			    <%=check_box_tag 'tab[column_names[deactive]][]'%></td>
+			    <%end%>
+			</td>
+		</tr>
+
+		<%end%>
+  </tbody>
+</table>
+
+
+<script type="text/javascript">
+// $(document).ready(function(){
+$('input[type="checkbox"]').attr("disabled", true);
+	
+// });
+</script>

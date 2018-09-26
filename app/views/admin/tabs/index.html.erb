@@ -41,7 +41,7 @@
                   <tr>
                     <td><%= tab&.name%></td>
                     <td><%=link_to "view tab", admin_category_tab_path(params[:category_id], tab)%>
-                      
+                       <%=link_to "edit tab", edit_admin_category_tab_path(params[:category_id], tab)%> 
                     </td>
                   </tr>
                   <%end%>

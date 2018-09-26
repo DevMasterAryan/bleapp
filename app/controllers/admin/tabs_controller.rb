@@ -21,28 +21,24 @@ class Admin::TabsController < ApplicationController
           flash[:notice] =  "Tab created successfully"
           redirect_to admin_category_tabs_path       
      end
-    # if @tab.save
-    #    @tab_tables = @tab.tab_tables.new(table_name: params[:table_name], table_columns: params[:tab][:column_names].to_unsafe_hash)
-    #    if @tab_tables.save
-    #       flash[:notice] =  "Tab created successfully"
-    #       redirect_to admin_category_tabs_path    
-    #    end
-    # end
-  	
   end
 
   def show
     @tab = Tab.find_by(id: params[:id])
     @show = @tab.columns
-    # binding.pry
     @show_tabs = @tab.columns.keys 
-    
-     # binding.pry
-     # @tab = Tab.find_by(id: params[:id])
-     # @column_names = @tab.tab_tables.first.table_name.camelize.constantize.attribute_names - ["_id","updated_at"]
-  
+   
   end
 
+  def edit
+   @tab = Tab.find_by(id: params[:id])
+   @show = @tab.columns
+   @show_tabs = @tab.columns.keys     
+  end
+
+  def update
+
+  end 
 
   def destroy
     

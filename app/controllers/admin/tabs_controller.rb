@@ -26,6 +26,14 @@ class Admin::TabsController < ApplicationController
   	
   end
 
+  def show
+     # binding.pry
+     @tab = Tab.find_by(id: params[:id])
+     @column_names = @tab.tab_tables.first.table_name.camelize.constantize.attribute_names - ["_id","updated_at"]
+  
+  end
+
+
   def destroy
     
   end

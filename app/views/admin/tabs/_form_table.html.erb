@@ -5,7 +5,7 @@
 				<th>Columns Name</th>
 				<th>Create</th>
 			    <th>Compulsary</th>
-					<!-- <th>Territory</th> -->
+			    <th>Deactive</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -14,6 +14,7 @@
 			<td><%= tab%></td>
 			<td><input type="checkbox" name="tab[column_names[create]][]" value="<%=tab%>" class="create-col"></td>
 			<td><input type="checkbox" name="tab[column_names[compulsary]][]" value="<%=tab%>" class="com-col"></td>
+			<td><input type="checkbox" name="tab[column_names[deactive]][]" value="<%=tab%>" class="com-col"></td>
 		</tr>
 
 		<%end%>

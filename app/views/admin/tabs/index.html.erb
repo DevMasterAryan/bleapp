@@ -40,7 +40,7 @@
                 <% @tabs.each do |tab|%>
                   <tr>
                     <td><%= tab&.name%></td>
-                    <td><%=link_to "view tab", "#"%>
+                    <td><%=link_to "view tab", admin_category_tab_path(params[:category_id], tab)%>
                       
                     </td>
                   </tr>

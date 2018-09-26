@@ -17,6 +17,7 @@ class Admin::TabsController < ApplicationController
     @category = Category.find_by(id: params[:category_id])
      @tab = @category.tabs.new(tab_params)
      if @tab.save
+          @tab.update(columns: params[:tab][:columns].to_unsafe_hash)
           flash[:notice] =  "Tab created successfully"
           redirect_to admin_category_tabs_path       
      end
@@ -31,9 +32,14 @@ class Admin::TabsController < ApplicationController
   end
 
   def show
+    @tab = Tab.find_by(id: params[:id])
+    @show = @tab.columns
+    # binding.pry
+    @show_tabs = @tab.columns.keys 
+    
      # binding.pry
-     @tab = Tab.find_by(id: params[:id])
-     @column_names = @tab.tab_tables.first.table_name.camelize.constantize.attribute_names - ["_id","updated_at"]
+     # @tab = Tab.find_by(id: params[:id])
+     # @column_names = @tab.tab_tables.first.table_name.camelize.constantize.attribute_names - ["_id","updated_at"]
   
   end
 
@@ -74,7 +80,7 @@ class Admin::TabsController < ApplicationController
 
   private
   def tab_params
-    params[:tab][:columns] = params[:tab][:columns].to_unsafe_hash 
-    params.require(:tab).permit(:name, :type, :columns)   
+    # params[:tab][:columns] = params[:tab][:columns].to_unsafe_hash 
+    params.require(:tab).permit(:name, :type)   
   end 
 end

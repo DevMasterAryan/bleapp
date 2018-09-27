@@ -23,7 +23,8 @@ class AdminUser
   belongs_to :category, optional: true
   validates :password, presence: false, :on => :create
   validates :password_confirmation, presence: false, :on => :create
-
+  
+  has_many :notifications
 
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|

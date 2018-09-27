@@ -1,10 +1,65 @@
- <section class="content-header">
+
+
+     <head>
+    <style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    height: 56px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    height: 100%;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+</style>
+</head>
+<body>
+<div class="tab">
+  <input type="button" class="tablinks" onclick="opentabform(event, 'listing')" id="defaultOpen" value="listing" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'added_user')" id="defaultOpen" value="added_user" />
+</div>
+
+   <%#=form_for :category, url: admin_categories_path, html: {:id=> "create-category"} do |f|%>
+<%#@show_tabs.each do |tab|%>
+<div id="listing" class="tabcontent">
+   <section class="content-header">
       <!-- <h1>
         Category
       </h1> -->
       <!-- <h1> -->
-        <form action="<%= admin_categories_path %>"  method="get" >
-            <input type="text" name="search" placeholder="Search Category"> 
+        <form action="<%= admin_category_tab_notifications_path %>"  method="get" >
+            <input type="text" name="search" placeholder="Search User"> 
           <button class="btn-primary">Search</button>
       </form>
       <!-- </h1> -->
@@ -17,7 +72,7 @@
     <!-- Main content -->
     <section class="content" >
           
-        </div>
+        
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
@@ -29,16 +84,24 @@
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                    <th>EMP Id</th>
                     <th>Name</th>
+                    <th>Type</th>
                     <th>Action</th>
                     <!-- <th>Territory</th> -->
                 </tr>
                 </thead>
                 <tbody>
-                <% @users.each do ||%>
+                <% @users.each do |user|%>
                   <tr>
-                    <td><%= user&.name%></td>
-                    <td><%=link_to "####", "#"%>
+                    <td><%= user&.emp_id%></td>
+                    <td><%= user&.first_name%></td>
+                    <%= form_tag notify_admin_category_tab_notifications_path(category_id: params[:category_id], tab_id: params[:tab_id]), method: :post do %>
+                    <td><%= select_tag :type, options_for_select([["select", ""],"Approved", "Approved and Notify", "Notify"])%></td>
+                    <td><%#=link_to '<button class = "btn-primary"> Add</button>'.html_safe, "#"%>
+                        <input type="hidden" name="user_id" value="<%=user.id%>">
+                        <%= submit_tag 'Add'.html_safe, :class=>"btn btn-sm btn-primary", style: "width: 99px;" %>
+                      <%end%>
                       
                     </td>
                   </tr>
@@ -57,4 +120,98 @@
       </div>
       <!-- /.row -->
     </section>
-    <!-- /.content -->
+</div>
+<div id="added_user" class="tabcontent">
+
+  <section class="content-header">
+      <!-- <h1>
+        Category
+      </h1> -->
+      <!-- <h1> -->
+        
+      <!-- </h1> -->
+      <ol class="breadcrumb">
+        <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Tables</a></li>
+        <li class="active">Data tables</li> -->
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content" >
+          
+        
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Emp Id</th>
+                    <th>Manager</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @notifications.each do |notification|%>
+                  <tr>
+                    <td><%= user(notification&.admin_user_id)&.emp_id %></td>
+                    <td><%= user(notification&.admin_user_id)&.first_name%></td>
+                    <td><%= notification&.type%></td>
+                    <td>
+                      <div class="action-btn">
+                      <%= link_to '<i class="fa fa-trash" aria-hidden="true"></i> Delete'.html_safe, admin_category_tab_notification_path(id: notification.id),:class=>"btn btn-sm btn-danger", method: :delete, data: {confirm: "Are you sure?"} %>
+                    </div>
+                      <%#= link_to '<i class="fa fa-trash" aria-hidden="true"></i> Delete'.html_safe, admin_category_tab_notification_path(id: notification.id), :class=>"btn btn-sm btn-danger", mehtod: :delete ,:data => {:confirm => 'Are you sure?'}%>
+                    </td>
+                    </td>
+                  </tr>
+                  <%end%>
+                </tbody>
+              </table>
+    <div class="custom-pagination pull-right">
+    <%= will_paginate @users %>
+    </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+   
+</div>
+
+<%#end%>
+
+
+<%#=f.submit "Create Category", class: "btn-primary"%> 
+<%#end%>
+<script>
+function opentabform(evt, tab_name) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tab_name).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+   document.getElementById("defaultOpen").click();
+</script>
+
+
+<script type="text/javascript">
+  $(".create-col").attr("disabled",true);
+</script>

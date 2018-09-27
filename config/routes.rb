@@ -8,7 +8,11 @@ Rails.application.routes.draw do
              post :render_table_table
              post :checkbox_session
            end
-           resources :notifications, only: [:index]   
+           resources :notifications do
+             collection do
+                post :notify
+             end  
+           end   
        end
     end#, only: [:new,:create, :edit, :update, :index]
     resources :accounts 

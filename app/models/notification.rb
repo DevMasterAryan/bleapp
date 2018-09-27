@@ -1,7 +1,8 @@
 class Notification
   include Mongoid::Document
-  field :emp_id, type: String
-  field :type, type: Integer
-
-  enum type: ["Notification","Approval and Notification","Approval"]
+  field :admin_user_id, type: String
+  field :type, type: String
+  field :tab_id, type: String 
+  belongs_to :tab
+  belongs_to :admin_user 
 end

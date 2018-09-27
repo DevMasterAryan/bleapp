@@ -3,10 +3,10 @@
         Category
       </h1> -->
       <!-- <h1> -->
-        <!-- <form action="#"  method="get" >
-            <input type="text" name="search" placeholder="Search Tab"> 
+        <form action="<%= admin_categories_path %>"  method="get" >
+            <input type="text" name="search" placeholder="Search Category"> 
           <button class="btn-primary">Search</button>
-      </form> -->
+      </form>
       <!-- </h1> -->
       <ol class="breadcrumb">
         <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -16,40 +16,37 @@
     </section>
     <!-- Main content -->
     <section class="content" >
-          <div class="action-btn" align="right" style="padding-bottom: 4px">
-          <a><%= link_to '<i class="fa fa-edit" aria-hidden="true"></i> Create Tab'.html_safe, new_admin_category_tab_path(@category), :class=>"btn btn-sm btn-success"%>
-          </a>
+          
         </div>
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title"> <%=@category&.name%></h3>
+              <h3 class="box-title">
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>Tab Name</th>
+                    <th>Name</th>
                     <th>Action</th>
                     <!-- <th>Territory</th> -->
                 </tr>
                 </thead>
                 <tbody>
-                <% @tabs.each do |tab|%>
+                <% @users.each do ||%>
                   <tr>
-                    <td><%= tab&.name%></td>
-                    <td><%=link_to "view tab", admin_category_tab_path(params[:category_id], tab)%>
-                      ||  <%=link_to "edit tab", edit_admin_category_tab_path(params[:category_id], tab)%> 
-                      || <%=link_to "Notify", admin_category_tab_notifications_path(params[:category_id], tab)%> 
+                    <td><%= user&.name%></td>
+                    <td><%=link_to "####", "#"%>
+                      
                     </td>
                   </tr>
                   <%end%>
                 </tbody>
               </table>
     <div class="custom-pagination pull-right">
-    <%= will_paginate @tabs %>
+    <%= will_paginate @users %>
     </div>
             </div>
             <!-- /.box-body -->

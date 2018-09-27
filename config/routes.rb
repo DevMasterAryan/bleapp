@@ -1,10 +1,5 @@
 Rails.application.routes.draw do
   
-
-  # namespace :admin do
-  #   get 'tabs/index'
-  # end
-
   namespace :admin do
     resources :categories do
        resources :tabs do 
@@ -13,6 +8,7 @@ Rails.application.routes.draw do
              post :render_table_table
              post :checkbox_session
            end
+           resources :notifications, only: [:index]   
        end
     end#, only: [:new,:create, :edit, :update, :index]
     resources :accounts 

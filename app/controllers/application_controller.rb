@@ -48,6 +48,12 @@ class ApplicationController < ActionController::Base
     @current_user = nil
   end
 
+  def column_names
+    models = Mongoid.default_client.collections.map(&:name).sort
+    @tables = models - [ "faqs", "fs.chunks", "fs.files", "locations", "payment_methods", "positions", "tab_tables", "tabs", "transactions", "user_payment_methods", "leads" ]
+    
+  end
+
   private
 
   def authenticate_request

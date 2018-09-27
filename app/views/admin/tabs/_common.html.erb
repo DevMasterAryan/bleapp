@@ -1,0 +1,9 @@
+<%begin%>
+      	<%if @show[column_name][tab].include?(tab_type)%>	
+      	<input type="checkbox" name="tab[columns][<%=column_name%>[<%=tab%>]][]" value="<%=tab_type%>" class="view-col" checked>
+      	<%else%>
+      	<input type="checkbox" name="tab[columns][<%=column_name%>[<%=tab%>]][]" value="<%=tab_type%>" class="view-col">
+        <%end%>
+        <%rescue Exception=>e%>
+        <input type="checkbox" name="tab[columns][<%=column_name%>[<%=tab%>]][]" value="<%=tab_type%>" class="view-col">
+      <%end%>

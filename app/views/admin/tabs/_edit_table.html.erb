@@ -1,0 +1,206 @@
+ <%=form_for(@tab, url: admin_category_tab_path, method: :patch , html: {:id=> "create-tabs"})do |f|%>
+  <%=f.label :name, " Tab Name"%>
+  <%=f.text_field :name%> <br>
+
+
+     <head>
+    <style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    height: 56px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    height: 100%;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+</style>
+</head>
+<body>
+<div class="tab">
+  <input type="button" class="tablinks" onclick="opentabform(event, 'Account')"id="defaultOpen" value="Account" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'Lead')"id="defaultOpen" value="Lead" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'Quotation')"id="defaultOpen" value="Quotation" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'deployment_document_datum')"id="defaultOpen" value="Deployment_document_datum"  />
+<!--   <button class="tablinks" onclick="opentabform(event, 'Lead')">Lead</button>
+  <button class="tablinks" onclick="opentabform(event, 'Quotation')">Quotation</button>
+  <button class="tablinks" onclick="opentabform(event, 'User')">User</button>
+ --></div>
+
+   <%#=form_for :category, url: admin_categories_path, html: {:id=> "create-category"} do |f|%>
+<div id="Account" class="tabcontent">
+   <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>Columns Name</th>
+        <th>View</th>
+        <!-- <th>Compulsary</th>
+        <th>Deactive</th> -->
+        </tr>
+        </thead>
+        <tbody>
+      <% @account_columns.each do |tab|%>
+        <tr>
+      <td><%= tab%></td>
+      
+      <td>
+      	<%=render "common", column_name: "account", tab: tab, tab_type: "view"%>
+      </td>
+      <!-- <td>
+      	<%#=render "common", column_name: "account", tab: tab, tab_type: "compulsary"%>
+      </td>
+      <td>
+      	<%#=render "common", column_name: "account", tab: tab, tab_type: "deactive"%>
+      </td> -->
+      
+    </tr>
+
+    <%end%>
+  </tbody>
+</table>
+</div>
+
+<div id="Lead" class="tabcontent">
+  <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>Columns Name</th>
+        <th>View</th>
+        <!-- <th>Compulsary</th>
+        <th>Deactive</th> -->
+        </tr>
+        </thead>
+        <tbody>
+      <% @lead_columns.each do |tab|%>
+        <tr>
+      <td><%= tab%></td>
+     <td>
+      	<%=render "common", column_name: "site", tab: tab, tab_type: "view"%>
+      </td>
+      <!-- <td>
+      	<%#=render "common", column_name: "lead", tab: tab, tab_type: "compulsary"%>
+      </td>
+      <td>
+      	<%#=render "common", column_name: "lead", tab: tab, tab_type: "deactive"%>
+      </td> -->
+      
+    </tr>
+
+    <%end%>
+  </tbody> 
+</table>
+</div>
+
+
+<div id="Quotation" class="tabcontent">
+ <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>Columns Name</th>
+        <th>View</th>
+        <!-- <th>Compulsary</th>
+        <th>Deactive</th> -->
+        </tr>
+        </thead>
+        <tbody>
+      <% @quotation_columns.each do |tab|%>
+        <tr>
+      <td><%= tab%></td>
+      <td>
+      	<%=render "common", column_name: "quotation", tab: tab, tab_type: "view"%>
+      </td>
+     <!--  <td>
+      	<%#=render "common", column_name: "quotation", tab: tab, tab_type: "compulsary"%>
+      </td>
+      <td>
+      	<%#=render "common", column_name: "quotation", tab: tab, tab_type: "deactive"%>
+      </td> -->
+      
+    </tr>
+
+    <%end%>
+  </tbody>
+</table>
+</div>
+
+<div id="deployment_document_datum" class="tabcontent">
+  <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>Columns Name</th>
+        <th>View</th>
+        <!-- <th>Compulsary</th>
+        <th>Deactive</th> -->
+        </tr>
+        </thead>
+        <tbody>
+      <% @ddd_columns.each do |tab|%>
+        <tr>
+      <td><%= tab%></td>
+     <td>
+      	<%=render "common", column_name: "deployment_document_datum", tab: tab, tab_type: "view"%>
+      </td>
+     <!--  <td>
+      	<%#=render "common", column_name: "deployment_document_datum", tab: tab, tab_type: "compulsary"%>
+      </td>
+      <td>
+      	<%#=render "common", column_name: "deployment_document_datum", tab: tab, tab_type: "deactive"%>
+      </td> -->
+      
+    </tr>
+
+    <%end%>
+  </tbody>
+</table>
+</div>
+<%#=f.submit "Create Category", class: "btn-primary"%> 
+<%=f.submit "Update Tab", :class=>"btn-primary"%>
+<%#end%>
+  <%end%>
+<script>
+function opentabform(evt, tab_name) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tab_name).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+   document.getElementById("defaultOpen").click();
+</script>

@@ -45,6 +45,11 @@ body {font-family: Arial;}
 </style>
 </head>
 <body>
+  <div class="bg-green disabled color-palette">
+    <span>
+      <%= @tab.name%>
+    </span>
+  </div>
 <div class="tab">
 <%@show_tabs.each do |tab|%>
   <input type="button" class="tablinks" onclick="opentabform(event, '<%=tab%>')" id="defaultOpen" value="<%=tab%>" />

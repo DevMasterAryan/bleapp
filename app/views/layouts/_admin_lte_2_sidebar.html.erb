@@ -49,7 +49,7 @@
       <%else%>
         <%if category_tabs.present?%>
            <%category_tabs.each do |tab|%>
-             <li><a href="#"><i class='fa fa-link'></i> <span><%=tab&.name&.capitalize%></span></a></li>          
+             <li><a href="/admin/dashboard/home?tab_id=<%=tab&.id%>"><i class='fa fa-link'></i> <span><%=tab&.name&.capitalize%></span></a></li>          
            <%end%>
         <%end%>
       <%end%>

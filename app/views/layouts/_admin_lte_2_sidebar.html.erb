@@ -29,6 +29,7 @@
 
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu">
+    <%if super_admin_user?%>
       <!-- <li class="header">HEADER</li> -->
         <!-- Optionally, you can add icons to the links -->
        <li><a href="/admin/dashboard/home"><i class='fa fa-link'></i> <span>Home Page</span></a></li>
@@ -45,6 +46,13 @@
           <li><a href="#">Link in level 2</a></li>
         </ul>
       </li> -->
+      <%else%>
+        <%if category_tabs.present?%>
+           <%category_tabs.each do |tab|%>
+             <li><a href="#"><i class='fa fa-link'></i> <span><%=tab&.name&.capitalize%></span></a></li>          
+           <%end%>
+        <%end%>
+      <%end%>
     </ul><!-- /.sidebar-menu -->
   </section>
   <!-- /.sidebar -->

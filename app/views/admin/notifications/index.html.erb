@@ -84,7 +84,7 @@ body {font-family: Arial;}
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>EMP Id</th>
+                    <th>Emp Id</th>
                     <th>Name</th>
                     <th>Type</th>
                     <th>Action</th>
@@ -97,7 +97,7 @@ body {font-family: Arial;}
                     <td><%= user&.emp_id%></td>
                     <td><%= user&.first_name%></td>
                     <%= form_tag notify_admin_category_tab_notifications_path(category_id: params[:category_id], tab_id: params[:tab_id]), method: :post do %>
-                    <td><%= select_tag :type, options_for_select([["select", ""],"Approved", "Approved and Notify", "Notify"])%></td>
+                    <td><%= select_tag :type, options_for_select([["select", ""],"Approved", "Approved and Notify", "Notify"]), required: true %></td>
                     <td><%#=link_to '<button class = "btn-primary"> Add</button>'.html_safe, "#"%>
                         <input type="hidden" name="user_id" value="<%=user.id%>">
                         <%= submit_tag 'Add'.html_safe, :class=>"btn btn-sm btn-primary", style: "width: 99px;" %>

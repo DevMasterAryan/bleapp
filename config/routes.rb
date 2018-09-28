@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
   # post 'auth/login', to: 'users#login'
   # get 'test', to: 'users#test'
-  
+  get "/create_session", to: "tabs#create_session"
   resources :exportdata do
       collection do
         get :exportxls

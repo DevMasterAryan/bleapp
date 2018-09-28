@@ -11,4 +11,5 @@ module Admin::TabsHelper
   def check_compulsary tab,column_name
   	return true if tab&.tab_tables&.first&.table_columns["compulsary"]&.include?(column_name)
   end
+
 end

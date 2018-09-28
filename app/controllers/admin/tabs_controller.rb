@@ -88,6 +88,17 @@ class Admin::TabsController < ApplicationController
   p session
   
   end
+
+  def create_session
+    if session[:table_name].present?
+       params[:table_name]
+       
+    else
+      session[:table_name] ||= [] 
+      session[:table_name] << params[:table_name]  
+    end
+    
+  end
   
 
   private

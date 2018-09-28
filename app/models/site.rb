@@ -7,7 +7,7 @@ class Site
   field :address, type: String
   field :lat, type: Float
   field :long, type: Float
-
+  #fields added after payment integration
   field :account_id, type: String
   field :site_person, type: String
   field :site_mobile, type: String
@@ -33,14 +33,11 @@ class Site
   # field :latitude, :type=> Float
 
   has_many :devices
-
-  # geocoded_by :address
-  # reverse_geocoded_by :coordinates
-  # after_validation :reverse_geocode, if: ->(obj){ obj.coordinates.present? }
-  # after_validation :geocode, if: ->(obj){ obj.address.present? }
-
-  # index({ geo: "2dsphere" })
+  #association added after payment gateway integration
+  belongs_to :account, optional: true 
+  has_many :quotations
   
+
   def self.search lati, longi
     result = Array.new
     self.all.each do |position|

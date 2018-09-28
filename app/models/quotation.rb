@@ -9,4 +9,6 @@ class Quotation
   field :manager_approval, type: String
   field :qt_approval_date, type: Time
   
+  belongs_to: site
+  
 end

@@ -46,10 +46,10 @@ body {font-family: Arial;}
 </head>
 <body>
 <div class="tab">
-  <input type="button" class="tablinks" onclick="opentabform(event, 'Account')"id="defaultOpen" value="Account" />
-  <input type="button" class="tablinks" onclick="opentabform(event, 'Lead')"id="defaultOpen" value="Lead" />
-  <input type="button" class="tablinks" onclick="opentabform(event, 'Quotation')"id="defaultOpen" value="Quotation" />
-  <input type="button" class="tablinks" onclick="opentabform(event, 'deployment_document_datum')"id="defaultOpen" value="Deployment_document_datum"  />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'Account')" id="defaultOpen" value="Account" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'Lead')" id="defaultOpen" value="Lead" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'Quotation')" id="defaultOpen" value="Quotation" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'deployment_document_datum')" id="defaultOpen" value="Deployment_document_datum"  />
 <!--   <button class="tablinks" onclick="opentabform(event, 'Lead')">Lead</button>
   <button class="tablinks" onclick="opentabform(event, 'Quotation')">Quotation</button>
   <button class="tablinks" onclick="opentabform(event, 'User')">User</button>
@@ -173,3 +173,52 @@ function opentabform(evt, tab_name) {
 }
    document.getElementById("defaultOpen").click();
 </script>
+
+
+<script type="text/javascript">
+       $(".view-col").on("change", function(){
+
+         if($('.view-col').is(':checked')){
+            var table_name = $(this).closest('div').attr('id')
+            // $.ajax(function(){
+            //   type: "get",
+            //   url: "",
+            //   data: {
+            //     table_name: table_name
+            //   } 
+            // });  
+
+            var table_name = $(this).closest('div').attr('id')
+             var count = 0;
+             // alert(table_name);
+             var $checkboxes = $(`#${table_name} td input[type="checkbox"]`);
+                  $checkboxes.change(function(){
+              var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+        // $('#count-checked-checkboxes').text(countCheckedCheckboxes);
+        
+          // alert(countCheckedCheckboxes);
+         });
+
+         }
+         else
+         {
+        //   var table_name = $(this).closest('div').attr('id')
+        //      var count = 0;
+        //      var $checkboxes = $('#Account td input[type="checkbox"]');
+              
+        //           $checkboxes.change(function(){
+        //  var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+        // // $('#count-checked-checkboxes').text(countCheckedCheckboxes);
+        
+        //   alert(countCheckedCheckboxes);
+        //  });        
+
+         }
+       
+       });
+
+  
+</script>
+
+
+

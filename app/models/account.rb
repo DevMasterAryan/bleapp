@@ -7,5 +7,8 @@ class Account
   field :contact_mobile, type: String
   field :potential_site, type: String
   field :emp_id, type: String
+
+
+  has_many :sites
    
 end

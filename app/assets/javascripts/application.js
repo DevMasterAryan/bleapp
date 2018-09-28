@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+//= require moment
 //= require jquery-jvectormap-1.2.2.min
 //= require jquery-jvectormap-world-mill-en
 //= require jquery.sparkline
@@ -28,11 +28,9 @@
 //= require bootstrap-datepicker
 //= require toastr.min
 //= require jquery.validate
-//= require moment
 //= require jquery.slimscroll
 //= require bootstrap.min.js
 //= require app
-//= require rails-ujs
 //= require_tree .
 
 

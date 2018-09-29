@@ -47,7 +47,7 @@ body {font-family: Arial;}
 <body>
 <div class="tab">
   <input type="button" class="tablinks" onclick="opentabform(event, 'Account')"id="defaultOpen" value="Account" />
-  <input type="button" class="tablinks" onclick="opentabform(event, 'Lead')"id="defaultOpen" value="Lead" />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'Site')"id="defaultOpen" value="Site" />
   <input type="button" class="tablinks" onclick="opentabform(event, 'Quotation')"id="defaultOpen" value="Quotation" />
   <input type="button" class="tablinks" onclick="opentabform(event, 'deployment_document_datum')"id="defaultOpen" value="Deployment_document_datum"  />
 <!--   <button class="tablinks" onclick="opentabform(event, 'Lead')">Lead</button>
@@ -80,7 +80,7 @@ body {font-family: Arial;}
 </table>
 </div>
 
-<div id="Lead" class="tabcontent">
+<div id="Site" class="tabcontent">
   <table class="table table-bordered table-hover">
         <thead>
         <tr>
@@ -172,4 +172,62 @@ function opentabform(evt, tab_name) {
     evt.currentTarget.className += " active";
 }
    document.getElementById("defaultOpen").click();
+</script>
+
+
+<script type="text/javascript">
+       $(".view-col").on("change", function(){
+
+         if($('.view-col').is(':checked')){
+            var table_name = $(this).closest('div').attr('id')
+            var $checkboxes = $(`#${table_name} td input[type="checkbox"]`);
+            // $checkboxes.change(function(){
+              var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+              // alert(countCheckedCheckboxes);
+              if(countCheckedCheckboxes>0){
+                $.ajax({
+                  type: "get",
+                  url: "/create_session",
+                  datascript: "js",
+                  data: {
+                    table_name: table_name
+                    
+                  },
+                  success: function(response){
+                     if(response.status==false){
+                        alert("Select column from associated table.");
+                        var table_name = $(this).closest('div').attr('id');
+                        $checkboxes.prop('checked', false)
+
+                     }
+                  }
+                });
+              }
+           // });
+         }
+
+         if($('.view-col').is(':unchecked')){
+            var table_name = $(this).closest('div').attr('id')
+            var $checkboxes = $(`#${table_name} td input[type="checkbox"]`);
+            // $checkboxes.change(function(){
+              var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+              var empty = "true"
+              // alert(countCheckedCheckboxes);
+              if(countCheckedCheckboxes==0){
+                $.ajax({
+                  type: "get",
+                  url: "/create_session",
+                  datascript: "js",
+                  data: {
+                    table_name: table_name,
+                    empty: empty
+                  }
+                });
+              }
+           // });
+         }
+
+       });
+
+  
 </script>

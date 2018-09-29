@@ -6,7 +6,6 @@ Rails.application.routes.draw do
            collection do
              post :render_table
              post :render_table_table
-             post :checkbox_session
            end
            resources :notifications do
              collection do
@@ -40,7 +39,7 @@ Rails.application.routes.draw do
 
   # post 'auth/login', to: 'users#login'
   # get 'test', to: 'users#test'
-  get "/create_session", to: "tabs#create_session"
+  get "/create_session", to: "admin/tabs#create_session"
   resources :exportdata do
       collection do
         get :exportxls

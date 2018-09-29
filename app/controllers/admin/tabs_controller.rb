@@ -17,6 +17,7 @@ class Admin::TabsController < ApplicationController
     @category = Category.find_by(id: params[:category_id])
      @tab = @category.tabs.new(tab_params)
      if @tab.save
+          session[:table_name] = []
           @tab.update(columns: params[:tab][:columns].to_unsafe_hash)
           flash[:notice] =  "Tab created successfully"
           redirect_to admin_category_tabs_path       
@@ -49,7 +50,6 @@ class Admin::TabsController < ApplicationController
   end
 
   def update
-    binding.pry
      @tab = Tab.find_by(id: params[:id])
      if @tab.update(name: params[:tab][:name], columns: params[:tab][:columns].to_unsafe_hash)
       redirect_to admin_category_tabs_path, notice: "Tab Updated Successfully"
@@ -78,24 +78,43 @@ class Admin::TabsController < ApplicationController
     # @tab_type = params[:type]
   end
 
-  def checkbox_session
-    session ||=[]
-  @session_hash ||= {}
-  @session_hash[params[:table]] ||= {}
-  @session_hash[params[:table]]["view"] ||= []
-  @session_hash[params[:table]]["view"] << params[:table_column]
-  @session <<  @session_hash
-  p session
+  # def checkbox_session
+  #   session ||=[]
+  # @session_hash ||= {}
+  # @session_hash[params[:table]] ||= {}
+  # @session_hash[params[:table]]["view"] ||= []
+  # @session_hash[params[:table]]["view"] << params[:table_column]
+  # @session <<  @session_hash
+  # p session
   
-  end
+  # end
 
   def create_session
     if session[:table_name].present?
-       params[:table_name]
-       
+       if params[:empty].present?
+         session[:table_name].delete(params[:table_name].downcase)
+        return if params[:empty] == "true"
+       end
+       return render json: {status: true} if session[:table_name].include?(params[:table_name])
+       associations = params[:table_name].camelize.constantize.reflect_on_all_associations.map(&:name).map(&:to_s).map(&:singularize)
+       count = 0
+       session[:table_name].each do |table_name|
+          count = (count + 1)  if associations.include?(table_name)   
+       end
+        if count > 0
+        p "*********true***********"
+         session[:table_name] << params[:table_name].downcase unless session[:table_name].include?(params[:table_name].downcase)
+          return render json: {status: true} 
+       elsif count == 0 
+        p "*********false***********"
+          return render json: {status: false}
+       end
+
     else
       session[:table_name] ||= [] 
-      session[:table_name] << params[:table_name]  
+      params[:table_name] = params[:table_name].downcase.singularize
+      session[:table_name] << params[:table_name]
+      return render json: {status: true}
     end
     
   end

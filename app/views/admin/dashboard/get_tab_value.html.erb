@@ -1,0 +1,23 @@
+
+
+
+
+
+
+
+
+
+
+<%= params[:tab_id]%><br>
+<%= params[:table_name].camelize%>
+<%= form_tag admin_dashboard_set_tab_value_path(id: params[:tab_id], table_name: params[:table_name]) do %>
+<% column = Tab.find_by(id: params[:tab_id]).columns%><br>
+<% column[:"#{params[:table_name].downcase}"].keys.each do |field| %>
+	<% table_name_field = params[:table_name]%>
+	<%= "#{field.camelize}"%><br><%#= text_field_tag :"#{field}" %><%= text_field_tag :"tab_value[:#{table_name_field}][:#{field}]" %><br>
+<%end%>
+
+<br>
+<br>
+<%= submit_tag 'Send'.html_safe, :class=>"btn btn-sm btn-info", style: "width: 99px;" %>
+   <%end%>

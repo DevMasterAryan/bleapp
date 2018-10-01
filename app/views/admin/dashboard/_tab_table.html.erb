@@ -8,14 +8,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                
+                <%Tab.find_by(id: params[:tab_id]).columns.keys.each do |key|%>
                   <tr>
-                    <td></td>
-                    <td>
-                      
-                    </td>
+                    <td><%= key.camelize%></td>
+                    <td><%= link_to "hit", admin_dashboard_get_tab_value_path(tab_id: params[:tab_id], table_name: key) %></td>
                   </tr>
                 </tbody>
+                <% end %>
               </table>
     <div class="custom-pagination pull-right">
     </div>

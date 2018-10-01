@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     post "sessions/create"
     delete "sessions/destroy"
     get "dashboard/home"
+    get "dashboard/get_tab_value"
+    post "dashboard/set_tab_value"
     get "sessions/forgot_password"
     post "password_resets/send_reset_password"
     get "/password_resets/reset_password"

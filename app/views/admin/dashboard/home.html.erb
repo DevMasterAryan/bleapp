@@ -19,8 +19,12 @@
             </a>
      </div>
     </div>
-<%else%>
-   <%if params[:tab_id].present?%>
-     <%=render "tab_#{@tab_type}"%>
-   <%end%>
+    <%else%>
+    <%if Tab.find_by(id: params[:tab_id]).type == "table" %>
+    <%= Tab.find_by(id: params[:tab_id]).type %>
+    <%= render "tab_table"%>
+    <%elsif Tab.find_by(id: params[:tab_id]).type == "form" %>
+    <%= Tab.find_by(id: params[:tab_id]).type %>
+    <%= render "tab_form"%>
+    <%end%>
 <%end%>

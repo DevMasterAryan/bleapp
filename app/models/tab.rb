@@ -5,6 +5,7 @@ class Tab
   field :category_id, type: String
   field :is_active, type: Boolean, default: true
   field :columns, type: Hash, default: {}
+  field :value, type: Hash, default: {:tab_values => {}}
 
   belongs_to :category
   has_many :tab_tables, dependent: :destroy

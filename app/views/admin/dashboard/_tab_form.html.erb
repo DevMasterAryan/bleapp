@@ -1,4 +1,4 @@
-<%=form_for(@model_object, url: "#") do |f|%>
+<%=form_for [:admin,@model_object] do |f|%>
   <%@table_field_keys = @tab.columns[@table_name].keys%>
   <%@table_field_keys.each do |key|%>
     <% if @tab.columns[@table_name][key].include?("create")%>
@@ -9,6 +9,11 @@
 
 <%=f.submit "Create #{@table_name.capitalize}"%>  
 <%end%>
+
+
+
+
+
 
 
 

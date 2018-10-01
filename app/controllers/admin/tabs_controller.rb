@@ -15,10 +15,11 @@ class Admin::TabsController < ApplicationController
 
   def create
     @category = Category.find_by(id: params[:category_id])
+     binding.pry
      @tab = @category.tabs.new(name: params[:tab][:name], type: params[:tab][:type], columns: params[:tab][:columns].to_unsafe_hash)
      if @tab.save
           session[:table_name] = []
-          @tab.update(columns: params[:tab][:columns].to_unsafe_hash)
+          # @tab.update(columns: params[:tab][:columns].to_unsafe_hash)
           flash[:notice] =  "Tab created successfully"
           redirect_to admin_category_tabs_path       
      end
@@ -84,6 +85,7 @@ class Admin::TabsController < ApplicationController
       @site_mgmt_columns = ["lead_id", "d3_id", "site_manager", "site_installer_id", "site_installer_status_report", "attachment", "site_approval", "site_activation_date"]
       @user_columns = ["_id","first_name", "last_name", "email", "mobile", "last_login", "imei", "lat", "long", "address", "created_at", "mobile_phone_mobel", "credit"]
       @device_columns = ["device", "stolen", "mac_address", "identifier","site_display_name", "ido_old", "ido_new","site_id"]
+
       @tab_type = params[:type]
     # @column_names = params[:table].camelize.constantize.attribute_names - ["updated_at"]
     # @tab_type = params[:type]

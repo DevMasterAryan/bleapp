@@ -1,1 +1,19 @@
-hello
+<%=form_for(@model_object, url: "#") do |f|%>
+  <%@table_field_keys = @tab.columns[@table_name].keys%>
+  <%@table_field_keys.each do |key|%>
+    <% if @tab.columns[@table_name][key].include?("create")%>
+      <%=f.label "#{key}"%><br>
+      <%=f.text_field "#{key}", required: @tab.columns[@table_name][key].include?("compulsary").present? ? true : false %><br>
+    <%end%>
+  <%end%>
+
+<%=f.submit "Create #{@table_name.capitalize}"%>  
+<%end%>
+
+
+
+
+
+
+
+

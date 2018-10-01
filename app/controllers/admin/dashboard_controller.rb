@@ -6,7 +6,13 @@ class Admin::DashboardController < ApplicationController
         @tab  = Tab.find_by(id: params[:tab_id])
         @tab_type = @tab.type
         p "#{@tab_type}"
-       
+        @table_name = @tab.columns.keys.first
+        @model_name  = @tab.columns.keys.first.camelize.constantize
+        
+        @model_object = @model_name.new
+        
+        @table_field_keys = @tab.columns[@table_name].keys
+     
      end
   end
 

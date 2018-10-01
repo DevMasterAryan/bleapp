@@ -19,7 +19,7 @@
             </a>
      </div>
     </div>
-    <%else%>
+<%else%>
     <%if Tab.find_by(id: params[:tab_id]).type == "table" %>
     <%= Tab.find_by(id: params[:tab_id]).type %>
     <%= render "tab_table"%>

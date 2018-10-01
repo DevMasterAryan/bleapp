@@ -50,6 +50,10 @@ body {font-family: Arial;}
   <input type="button" class="tablinks" onclick="opentabform(event, 'Site')" id="defaultOpen" value="Site" />
   <input type="button" class="tablinks" onclick="opentabform(event, 'Quotation')" id="defaultOpen" value="Quotation" />
   <input type="button" class="tablinks" onclick="opentabform(event, 'deployment_document_datum')" id="defaultOpen" value="Deployment_document_datum"  />
+  <input type="button" class="tablinks" onclick="opentabform(event, 'warehouse')" id="defaultOpen" value="warehouse"/>
+  <input type="button" class="tablinks" onclick="opentabform(event, 'site_management')" id="defaultOpen" value="site_management"/>
+  <input type="button" class="tablinks" onclick="opentabform(event, 'user')" id="defaultOpen" value="user"/>
+
 <!--   <button class="tablinks" onclick="opentabform(event, 'Lead')">Lead</button>
   <button class="tablinks" onclick="opentabform(event, 'Quotation')">Quotation</button>
   <button class="tablinks" onclick="opentabform(event, 'User')">User</button>
@@ -149,6 +153,81 @@ body {font-family: Arial;}
       <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="compulsary" class="view-col"></td>
       <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="deactive" class="view-col"></td>
       
+    </tr>
+
+    <%end%>
+  </tbody>
+</table>
+</div>
+
+
+<div id="warehouse" class="tabcontent">
+  <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>Columns Name</th>
+        <th>Create</th>
+        <th>Compulsary</th>
+        <th>Deactive</th>
+        </tr>
+        </thead>
+        <tbody>
+      <% @warehouse_columns.each do |tab|%>
+        <tr>
+      <td><%= tab%></td>
+      <td><input type="checkbox" name="tab[columns][warehouse[<%=tab%>]][]" value="create" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][warehouse[<%=tab%>]][]" value="compulsary" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][warehouse[<%=tab%>]][]" value="deactive" class="view-col"></td>
+      
+    </tr>
+
+    <%end%>
+  </tbody>
+</table>
+</div>
+<div id="site_management" class="tabcontent">
+  <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>Columns Name</th>
+        <th>View</th>
+        <!-- <th>Compulsary</th>
+        <th>Deactive</th> -->
+        </tr>
+        </thead>
+        <tbody>
+      <% @site_mgmt_columns.each do |tab|%>
+        <tr>
+      <td><%= tab%></td>
+      <td><input type="checkbox" name="tab[columns][site_management[<%=tab%>]][]" value="view" class="view-col"></td>
+      <!-- <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="compulsary" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="deactive" class="view-col"></td>
+       -->
+    </tr>
+
+    <%end%>
+  </tbody>
+</table>
+</div>
+
+<div id="user" class="tabcontent">
+  <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>Columns Name</th>
+        <th>View</th>
+        <!-- <th>Compulsary</th>
+        <th>Deactive</th> -->
+        </tr>
+        </thead>
+        <tbody>
+      <% @user_columns.each do |tab|%>
+        <tr>
+      <td><%= tab%></td>
+      <td><input type="checkbox" name="tab[columns][user[<%=tab%>]][]" value="view" class="view-col"></td>
+      <!-- <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="compulsary" class="view-col"></td>
+      <td><input type="checkbox" name="tab[columns][deployment_document_datum[<%=tab%>]][]" value="deactive" class="view-col"></td>
+       -->
     </tr>
 
     <%end%>

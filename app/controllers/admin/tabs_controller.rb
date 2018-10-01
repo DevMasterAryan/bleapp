@@ -15,7 +15,7 @@ class Admin::TabsController < ApplicationController
 
   def create
     @category = Category.find_by(id: params[:category_id])
-     @tab = @category.tabs.new(tab_params)
+     @tab = @category.tabs.new(name: params[:tab][:name], type: params[:tab][:type], columns: params[:tab][:columns].to_unsafe_hash)
      if @tab.save
           session[:table_name] = []
           @tab.update(columns: params[:tab][:columns].to_unsafe_hash)
@@ -46,6 +46,9 @@ class Admin::TabsController < ApplicationController
     @quotation_columns = ["_id","created_at","site_id", "device_quantity", "hub_quantity", "one_time_retail_fee", "manager_approval", "qt_approval_date"] 
     @ddd_columns = [ "_id","created_at","quotation_id", "site_id", "site_name", "site_location", "quotation_date", "device_id", "device_type", "attachment", "d3_id", "d3_creation_date", "wh_pickup_date"]  
    end
+   @site_mgmt_columns = ["lead_id", "d3_id", "site_manager", "site_installer_id", "site_installer_status_report", "attachment", "site_approval", "site_activation_date"]
+   @warehouse_columns = ["device_id", "qr_code", "product_type", "warehouse_received_date", "iqc_report", "device_status"]
+
 
   end
 
@@ -65,6 +68,10 @@ class Admin::TabsController < ApplicationController
       @lead_columns = ["site_name", "location_address", "address", "lat", "long", "account_id", "site_person", "site_mobile", "estimated_value", "sales_emp_id", "attachment", "quotation_id", "emp_remarks", "escalation_one", "escalation_two", "status_one", "status_two", "site_manager_id", "manager_id", "est_close_date", "s1_close_date", "s2_close_date", "manager_remark"] 
       @quotation_columns = ["site_id", "device_quantity", "hub_quantity", "one_time_retail_fee", "manager_approval", "qt_approval_date"] 
       @ddd_columns = [ "quotation_id", "site_id", "site_name", "site_location", "quotation_date", "device_id", "device_type", "attachment", "d3_id", "d3_creation_date", "wh_pickup_date"] 
+      @warehouse_columns = ["device_id", "qr_code", "product_type", "warehouse_received_date", "iqc_report", "device_status"]
+      @site_mgmt_columns = ["lead_id", "d3_id", "site_manager", "site_installer_id", "site_installer_status_report", "attachment", "site_approval", "site_activation_date"]
+      @user_columns = ["first_name", "last_name", "email", "mobile", "last_login", "imei", "lat", "long", "address", "created_at", "mobile_phone_mobel", "credit"]
+      @device_columns = ["device", "stolen", "mac_address", "identifier","site_display_name", "ido_old", "ido_new","site_id"]
       @tab_type = params[:type]
   end
 
@@ -73,6 +80,10 @@ class Admin::TabsController < ApplicationController
       @lead_columns = ["_id","created_at","site_name", "location_address", "address", "lat", "long", "account_id", "site_person", "site_mobile", "estimated_value", "sales_emp_id", "attachment", "quotation_id", "emp_remarks", "escalation_one", "escalation_two", "status_one", "status_two", "site_manager_id", "manager_id", "est_close_date", "s1_close_date", "s2_close_date", "manager_remark"] 
       @quotation_columns = ["_id","created_at","site_id", "device_quantity", "hub_quantity", "one_time_retail_fee", "manager_approval", "qt_approval_date"] 
       @ddd_columns = [ "_id","created_at","quotation_id", "site_id", "site_name", "site_location", "quotation_date", "device_id", "device_type", "attachment", "d3_id", "d3_creation_date", "wh_pickup_date"]  
+      @warehouse_columns = ["device_id", "qr_code", "product_type", "warehouse_received_date", "iqc_report", "device_status"]
+      @site_mgmt_columns = ["lead_id", "d3_id", "site_manager", "site_installer_id", "site_installer_status_report", "attachment", "site_approval", "site_activation_date"]
+      @user_columns = ["_id","first_name", "last_name", "email", "mobile", "last_login", "imei", "lat", "long", "address", "created_at", "mobile_phone_mobel", "credit"]
+      @device_columns = ["device", "stolen", "mac_address", "identifier","site_display_name", "ido_old", "ido_new","site_id"]
       @tab_type = params[:type]
     # @column_names = params[:table].camelize.constantize.attribute_names - ["updated_at"]
     # @tab_type = params[:type]
